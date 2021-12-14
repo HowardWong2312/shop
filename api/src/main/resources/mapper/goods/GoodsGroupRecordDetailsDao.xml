@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.modules.goods.dao.GoodsGroupRecordDetailsDao">
+
+    <select id="queryListByGoodsGroupRecordId" resultType="io.dubai.modules.goods.entity.vo.GoodsGroupRecordDetailsVo">
+        select
+        a.*,
+        u.nickName as user_name,
+        u.header as user_face_img
+        from shop_goods_group_record_details a
+        left join t_user_info u on(a.user_id = u.userId)
+        where a.goods_group_record_id = #{goodsGroupRecordId} and status!=2
+    </select>
+
+    <select id="queryByGoodsOrderCode" resultType="io.dubai.modules.goods.entity.GoodsGroupRecordDetails">
+        select * from shop_goods_group_record_details where goods_order_code = #{goodsOrderCode}
+    </select>
+
+    <select id="queryCashAwardCountByGoodsGroupId" resultType="int">
+        select count(0) from shop_goods_group_record_details a
+        left join shop_goods_group_record b on(a.goods_group_record_id = b.id)
+        left join shop_goods_group c on(b.goods_group_id = c.id)
+        where a.status=3 and c.goods_group_id = #{goodsGroupId}
+    </select>
+
+</mapper>

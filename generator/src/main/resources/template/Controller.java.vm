@@ -1,0 +1,86 @@
+package ${package}.${moduleName}.controller;
+
+import java.util.Arrays;
+import java.util.Map;
+
+import io.dubai.common.validator.ValidatorUtils;
+#if($type == 'admin')
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+#end
+
+import org.springframework.web.bind.annotation.*;
+import javax.annotation.Resource;
+
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.service.${className}Service;
+import ${mainPath}.common.utils.PageUtils;
+import ${mainPath}.common.utils.R;
+
+
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @name ${comments}
+ * @date ${datetime}
+ */
+@RestController
+@RequestMapping("${moduleName}/${pathName}")
+public class ${className}Controller {
+    @Resource
+    private ${className}Service ${classname}Service;
+
+    @GetMapping("/list")
+    #if($type == 'admin')
+    @RequiresPermissions("${moduleName}:${pathName}:list")
+    #end
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = ${classname}Service.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    @GetMapping("/info/{${pk.attrname}}")
+    #if($type == 'admin')
+    @RequiresPermissions("${moduleName}:${pathName}:info")
+    #end
+    public R info(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}){
+        ${className} ${classname} = ${classname}Service.getById(${pk.attrname});
+
+        return R.ok().put("${classname}", ${classname});
+    }
+
+    @PostMapping("/save")
+    #if($type == 'admin')
+    @RequiresPermissions("${moduleName}:${pathName}:save")
+    #end
+    public R save(@RequestBody ${className} ${classname}){
+        ${classname}Service.save(${classname});
+
+        return R.ok();
+    }
+
+    @PostMapping("/update")
+    #if($type == 'admin')
+    @RequiresPermissions("${moduleName}:${pathName}:update")
+    #end
+    public R update(@RequestBody ${className} ${classname}){
+        ValidatorUtils.validateEntity(${classname});
+        ${classname}Service.updateById(${classname});
+        
+        return R.ok();
+    }
+
+    @DeleteMapping("/delete")
+    #if($type == 'admin')
+    @RequiresPermissions("${moduleName}:${pathName}:delete")
+    #end
+    public R delete(@RequestBody ${pk.attrType}[] ${pk.attrname}s){
+        ${classname}Service.removeByIds(Arrays.asList(${pk.attrname}s));
+
+        return R.ok();
+    }
+
+}

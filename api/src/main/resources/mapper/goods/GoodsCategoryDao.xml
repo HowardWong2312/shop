@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.modules.goods.dao.GoodsCategoryDao">
+
+    <select id="queryListByParentIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsCategoryVo">
+        SELECT
+            a.*,
+            b.title as language_title,
+            b.icon_url as language_icon_url
+        from shop_goods_category a
+        left join shop_goods_category_lang b on(a.id=b.goods_category_id and b.language_id = #{languageId})
+        where a.parent_id = #{parentId}
+    </select>
+
+    <select id="queryIdsByParentId" resultType="Long">
+        SELECT
+            id
+        from shop_goods_category
+        where parent_id = #{parentId}
+    </select>
+
+    <select id="queryByIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsCategoryVo">
+        SELECT
+            a.*,
+            b.title as language_title,
+            b.icon_url as language_icon_url
+        from shop_goods_category a
+        left join shop_goods_category_lang b on(a.id=b.goods_category_id and b.language_id = #{languageId})
+        where a.id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorinterval="10">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</Console>
+		<RollingFile name="RollingFileDebug" fileName="logs/debug/debug.log" filePattern="logs/debug/debug-%i.log">
+			<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] - %l - %m%n"/>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="7"/>
+		</RollingFile>
+		<RollingFile name="RollingFileInfo" fileName="logs/info/info.log" filePattern="logs/info/info-%i.log">
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] - %m%n"/>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="7"/>
+		</RollingFile>
+		<RollingFile name="RollingFileWarn" fileName="logs/warn/warn.log" filePattern="logs/warn/warn-%i.log">
+			<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] - %l - %m%n"/>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="7"/>
+		</RollingFile>
+		<RollingFile name="RollingFileError" fileName="logs/error/error.log" filePattern="logs/error/error-%i.log">
+			<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] - %l - %m%n"/>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="7"/>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="RollingFileInfo"/>
+			<AppenderRef ref="RollingFileWarn"/>
+			<AppenderRef ref="RollingFileError"/>
+		</Root>
+
+		<logger name="io.dubai" level="debug" >
+			<AppenderRef ref="RollingFileDebug"/>
+		</logger>
+	</Loggers>
+</Configuration>

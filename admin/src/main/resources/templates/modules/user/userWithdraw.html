@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>提现申请</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-inline">
+            <#if shiro.hasPermission("user:userWithdraw:list")>
+                <div class="form-group">
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="关键字">
+                </div>
+                <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
+            </#if>
+            <#if shiro.hasPermission("user:userWithdraw:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i> 新增</a>
+            </#if>
+            <#if shiro.hasPermission("user:userWithdraw:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>
+            </#if>
+            <#if shiro.hasPermission("user:userWithdraw:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
+            </#if>
+            </div>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                                    <div class="form-group">
+                <div class="col-sm-2 control-label">用户id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.userId" placeholder="用户id"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">银行卡名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.bankName" placeholder="银行卡名称"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.accountName" placeholder=""/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.accountNumber" placeholder=""/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.branchName" placeholder=""/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.iban" placeholder=""/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.ifsc" placeholder=""/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.upi" placeholder=""/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">提现金额</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.amount" placeholder="提现金额"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">拒绝原因</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.remark" placeholder="拒绝原因"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">0:等待审核,1:审核成功,2:审核失败</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.status" placeholder="0:等待审核,1:审核成功,2:审核失败"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userWithdraw.createTime" placeholder=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/user/userWithdraw.js?_${.now?long}"></script>
+</body>
+</html>

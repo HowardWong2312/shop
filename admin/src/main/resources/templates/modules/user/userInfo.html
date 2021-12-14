@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户信息</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-inline">
+            <#if shiro.hasPermission("user:userInfo:list")>
+                <div class="form-group">
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="关键字">
+                </div>
+                <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
+            </#if>
+            <#if shiro.hasPermission("user:userInfo:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i> 新增</a>
+            </#if>
+            <#if shiro.hasPermission("user:userInfo:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>
+            </#if>
+            <#if shiro.hasPermission("user:userInfo:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
+            </#if>
+            </div>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                                    <div class="form-group">
+                <div class="col-sm-2 control-label">国家编码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.countrycode" placeholder="国家编码"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">手机号</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.phone" placeholder="手机号"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">昵称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.nickname" placeholder="昵称"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">头像</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.header" placeholder="头像"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">性别 男/女</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.sex" placeholder="性别 男/女"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">生日</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.birthday" placeholder="生日"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">年龄</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.age" placeholder="年龄"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">bibi号（8位纯数字）</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.bibicode" placeholder="bibi号（8位纯数字）"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">邀请码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.invitecode" placeholder="邀请码"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">邀请人</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.fatherid" placeholder="邀请人"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">当前积分</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.credits" placeholder="当前积分"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">累计收益积分</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.incomecredits" placeholder="累计收益积分"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">环信id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.easemobid" placeholder="环信id"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">环信密码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.easemobpwd" placeholder="环信密码"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">个性签名</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.signature" placeholder="个性签名"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">肤色</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.skincolor" placeholder="肤色"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">财富值</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.wealth" placeholder="财富值"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">财富等级</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.wealthlevel" placeholder="财富等级"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">背景图</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.backimage" placeholder="背景图"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">国家id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.countryid" placeholder="国家id"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">国家</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.country" placeholder="国家"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">省id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.provinceid" placeholder="省id"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">省级名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.provincename" placeholder="省级名称"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">市id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.cityid" placeholder="市id"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">市级名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.cityname" placeholder="市级名称"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">二维码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.ecode" placeholder="二维码"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">手机号修改时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.phonechangetime" placeholder="手机号修改时间"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">bibi号修改时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.bibicodechangetime" placeholder="bibi号修改时间"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">添加好友是否需要验证0否1是</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.verifyfriend" placeholder="添加好友是否需要验证0否1是"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否他可以通过手机号添加好友</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.isphoneaddfriend" placeholder="是否他可以通过手机号添加好友"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否可以通过bibi号添加好友</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.isbibicodeaddfriend" placeholder="是否可以通过bibi号添加好友"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否可以通过群聊添加好友</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.isgroupaddfriend" placeholder="是否可以通过群聊添加好友"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否可以通过二维码添加好友</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.isecodeaddfriend" placeholder="是否可以通过二维码添加好友"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">0.未认证1.已认证2黑名单</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.isapprove" placeholder="0.未认证1.已认证2黑名单"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">语言（默认中文）</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.language" placeholder="语言（默认中文）"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否弃用 0否 1是</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.del" placeholder="是否弃用 0否 1是"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">创建时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.createtime" placeholder="创建时间"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否可以创建群0否1是</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.iscancreategroup" placeholder="是否可以创建群0否1是"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">手机号搜索（国家编码+手机号）</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.searchphone" placeholder="手机号搜索（国家编码+手机号）"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">是否商家</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.ismerchant" placeholder="是否商家"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">余额</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.balance" placeholder="余额"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">支付密码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.password" placeholder="支付密码"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">等级(id就等于等级数)</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.userlevelid" placeholder="等级(id就等于等级数)"/>
+                </div>
+            </div>
+                                <div class="form-group">
+                <div class="col-sm-2 control-label">免费抽奖次数</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="userInfo.lotterytimes" placeholder="免费抽奖次数"/>
+                </div>
+            </div>
+                        <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/user/userInfo.js?_${.now?long}"></script>
+</body>
+</html>

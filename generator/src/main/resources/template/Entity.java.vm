@@ -1,0 +1,61 @@
+package ${package}.${moduleName}.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
+
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+#end
+import java.io.Serializable;
+#if(${hasTimestamp})
+import java.sql.Timestamp;
+#end
+#if(${hasLocalDateTime})
+import java.time.LocalDateTime;
+#end
+#if(${hasLocalDate})
+import java.time.LocalDate;
+#end
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+
+/**
+ * @author ${author}
+ * @name ${comments}
+ * @date ${datetime}
+ */
+@Data
+@TableName("${tableName}")
+public class ${className} implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+	//$column.comments
+	#if($column.columnName == $pk.columnName)
+	@TableId
+	#end
+	#if($column.attrType == 'Timestamp' || $column.attrType == 'LocalDateTime')
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	#end
+	#if($column.attrType == 'LocalDate')
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	#end
+	#if($column.attrname == 'createTime' || $column.attrname == 'isDel' || $column.attrname == 'version')
+	@TableField(fill = FieldFill.INSERT)
+	#end
+	#if($column.attrname == 'isDel')
+	@TableLogic
+	#end
+	#if($column.attrname == 'version')
+	@Version
+	#end
+	#if($column.attrname == 'updateTime')
+	@TableField(fill = FieldFill.UPDATE)
+	#end
+	private $column.attrType $column.attrname;
+
+#end
+
+}

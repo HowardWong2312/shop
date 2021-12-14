@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.modules.goods.dao.GoodsOrderDao">
+
+    <select id="queryPage" resultType="io.dubai.modules.goods.entity.vo.GoodsOrderVo">
+        SELECT
+        a.*,
+        m.userId as merchant_id,
+        m.nickName as merchant_name,
+        m.header as merchant_face_img,
+        b.title,
+        b.logo_url,
+        b.price,
+        c.title as language_title,
+        c.logo_url as language_logo_url
+        from shop_goods_order a
+        left join shop_goods b on(a.goods_id=b.id)
+        left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${query.languageId})
+        left join t_user_info m on(b.user_id=m.userId)
+        where 1=1 and a.user_id = #{query.userId}
+        <if test="query.status != null">
+            and a.status=#{query.status}
+        </if>
+    </select>
+
+    <select id="queryByOrderCodeAndLanguageIdForMerchant" resultType="io.dubai.modules.goods.entity.vo.GoodsOrderVo">
+        SELECT
+            a.*,
+            p.title as payment_title,
+            pl.title as language_payment_title,
+            u.nickName as user_name,
+            u.header as user_face_img,
+            b.title,
+            b.logo_url,
+            b.price,
+            c.title as language_title,
+            c.logo_url as language_logo_url
+        from shop_goods_order a
+        left join shop_goods b on(a.goods_id=b.id)
+        left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${languageId})
+        left join t_user_info u on(a.user_id=u.userId)
+        left join shop_payment p on(a.payment_id=p.id)
+        left join shop_payment_lang pl on(p.id=pl.payment_id)
+        where a.order_code = #{orderCode}
+    </select>
+
+    <select id="queryByOrderCodeAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsOrderVo">
+        SELECT
+        a.*,
+        p.title as payment_title,
+        pl.title as language_payment_title,
+        m.userId as merchant_id,
+        m.nickName as merchant_name,
+        m.header as merchant_face_img,
+        b.title,
+        b.logo_url,
+        b.price,
+        c.title as language_title,
+        c.logo_url as language_logo_url
+        from shop_goods_order a
+        left join shop_goods b on(a.goods_id=b.id)
+        left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${languageId})
+        left join t_user_info m on(b.user_id=m.userId)
+        left join shop_payment p on(a.payment_id=p.id)
+        left join shop_payment_lang pl on(p.id=pl.payment_id)
+        where a.order_code = #{orderCode}
+    </select>
+
+    <select id="queryPageForMerchant" resultType="io.dubai.modules.goods.entity.vo.GoodsOrderVo">
+        SELECT
+        a.*,
+        u.nickName as user_name,
+        u.header as user_face_img,
+        b.title,
+        b.logo_url,
+        b.price,
+        c.title as language_title,
+        c.logo_url as language_logo_url
+        from shop_goods_order a
+        left join shop_goods b on(a.goods_id=b.id)
+        left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${query.languageId})
+        left join t_user_info u on(a.user_id=u.userId)
+        where 1=1 and b.user_id = #{query.userId}
+        <if test="query.status != null">
+            and a.status=#{query.status}
+        </if>
+    </select>
+
+
+</mapper>
