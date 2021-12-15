@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.admin.modules.goods.dao.ShopGoodsCategoryDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.dubai.admin.modules.goods.entity.ShopGoodsCategory" id="shopGoodsCategoryMap">
+        <result property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="title" column="title"/>
+        <result property="iconUrl" column="icon_url"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="isDel" column="is_del"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <select id="queryList" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsCategoryVo">
+        SELECT
+        sgc.title defaultTitle,sgc.icon_url defaultIconUrl,sgc.id,sgcl.title languageTitle,sl.`name`,sgc.is_del
+        FROM
+        shop_goods_category sgc
+        LEFT JOIN shop_goods_category_lang sgcl ON sgc.id = sgcl.goods_category_id LEFT JOIN shop_language sl ON
+        sgcl.language_id = sl.id
+        WHERE 1 = 1
+        <if test="params.languageId !=null and params.languageId !=''">
+            and sl.id = #{params.languageId}
+        </if>
+        <if test="params.parentId !=null and params.parentId !=''">
+            and sgc.parent_id = #{params.parentId}
+        </if>
+    </select>
+
+</mapper>
