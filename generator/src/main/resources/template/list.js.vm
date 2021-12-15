@@ -38,7 +38,7 @@ $(function () {
     });
 });
 
-var vm = new Vue({
+let vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
@@ -64,7 +64,7 @@ var vm = new Vue({
 			vm.${classname} = {};
 		},
 		update: function (event) {
-			var $pk.attrname = getSelectedRow();
+			let $pk.attrname = getSelectedRow();
 			if($pk.attrname == null){
 				return ;
 			}
@@ -75,7 +75,7 @@ var vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
 		    $('#btnSaveOrUpdate').button('loading').delay(300).queue(function() {
-                var url = vm.${classname}.${pk.attrname} == null ? "${moduleName}/${pathName}/save" : "${moduleName}/${pathName}/update";
+                let url = vm.${classname}.${pk.attrname} == null ? "${moduleName}/${pathName}/save" : "${moduleName}/${pathName}/update";
                 $.ajax({
                     type: "POST",
                     url: baseURL + url,
@@ -97,11 +97,11 @@ var vm = new Vue({
 			});
 		},
 		del: function () {
-			var ${pk.attrname}s = getSelectedRows();
+			let ${pk.attrname}s = getSelectedRows();
 			if(${pk.attrname}s == null){
 				return ;
 			}
-			var lock = false;
+			let lock = false;
             layer.confirm('确定要删除选中的记录？', {
                 btn: ['确定','取消'] //按钮
             }, function(){
@@ -132,7 +132,7 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			let page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
