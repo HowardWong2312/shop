@@ -1,5 +1,6 @@
 package io.dubai.admin.modules.goods.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.admin.modules.goods.dao.ShopGoodsCategoryDao;
@@ -56,9 +57,14 @@ public class ShopGoodsCategoryServiceImpl extends ServiceImpl<ShopGoodsCategoryD
 
     @Override
     public Integer addShopCategoryLang(ShopGoodsCategoryFrom shopGoodsCategoryFrom) {
-        if(shopGoodsCategoryFrom.getGoodsCategoryId() == null){
+        if (shopGoodsCategoryFrom.getGoodsCategoryId() == null) {
             throw new RRException("id不存在");
         }
+
+        if (shopGoodsCategoryLangService.getBaseMapper().selectOne(new QueryWrapper<ShopGoodsCategoryLang>().eq("goods_category_id", shopGoodsCategoryFrom.getGoodsCategoryId()).eq("language_id", shopGoodsCategoryFrom.getLanguageId())) != null) {
+            throw new RRException("语言包已存在");
+        }
+
         ShopGoodsCategoryLang shopGoodsCategoryLang = new ShopGoodsCategoryLang();
         shopGoodsCategoryLang.setLanguageId(shopGoodsCategoryFrom.getLanguageId());
         shopGoodsCategoryLang.setTitle(shopGoodsCategoryFrom.getLanguageTitle());
