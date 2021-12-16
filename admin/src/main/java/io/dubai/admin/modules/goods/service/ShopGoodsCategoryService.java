@@ -19,5 +19,7 @@ public interface ShopGoodsCategoryService extends IService<ShopGoodsCategory> {
     PageUtils queryPage(Map<String, Object> params);
 
     Integer save(ShopGoodsCategoryFrom shopGoodsCategoryFrom);
+
+    Integer addShopCategoryLang(ShopGoodsCategoryFrom shopGoodsCategoryFrom);
 }
 

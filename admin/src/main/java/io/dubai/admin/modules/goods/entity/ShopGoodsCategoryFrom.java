@@ -7,6 +7,8 @@ import java.io.Serializable;
 @Data
 public class ShopGoodsCategoryFrom implements Serializable {
 
+    private Long goodsCategoryId;
+
     private Long parentId;
 
     private Long languageId;

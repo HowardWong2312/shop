@@ -3,7 +3,8 @@ $(function () {
         url: baseURL + 'goods/shopGoodsCategory/list',
         datatype: "json",
         postData: {
-            "parentId": 0
+            "parentId": 0,
+            "languageId":1
         },
         colModel: [
             {label: 'id', name: 'id', index: 'id', width: 50, key: true},
@@ -209,8 +210,28 @@ const vm = new Vue({
                 });
             });
         },
-        AddLanguageOrUpdate(event){
+        AddLanguageOrUpdate(event) {
 
+            $('#btnAddLanguageOrUpdate').button('loading').delay(300).queue(function () {
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + 'goods/shopGoodsCategory/addShopCategoryLang',
+                    contentType: "application/json",
+                    data: JSON.stringify(vm.shopGoodsCategory),
+                    success: function (r) {
+                        if (r.code == 200) {
+                            layer.msg("操作成功", {icon: 1});
+                            vm.reload();
+                            $('#btnAddLanguageOrUpdate').button('reset');
+                            $('#btnAddLanguageOrUpdate').dequeue();
+                        } else {
+                            layer.alert(r.msg);
+                            $('#btnAddLanguageOrUpdate').button('reset');
+                            $('#btnAddLanguageOrUpdate').dequeue();
+                        }
+                    }
+                });
+            });
         },
         del: function () {
             var ids = getSelectedRows();
@@ -244,6 +265,7 @@ const vm = new Vue({
         getInfo: function (id) {
             $.get(baseURL + "goods/shopGoodsCategory/info/" + id, function (r) {
                 vm.shopGoodsCategory = r.shopGoodsCategory;
+                vm.shopGoodsCategory.goodsCategoryId = vm.shopGoodsCategory.id;
             });
         },
         reload: function (event) {
@@ -274,7 +296,7 @@ layui.use(['layer', 'upload'], function () {
         },
         done: function (res) {
             layer.closeAll('loading');
-            if (res.code == 200) {
+            if (res.code === 200) {
                 vm.$set(vm.shopGoodsCategory, 'defaultIconUrl', res.url)
                 console.log(vm.shopGoodsCategory);
                 return;
@@ -297,7 +319,31 @@ layui.use(['layer', 'upload'], function () {
         },
         done: function (res) {
             layer.closeAll('loading');
-            if (res.code == 200) {
+            if (res.code === 200) {
+                vm.$set(vm.shopGoodsCategory, 'languageIconUrl', res.url)
+                console.log(vm.shopGoodsCategory);
+                return;
+            }
+            layui.layer.msg('上传失败', {icon: 5});
+        },
+        error: function () {
+            layer.closeAll('loading');
+            layui.layer.msg('上传失败', {icon: 5});
+        }
+    });
+
+    layui.upload.render({
+        elem: '#upload3',
+        accept: 'images',
+        acceptMime: 'image/*',//只显示图片
+        url: baseURL + '/sys/oss/upload',
+        field: 'file',
+        before: function (obj) {
+            layer.load();
+        },
+        done: function (res) {
+            layer.closeAll('loading');
+            if (res.code === 200) {
                 vm.$set(vm.shopGoodsCategory, 'languageIconUrl', res.url)
                 console.log(vm.shopGoodsCategory);
                 return;

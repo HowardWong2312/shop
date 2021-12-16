@@ -8,6 +8,7 @@ import io.dubai.admin.modules.goods.entity.ShopGoodsCategoryFrom;
 import io.dubai.admin.modules.goods.entity.ShopGoodsCategoryLang;
 import io.dubai.admin.modules.goods.service.ShopGoodsCategoryLangService;
 import io.dubai.admin.modules.goods.service.ShopGoodsCategoryService;
+import io.dubai.common.exception.RRException;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,19 @@ public class ShopGoodsCategoryServiceImpl extends ServiceImpl<ShopGoodsCategoryD
         shopGoodsCategoryLang.setIconUrl(shopGoodsCategoryFrom.getLanguageIconUrl());
 
 
+        return shopGoodsCategoryLangService.getBaseMapper().insert(shopGoodsCategoryLang);
+    }
+
+    @Override
+    public Integer addShopCategoryLang(ShopGoodsCategoryFrom shopGoodsCategoryFrom) {
+        if(shopGoodsCategoryFrom.getGoodsCategoryId() == null){
+            throw new RRException("id不存在");
+        }
+        ShopGoodsCategoryLang shopGoodsCategoryLang = new ShopGoodsCategoryLang();
+        shopGoodsCategoryLang.setLanguageId(shopGoodsCategoryFrom.getLanguageId());
+        shopGoodsCategoryLang.setTitle(shopGoodsCategoryFrom.getLanguageTitle());
+        shopGoodsCategoryLang.setIconUrl(shopGoodsCategoryFrom.getLanguageIconUrl());
+        shopGoodsCategoryLang.setGoodsCategoryId(shopGoodsCategoryFrom.getGoodsCategoryId());
         return shopGoodsCategoryLangService.getBaseMapper().insert(shopGoodsCategoryLang);
     }
 }

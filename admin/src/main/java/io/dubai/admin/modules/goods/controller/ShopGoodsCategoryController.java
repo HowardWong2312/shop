@@ -54,6 +54,13 @@ public class ShopGoodsCategoryController {
         return shopGoodsCategoryService.save(shopGoodsCategoryFrom) > 0 ? R.ok() : R.error("服务器异常");
     }
 
+    @PostMapping("/addShopCategoryLang")
+    @RequiresPermissions("goods:shopGoodsCategory:save")
+    public R addShopCategoryLang(@RequestBody ShopGoodsCategoryFrom shopGoodsCategoryFrom) {
+
+        return shopGoodsCategoryService.addShopCategoryLang(shopGoodsCategoryFrom) > 0 ? R.ok() : R.error("服务器异常");
+    }
+
     @PostMapping("/update")
     @RequiresPermissions("goods:shopGoodsCategory:update")
     public R update(@RequestBody ShopGoodsCategory shopGoodsCategory) {

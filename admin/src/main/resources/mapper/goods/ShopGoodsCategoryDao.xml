@@ -33,7 +33,7 @@
         shop_goods_category sgc
         LEFT JOIN shop_goods_category_lang sgcl ON sgc.id = sgcl.goods_category_id LEFT JOIN shop_language sl ON
         sgcl.language_id = sl.id
-        WHERE 1 = 1
+        WHERE 1 = 1 and sgc.is_del =0
         <if test="params.languageId !=null and params.languageId !=''">
             and sl.id = #{params.languageId}
         </if>
