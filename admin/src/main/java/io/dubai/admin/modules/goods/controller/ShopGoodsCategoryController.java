@@ -3,17 +3,18 @@ package io.dubai.admin.modules.goods.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.dubai.admin.modules.goods.entity.ShopGoodsCategoryFrom;
 import io.dubai.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 
 import io.dubai.admin.modules.goods.entity.ShopGoodsCategory;
 import io.dubai.admin.modules.goods.service.ShopGoodsCategoryService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
-
 
 
 /**
@@ -30,8 +31,8 @@ public class ShopGoodsCategoryController {
     private ShopGoodsCategoryService shopGoodsCategoryService;
 
     @GetMapping("/list")
-        @RequiresPermissions("goods:shopGoodsCategory:list")
-        public R list(@RequestParam Map<String, Object> params){
+    @RequiresPermissions("goods:shopGoodsCategory:list")
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = shopGoodsCategoryService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -39,24 +40,23 @@ public class ShopGoodsCategoryController {
 
 
     @GetMapping("/info/{id}")
-        @RequiresPermissions("goods:shopGoodsCategory:info")
-        public R info(@PathVariable("id") Long id){
+    @RequiresPermissions("goods:shopGoodsCategory:info")
+    public R info(@PathVariable("id") Long id) {
         ShopGoodsCategory shopGoodsCategory = shopGoodsCategoryService.getById(id);
 
         return R.ok().put("shopGoodsCategory", shopGoodsCategory);
     }
 
     @PostMapping("/save")
-        @RequiresPermissions("goods:shopGoodsCategory:save")
-        public R save(@RequestBody ShopGoodsCategory shopGoodsCategory){
-        shopGoodsCategoryService.save(shopGoodsCategory);
+    @RequiresPermissions("goods:shopGoodsCategory:save")
+    public R save(@RequestBody ShopGoodsCategoryFrom shopGoodsCategoryFrom) {
 
-        return R.ok();
+        return shopGoodsCategoryService.save(shopGoodsCategoryFrom) > 0 ? R.ok() : R.error("服务器异常");
     }
 
     @PostMapping("/update")
-        @RequiresPermissions("goods:shopGoodsCategory:update")
-        public R update(@RequestBody ShopGoodsCategory shopGoodsCategory){
+    @RequiresPermissions("goods:shopGoodsCategory:update")
+    public R update(@RequestBody ShopGoodsCategory shopGoodsCategory) {
         ValidatorUtils.validateEntity(shopGoodsCategory);
         shopGoodsCategoryService.updateById(shopGoodsCategory);
 
@@ -64,8 +64,8 @@ public class ShopGoodsCategoryController {
     }
 
     @DeleteMapping("/delete")
-        @RequiresPermissions("goods:shopGoodsCategory:delete")
-        public R delete(@RequestBody Long[] ids){
+    @RequiresPermissions("goods:shopGoodsCategory:delete")
+    public R delete(@RequestBody Long[] ids) {
         shopGoodsCategoryService.removeByIds(Arrays.asList(ids));
 
         return R.ok();

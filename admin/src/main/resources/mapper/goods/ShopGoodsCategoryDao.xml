@@ -19,7 +19,16 @@
 
     <select id="queryList" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsCategoryVo">
         SELECT
-        sgc.title defaultTitle,sgc.icon_url defaultIconUrl,sgc.id,sgcl.title languageTitle,sl.`name`,sgc.is_del
+        sgc.id,
+        sgc.parent_id,
+        sgc.title defaultTitle,
+        sgc.icon_url defaultIconUrl,
+        sgcl.icon_url languageIconUrl,
+        sgcl.title languageTitle,
+        sl.`name`,
+        sgc.is_del,
+        sgc.create_time,
+        sgc.update_time
         FROM
         shop_goods_category sgc
         LEFT JOIN shop_goods_category_lang sgcl ON sgc.id = sgcl.goods_category_id LEFT JOIN shop_language sl ON
@@ -28,9 +37,14 @@
         <if test="params.languageId !=null and params.languageId !=''">
             and sl.id = #{params.languageId}
         </if>
-        <if test="params.parentId !=null and params.parentId !=''">
-            and sgc.parent_id = #{params.parentId}
+        <if test="params.parentId !=null and params.parentId == 0">
+            and sgc.parent_id = 0
         </if>
+
+        <if test="params.parentId !=null and params.parentId == 1">
+            and sgc.parent_id != 0
+        </if>
+
     </select>
 
 </mapper>

@@ -1,6 +1,7 @@
 package io.dubai.admin.modules.goods.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.dubai.admin.modules.goods.entity.ShopGoodsCategoryFrom;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.admin.modules.goods.entity.ShopGoodsCategory;
 
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface ShopGoodsCategoryService extends IService<ShopGoodsCategory> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    Integer save(ShopGoodsCategoryFrom shopGoodsCategoryFrom);
 }
 

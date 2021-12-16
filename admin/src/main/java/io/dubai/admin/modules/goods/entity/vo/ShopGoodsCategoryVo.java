@@ -1,8 +1,5 @@
 package io.dubai.admin.modules.goods.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -13,11 +10,15 @@ public class ShopGoodsCategoryVo {
 
     private Long id;
 
+    private Long parentId;
+
     private String defaultTitle;
 
     private String defaultIconUrl;
 
     private String languageTitle;
+
+    private String languageIconUrl;
 
     private String name;
 

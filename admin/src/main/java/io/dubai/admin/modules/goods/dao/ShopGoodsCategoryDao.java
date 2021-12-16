@@ -3,6 +3,7 @@ package io.dubai.admin.modules.goods.dao;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.dubai.admin.modules.goods.entity.ShopGoodsCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.dubai.admin.modules.goods.entity.ShopGoodsCategoryFrom;
 import io.dubai.admin.modules.goods.entity.vo.ShopGoodsCategoryVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
