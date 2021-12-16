@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 系统用户
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_user")

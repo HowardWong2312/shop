@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 表数据
  *
- * @author howard
+ * @author mother fucker
  */
 public class TableEntity {
 	//表的名称

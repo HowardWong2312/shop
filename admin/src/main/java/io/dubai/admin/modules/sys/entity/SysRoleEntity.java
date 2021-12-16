@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 角色
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_role")

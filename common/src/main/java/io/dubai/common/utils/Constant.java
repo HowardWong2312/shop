@@ -3,7 +3,7 @@ package io.dubai.common.utils;
 /**
  * 常量
  *
- * @author howard
+ * @author mother fucker
  */
 public class Constant {
 	/** 超级管理员ID */

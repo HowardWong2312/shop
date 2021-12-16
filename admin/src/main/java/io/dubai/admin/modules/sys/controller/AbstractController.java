@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Controller公共组件
  *
- * @author howard
+ * @author mother fucker
  */
 public abstract class AbstractController {
     protected Logger logger = LoggerFactory.getLogger(getClass());

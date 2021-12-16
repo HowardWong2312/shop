@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 用户与角色对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Service("sysUserRoleService")
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserRoleEntity> implements SysUserRoleService {

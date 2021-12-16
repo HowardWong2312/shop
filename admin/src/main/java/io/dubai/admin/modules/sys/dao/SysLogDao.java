@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 系统日志
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysLogDao extends BaseMapper<SysLogEntity> {

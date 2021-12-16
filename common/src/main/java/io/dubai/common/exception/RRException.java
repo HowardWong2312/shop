@@ -5,7 +5,7 @@ import io.dubai.common.enums.ResponseStatusEnum;
 /**
  * 自定义异常
  *
- * @author howard
+ * @author mother fucker
  */
 public class RRException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

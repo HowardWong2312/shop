@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 角色与部门对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_role_dept")

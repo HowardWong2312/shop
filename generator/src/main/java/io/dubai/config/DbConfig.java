@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 /**
  * 数据库配置
  *
- * @author howard
+ * @author mother fucker
  */
 @Configuration
 public class DbConfig {

@@ -3,7 +3,7 @@ package io.dubai.common.utils;
 /**
  * 系统参数相关Key
  *
- * @author howard
+ * @author mother fucker
  */
 public class ConfigConstant {
     /**

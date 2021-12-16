@@ -3,7 +3,7 @@ package io.dubai.admin.modules.job.task;
 /**
  * 定时任务接口，所有定时任务都要实现该接口
  *
- * @author howard
+ * @author mother fucker
  */
 public interface ITask {
 

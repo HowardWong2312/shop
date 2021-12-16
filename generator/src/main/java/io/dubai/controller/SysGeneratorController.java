@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 代码生成器
  *
- * @author howard
+ * @author mother fucker
  */
 @Controller
 @RequestMapping("/sys/generator")

@@ -3,6 +3,26 @@
 
 <mapper namespace="io.dubai.admin.modules.user.dao.UserInfoDao">
 
-
+    <select id="queryPage" resultType="io.dubai.admin.modules.user.entity.UserInfo">
+        select a.*,b.nickName as father_name from `t_user_info` a
+        left join t_user_info b on (a.fatherId=b.userId)
+        where 1=1
+        <if test="obj.key !=null and obj.key !=''">
+            and (
+            a.userId=#{obj.key}
+            or a.bibiCode=#{obj.key}
+            or a.`nickName` like '%${obj.key}%'
+            )
+        </if>
+        <if test="obj.fatherId !=null and obj.fatherId !=''">
+            and a.fatherId = #{obj.fatherId}
+        </if>
+        <if test="obj.isMerchant !=null and obj.isMerchant !=''">
+            and a.`isMerchant`=#{obj.isMerchant}
+        </if>
+        <if test="obj.userLevelId !=null and obj.userLevelId !=''">
+            and a.userLevelId=#{obj.userLevelId}
+        </if>
+    </select>
 
 </mapper>

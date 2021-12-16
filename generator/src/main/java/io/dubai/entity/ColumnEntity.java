@@ -3,7 +3,7 @@ package io.dubai.entity;
 /**
  * 列的属性
  *
- * @author howard
+ * @author mother fucker
  */
 public class ColumnEntity {
 	//列名

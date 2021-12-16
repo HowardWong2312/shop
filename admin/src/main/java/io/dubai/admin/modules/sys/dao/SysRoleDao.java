@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 角色管理
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysRoleDao extends BaseMapper<SysRoleEntity> {

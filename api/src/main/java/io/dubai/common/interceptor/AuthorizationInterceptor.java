@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 权限(Token)验证
  *
- * @author Howard
+ * @author mother fucker
  * @Date 2020/11/06
  */
 @Component

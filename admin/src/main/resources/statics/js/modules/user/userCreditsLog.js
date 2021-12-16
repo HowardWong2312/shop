@@ -4,11 +4,17 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '账户ID', name: 'userid', index: 'userId', width: 80 }, 
+			{ label: '账户ID', name: 'userName', width: 80 },
 			{ label: '变动积分', name: 'amount', index: 'amount', width: 80 }, 
-			{ label: '变后积分余额', name: 'balance', index: 'balance', width: 80 }, 
+			{ label: '变后结余', name: 'balance', index: 'balance', width: 80 },
 			{ label: '', name: 'status', index: 'status', width: 80 }, 
-			{ label: '1收入，2支出', name: 'type', index: 'type', width: 80 }, 
+            { label: '方向', name: 'type', index: 'type', width: 60 ,formatter:function(value){
+                if(value === 1){
+                    return '<span class="label label-success">收入</span>';
+                }else{
+                    return '<span class="label label-danger">支出</span>';
+                }
+            }},
 			{ label: '', name: 'desc', index: 'desc', width: 80 }, 
 			{ label: '', name: 'createtime', index: 'createTime', width: 80 }, 
 			{ label: '', name: 'updatetime', index: 'updateTime', width: 80 }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * 定义请求action类型
- * @author howard
+ * @author mother fucker
  *
  */
 @SuppressWarnings("serial")

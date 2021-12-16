@@ -9,7 +9,7 @@ import io.dubai.common.utils.SpringContextUtils;
 /**
  * 文件上传Factory
  *
- * @author howard
+ * @author mother fucker
  */
 public final class OSSFactory {
 

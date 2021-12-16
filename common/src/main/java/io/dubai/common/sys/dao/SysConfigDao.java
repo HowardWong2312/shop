@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 系统配置信息
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysConfigDao extends BaseMapper<SysConfig> {

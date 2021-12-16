@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * 云存储(支持七牛、阿里云、腾讯云、又拍云)
  *
- * @author howard
+ * @author mother fucker
  */
 public abstract class CloudStorageService {
     /** 云存储配置信息 */

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 角色
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysRoleService extends IService<SysRoleEntity> {
 

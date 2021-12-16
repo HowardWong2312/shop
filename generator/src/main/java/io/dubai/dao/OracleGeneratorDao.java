@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * Oracle代码生成器
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface OracleGeneratorDao extends GeneratorDao {

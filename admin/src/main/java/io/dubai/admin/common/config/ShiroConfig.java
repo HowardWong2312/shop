@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Shiro的配置文件
  *
- * @author howard
+ * @author mother fucker
  */
 @Configuration
 public class ShiroConfig {

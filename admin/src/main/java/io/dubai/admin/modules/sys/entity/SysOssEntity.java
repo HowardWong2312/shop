@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * 文件上传
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_oss")

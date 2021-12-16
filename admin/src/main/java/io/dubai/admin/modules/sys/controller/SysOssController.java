@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * 文件上传
  *
- * @author howard
+ * @author mother fucker
  */
 @RestController
 @RequestMapping("sys/oss")

@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 /**
  * 有@LoginUser注解的方法参数，注入当前登录用户
  *
- * @author Howard
+ * @author mother fucker
  */
 @Component
 public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {

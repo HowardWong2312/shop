@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 /**
  * 轮播图
  *
- * @author Howard
+ * @author mother fucker
  * @email admin@gmail.com
  * @date 2021-10-07 16:29:29
  */

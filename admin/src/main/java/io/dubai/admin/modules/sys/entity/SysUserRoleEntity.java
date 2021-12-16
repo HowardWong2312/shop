@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * 用户与角色对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_user_role")

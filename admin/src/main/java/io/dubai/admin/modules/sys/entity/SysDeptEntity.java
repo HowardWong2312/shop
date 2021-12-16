@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 部门管理
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_dept")

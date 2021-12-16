@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 定时任务
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface ScheduleJobDao extends BaseMapper<ScheduleJobEntity> {

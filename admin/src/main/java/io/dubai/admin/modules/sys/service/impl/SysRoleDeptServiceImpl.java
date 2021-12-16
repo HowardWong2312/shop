@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 角色与部门对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Service("sysRoleDeptService")
 public class SysRoleDeptServiceImpl extends ServiceImpl<SysRoleDeptDao, SysRoleDeptEntity> implements SysRoleDeptService {

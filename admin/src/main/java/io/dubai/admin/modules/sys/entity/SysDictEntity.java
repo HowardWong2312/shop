@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * 数据字典
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_dict")

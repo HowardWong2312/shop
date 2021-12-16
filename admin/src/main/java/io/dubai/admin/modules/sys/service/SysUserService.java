@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 系统用户
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysUserService extends IService<SysUserEntity> {
 

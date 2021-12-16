@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 部门管理
  *
- * @author howard
+ * @author mother fucker
  */
 @RestController
 @RequestMapping("/sys/dept")

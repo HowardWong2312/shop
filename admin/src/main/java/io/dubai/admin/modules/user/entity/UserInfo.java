@@ -1,5 +1,7 @@
 package io.dubai.admin.modules.user.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 /**
@@ -22,145 +25,257 @@ import java.time.LocalDateTime;
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //
-    @TableId
-    private Integer userid;
-
-    //国家编码
-    private String countrycode;
-
-    //手机号
+    /**
+     * userId
+     */
+    @TableId(value = "userId",type = IdType.INPUT)
+    private Integer userId;
+    /**
+     * 国家编码
+     */
+    @TableField("countryCode")
+    private String countryCode;
+    /**
+     * 手机号
+     */
+    @TableField("phone")
     private String phone;
-
-    //昵称
-    private String nickname;
-
-    //头像
+    /**
+     * 昵称
+     */
+    @TableField("nickName")
+    private String nickName;
+    /**
+     * 头像
+     */
+    @TableField("header")
     private String header;
-
-    //性别 男/女
+    /**
+     * 性别 男/女
+     */
+    @TableField("sex")
     private String sex;
-
-    //生日
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private LocalDate birthday;
-
-    //年龄
+    /**
+     * 生日
+     */
+    @TableField("birthday")
+    private Timestamp birthday;
+    /**
+     * 年龄
+     */
+    @TableField("age")
     private Integer age;
-
-    //bibi号（8位纯数字）
-    private String bibicode;
-
-    //邀请码
-    private String invitecode;
-
-    //邀请人
-    private Integer fatherid;
-
-    //当前积分
+    /**
+     * bibi号（8位纯数字）
+     */
+    @TableField("bibiCode")
+    private String bibiCode;
+    /**
+     * 邀请码
+     */
+    @TableField("inviteCode")
+    private String inviteCode;
+    /**
+     * 邀请人
+     */
+    @TableField("fatherId")
+    private Integer fatherId;
+    /**
+     * 当前积分
+     */
+    @TableField("credits")
     private BigDecimal credits;
-
-    //累计收益积分
-    private BigDecimal incomecredits;
-
-    //环信id
-    private String easemobid;
-
-    //环信密码
-    private String easemobpwd;
-
-    //个性签名
+    /**
+     * 累计收益积分
+     */
+    @TableField("incomeCredits")
+    private BigDecimal incomeCredits;
+    /**
+     * 环信id
+     */
+    @TableField("easemobId")
+    private String easemobId;
+    /**
+     * 环信密码
+     */
+    @TableField("easemobPwd")
+    private String easemobPwd;
+    /**
+     * 个性签名
+     */
+    @TableField("signature")
     private String signature;
-
-    //肤色
-    private String skincolor;
-
-    //财富值
+    /**
+     * 肤色
+     */
+    @TableField("skinColor")
+    private String skinColor;
+    /**
+     * 财富值
+     */
+    @TableField("wealth")
     private BigDecimal wealth;
-
-    //财富等级
-    private Integer wealthlevel;
-
-    //背景图
-    private String backimage;
-
-    //国家id
-    private Integer countryid;
-
-    //国家
+    /**
+     * 财富等级
+     */
+    @TableField("wealthLevel")
+    private Integer wealthLevel;
+    /**
+     * 背景图
+     */
+    @TableField("backImage")
+    private String backImage;
+    /**
+     * 国家id
+     */
+    @TableField("countryId")
+    private Integer countryId;
+    /**
+     * 国家
+     */
+    @TableField("country")
     private String country;
-
-    //省id
-    private Integer provinceid;
-
-    //省级名称
-    private String provincename;
-
-    //市id
-    private Integer cityid;
-
-    //市级名称
-    private String cityname;
-
-    //二维码
-    private String ecode;
-
-    //手机号修改时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime phonechangetime;
-
-    //bibi号修改时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime bibicodechangetime;
-
-    //添加好友是否需要验证0否1是
-    private Integer verifyfriend;
-
-    //是否他可以通过手机号添加好友
-    private Integer isphoneaddfriend;
-
-    //是否可以通过bibi号添加好友
-    private Integer isbibicodeaddfriend;
-
-    //是否可以通过群聊添加好友
-    private Integer isgroupaddfriend;
-
-    //是否可以通过二维码添加好友
-    private Integer isecodeaddfriend;
-
-    //0.未认证1.已认证2黑名单
-    private Integer isapprove;
-
-    //语言（默认中文）
+    /**
+     * 省id
+     */
+    @TableField("provinceId")
+    private Integer provinceId;
+    /**
+     * 省级名称
+     */
+    @TableField("provinceName")
+    private String provinceName;
+    /**
+     * 市id
+     */
+    @TableField("cityId")
+    private Integer cityId;
+    /**
+     * 市级名称
+     */
+    @TableField("cityName")
+    private String cityName;
+    /**
+     * 二维码
+     */
+    @TableField("eCode")
+    private String eCode;
+    /**
+     * 手机号修改时间
+     */
+    @TableField("phoneChangeTime")
+    private Date phoneChangeTime;
+    /**
+     * bibi号修改时间
+     */
+    @TableField("bibiCodeChangeTime")
+    private Date bibiCodeChangeTime;
+    /**
+     * 添加好友是否需要验证0否1是
+     */
+    @TableField("verifyFriend")
+    private Integer verifyFriend;
+    /**
+     * 是否他可以通过手机号添加好友
+     */
+    @TableField("isPhoneAddFriend")
+    private Integer isPhoneAddFriend;
+    /**
+     * 是否可以通过bibi号添加好友
+     */
+    @TableField("isBiBiCodeAddFriend")
+    private Integer isBiBiCodeAddFriend;
+    /**
+     * 是否可以通过群聊添加好友
+     */
+    @TableField("isGroupAddFriend")
+    private Integer isGroupAddFriend;
+    /**
+     * 是否可以通过二维码添加好友
+     */
+    @TableField("isECodeAddFriend")
+    private Integer isECodeAddFriend;
+    /**
+     * 是否认证0否1是
+     */
+    @TableField("isApprove")
+    private Integer isApprove;
+    /**
+     * 语言（默认中文）
+     */
+    @TableField("language")
     private String language;
-
-    //是否弃用 0否 1是
+    /**
+     * 是否弃用 0否 1是
+     */
+    @TableField("del")
     private Integer del;
+    /**
+     * createTime
+     */
+    @TableField("createTime")
+    private Timestamp createTime;
+    /**
+     * 是否可以创建群0否1是
+     */
+    @TableField("isCanCreateGroup")
+    private Integer isCanCreateGroup;
+    /**
+     * 手机号搜索（国家编码+手机号）
+     */
+    @TableField("searchPhone")
+    private String searchPhone;
 
-    //创建时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp createtime;
 
-    //是否可以创建群0否1是
-    private Integer iscancreategroup;
+    /**
+     * 地址
+     */
+    @TableField(exist = false)
+    private String address;
 
-    //手机号搜索（国家编码+手机号）
-    private String searchphone;
+    @TableField(exist = false)
+    private String token;
 
-    //是否商家
-    private Integer ismerchant;
+    @TableField(exist = false)
+    private Integer isAnnoy;//是否免打扰0否1是
 
-    //余额
-    private BigDecimal balance;
+    @TableField(exist = false)
+    private Integer isFriend;//是否好友0否1是
 
-    //支付密码
-    private String password;
+    @TableField(exist = false)
+    private Integer isBlack;//是否黑名单0否1是
 
-    //等级(id就等于等级数)
-    private Integer userlevelid;
+    @TableField(exist = false)
+    private Integer isBlocked;//是否被拉黑0否1是
 
-    //免费抽奖次数
-    private Integer lotterytimes;
+    @TableField(exist = false)
+    private Integer friendStatus;//添加好友状态：1.等待对方同意，2.等待你同意3.已添加好友4.未添加5.已过期6.别人将你删除7.你将别人删除
+
+    @TableField(exist = false)
+    private Integer haveNum; //邀请人数
+
+    @TableField(exist = false)
+    private Integer needNum; //下一届阶段需要邀请人数
+
+    @TableField(exist = false)
+    private Integer isHavePwd;//是否设置密码0否1是
+
+    @TableField(exist = false)
+    private String fatherName;//邀请人姓名
+
+    @TableField("isMerchant")
+    private Integer isMerchant; // 是否为电商商家
+
+    private BigDecimal balance;//账户余额
+
+    private String password;//支付密码
+
+    @TableField("userLevelId")
+    private Long userLevelId;//用户等级
+
+    @TableField("lotteryTimes")
+    private Integer lotteryTimes;//免费抽奖次数
+
 
 
 }

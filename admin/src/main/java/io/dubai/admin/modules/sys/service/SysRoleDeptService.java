@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 角色与部门对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysRoleDeptService extends IService<SysRoleDeptEntity> {
 

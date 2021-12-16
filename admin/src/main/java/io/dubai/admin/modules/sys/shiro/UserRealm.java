@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * 认证
  *
- * @author howard
+ * @author mother fucker
  */
 @Component
 public class UserRealm extends AuthorizingRealm {

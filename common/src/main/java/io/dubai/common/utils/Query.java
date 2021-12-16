@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * 查询参数
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @ApiModel("分页参数")

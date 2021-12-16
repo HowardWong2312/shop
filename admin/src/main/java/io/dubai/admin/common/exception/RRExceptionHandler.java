@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 异常处理器
  *
- * @author howard
+ * @author mother fucker
  */
 @RestControllerAdvice
 public class RRExceptionHandler {

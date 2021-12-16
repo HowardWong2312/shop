@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 定时任务日志
  *
- * @author howard
+ * @author mother fucker
  */
 public interface ScheduleJobLogService extends IService<ScheduleJobLogEntity> {
 

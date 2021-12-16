@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * 配置管理器
- * @author howard
+ * @author mother fucker
  *
  */
 public final class ConfigManager {

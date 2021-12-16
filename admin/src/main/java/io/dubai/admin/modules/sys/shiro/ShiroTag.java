@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * Shiro权限标签
  *
- * @author howard
+ * @author mother fucker
  */
 @Component
 public class ShiroTag {

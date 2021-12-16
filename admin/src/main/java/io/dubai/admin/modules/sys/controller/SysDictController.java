@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 数据字典
  *
- * @author howard
+ * @author mother fucker
  */
 @RestController
 @RequestMapping("sys/dict")

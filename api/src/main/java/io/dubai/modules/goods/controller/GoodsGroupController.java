@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * 拼团商品
  *
- * @author Howard
+ * @author mother fucker
  * @email admin@gmail.com
  * @date 2021-10-07 16:25:36
  */

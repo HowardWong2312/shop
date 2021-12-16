@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * 系统配置信息
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("sys_config")

@@ -22,7 +22,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * 代码生成器   工具类
  *
- * @author howard
+ * @author mother fucker
  */
 public class GenUtils {
 

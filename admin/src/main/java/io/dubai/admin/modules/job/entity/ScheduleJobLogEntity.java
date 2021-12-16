@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * 定时任务日志
  *
- * @author howard
+ * @author mother fucker
  */
 @Data
 @TableName("schedule_job_log")

@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 /**
  * 系统配置Redis
  *
- * @author howard
+ * @author mother fucker
  */
 @Component
 public class SysConfigRedis {

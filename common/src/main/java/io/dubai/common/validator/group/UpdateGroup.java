@@ -3,7 +3,7 @@ package io.dubai.common.validator.group;
 /**
  * 更新数据 Group
  *
- * @author howard
+ * @author mother fucker
  */
 public interface UpdateGroup {
 

@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * 角色
  *
- * @author howard
+ * @author mother fucker
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {

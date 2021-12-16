@@ -11,7 +11,7 @@ import java.util.Properties;
 /**
  * 生成验证码配置
  *
- * @author howard
+ * @author mother fucker
  */
 @Configuration
 public class KaptchaConfig {

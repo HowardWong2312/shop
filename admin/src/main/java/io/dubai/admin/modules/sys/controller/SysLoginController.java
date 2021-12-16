@@ -22,7 +22,7 @@ import java.io.IOException;
 /**
  * 登录相关
  *
- * @author howard
+ * @author mother fucker
  */
 @Controller
 public class SysLoginController {

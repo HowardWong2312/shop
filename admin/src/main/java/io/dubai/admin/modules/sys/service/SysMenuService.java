@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 菜单管理
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysMenuService extends IService<SysMenuEntity> {
 

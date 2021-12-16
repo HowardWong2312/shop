@@ -3,7 +3,7 @@ package io.dubai.common.group;
 /**
  * 七牛
  *
- * @author howard
+ * @author mother fucker
  */
 public interface QiniuGroup {
 }

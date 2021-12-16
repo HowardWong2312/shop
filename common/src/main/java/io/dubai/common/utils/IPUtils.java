@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * IP地址
  *
- * @author howard
+ * @author mother fucker
  */
 public class IPUtils {
 	private static Logger logger = LoggerFactory.getLogger(IPUtils.class);

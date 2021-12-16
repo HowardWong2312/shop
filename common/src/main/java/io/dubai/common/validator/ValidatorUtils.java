@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * 参考文档：http://docs.jboss.org/hibernate/validator/5.4/reference/en-US/html_single/
  *
- * @author howard
+ * @author mother fucker
  */
 public class ValidatorUtils {
     private static Validator validator;

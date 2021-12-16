@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 登录用户信息
  *
- * @author Howard
+ * @author mother fucker
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

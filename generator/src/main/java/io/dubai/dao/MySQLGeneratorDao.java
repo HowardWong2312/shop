@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * MySQL代码生成器
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface MySQLGeneratorDao extends GeneratorDao {

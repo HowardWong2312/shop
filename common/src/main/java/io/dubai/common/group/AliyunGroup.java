@@ -3,7 +3,7 @@ package io.dubai.common.group;
 /**
  * 阿里云
  *
- * @author howard
+ * @author mother fucker
  */
 public interface AliyunGroup {
 }

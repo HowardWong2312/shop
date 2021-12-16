@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 角色管理
  *
- * @author howard
+ * @author mother fucker
  */
 @RestController
 @RequestMapping("/sys/role")

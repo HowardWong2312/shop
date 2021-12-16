@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 文件上传
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysOssService extends IService<SysOssEntity> {
 

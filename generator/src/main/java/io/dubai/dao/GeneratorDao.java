@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 数据库接口
  *
- * @author howard
+ * @author mother fucker
  */
 public interface GeneratorDao {
     List<Map<String, Object>> queryList(Map<String, Object> map);

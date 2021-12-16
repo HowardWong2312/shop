@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 角色与菜单对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Service("sysRoleMenuService")
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuDao, SysRoleMenuEntity> implements SysRoleMenuService {

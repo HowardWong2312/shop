@@ -12,7 +12,7 @@ import java.util.Properties;
 /**
  * Freemarker配置
  *
- * @author howard
+ * @author mother fucker
  */
 @Configuration
 public class FreemarkerConfig {

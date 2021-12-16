@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 数据字典
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysDictDao extends BaseMapper<SysDictEntity> {

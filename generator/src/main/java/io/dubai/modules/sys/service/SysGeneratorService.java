@@ -18,7 +18,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * 代码生成器
  *
- * @author howard
+ * @author mother fucker
  */
 @Service
 public class SysGeneratorService {

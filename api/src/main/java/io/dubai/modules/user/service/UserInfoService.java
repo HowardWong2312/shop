@@ -6,7 +6,7 @@ import com.cz.czUser.system.entity.UserInfo;
 /**
  * 用户账户
  *
- * @author Howard
+ * @author mother fucker
  * @email admin@gmail.com
  * @date 2021-10-07 16:28:10
  */

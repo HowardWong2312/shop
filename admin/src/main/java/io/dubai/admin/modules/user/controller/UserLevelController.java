@@ -27,13 +27,9 @@ public class UserLevelController {
     private UserLevelService userLevelService;
 
     @GetMapping("/list")
-    @RequiresPermissions("user:userLevel:list")
-    public R list(@RequestParam Map<String, Object> params) {
-        PageUtils page = userLevelService.queryPage(params);
-
-        return R.ok().put("page", page);
+    public R list() {
+        return R.ok().put("list", userLevelService.list());
     }
-
 
     @GetMapping("/info/{id}")
     @RequiresPermissions("user:userLevel:info")

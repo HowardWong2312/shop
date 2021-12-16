@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 系统菜单
  *
- * @author howard
+ * @author mother fucker
  */
 @RestController
 @RequestMapping("/sys/menu")

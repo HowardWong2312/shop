@@ -21,7 +21,7 @@ import java.util.Locale;
 /**
  * MVC配置
  *
- * @author Howard
+ * @author mother fucker
  */
 @Configuration
 @ComponentScan(basePackages = { "com.cz.czUser.system.entity"})

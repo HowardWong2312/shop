@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * mybatis-plus配置
  *
- * @author Howard
+ * @author mother fucker
  */
 @Configuration
 @EnableTransactionManagement

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 菜单管理
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysMenuDao extends BaseMapper<SysMenuEntity> {

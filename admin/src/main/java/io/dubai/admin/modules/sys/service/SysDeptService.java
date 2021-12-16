@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 部门管理
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysDeptService extends IService<SysDeptEntity> {
 

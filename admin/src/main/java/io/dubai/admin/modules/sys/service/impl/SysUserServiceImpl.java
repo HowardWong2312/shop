@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * 系统用户
  *
- * @author howard
+ * @author mother fucker
  */
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {

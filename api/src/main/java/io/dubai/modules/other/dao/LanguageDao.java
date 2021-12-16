@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 语言
  *
- * @author Howard
+ * @author mother fucker
  * @email admin@gmail.com
  * @date 2021-10-11 20:00:11
  */

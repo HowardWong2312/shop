@@ -20,7 +20,7 @@
 ///**
 // * mybatis拦截器，去掉字符串参数的前后空格
 // *
-// * @Author Howard
+// * @author mother fucker
 // * @Date 2020-12-14
 // */
 //@Slf4j

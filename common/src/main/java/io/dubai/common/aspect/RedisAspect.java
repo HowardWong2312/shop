@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * Redis切面处理类
  *
- * @author howard
+ * @author mother fucker
  */
 @Aspect
 @Component

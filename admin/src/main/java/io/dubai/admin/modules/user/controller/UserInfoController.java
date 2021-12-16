@@ -30,7 +30,6 @@ public class UserInfoController {
     @RequiresPermissions("user:userInfo:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = userInfoService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -55,8 +54,7 @@ public class UserInfoController {
     @RequiresPermissions("user:userInfo:update")
     public R update(@RequestBody UserInfo userInfo) {
         ValidatorUtils.validateEntity(userInfo);
-        userInfoService.updateById(userInfo);
-
+        userInfoService.update(userInfo);
         return R.ok();
     }
 

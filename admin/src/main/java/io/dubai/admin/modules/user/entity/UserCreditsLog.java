@@ -1,5 +1,6 @@
 package io.dubai.admin.modules.user.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,7 +26,8 @@ public class UserCreditsLog implements Serializable {
     private Long id;
 
     //账户ID
-    private Long userid;
+    @TableField("userId")
+    private Long userId;
 
     //变动积分
     private BigDecimal amount;
@@ -42,13 +44,13 @@ public class UserCreditsLog implements Serializable {
     //
     private String desc;
 
-    //
+    @TableField("createTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createtime;
+    private LocalDateTime createTime;
 
-    //
+    @TableField("updateTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime updatetime;
+    private LocalDateTime updateTime;
 
 
 }

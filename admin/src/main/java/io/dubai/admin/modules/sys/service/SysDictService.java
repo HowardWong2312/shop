@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 数据字典
  *
- * @author howard
+ * @author mother fucker
  */
 public interface SysDictService extends IService<SysDictEntity> {
 

@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * 系统日志，切面处理类
  *
- * @author howard
+ * @author mother fucker
  */
 @Aspect
 @Component

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 角色与部门对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysRoleDeptDao extends BaseMapper<SysRoleDeptEntity> {

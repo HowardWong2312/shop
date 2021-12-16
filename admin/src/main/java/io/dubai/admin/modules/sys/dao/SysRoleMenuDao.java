@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 角色与菜单对应关系
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysRoleMenuDao extends BaseMapper<SysRoleMenuEntity> {

@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * 登录效验
  *
- * @author Howard
+ * @author mother fucker
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 文件上传
  *
- * @author howard
+ * @author mother fucker
  */
 @Mapper
 public interface SysOssDao extends BaseMapper<SysOssEntity> {

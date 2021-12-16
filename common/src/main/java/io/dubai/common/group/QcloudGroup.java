@@ -3,7 +3,7 @@ package io.dubai.common.group;
 /**
  * 腾讯云
  *
- * @author howard
+ * @author mother fucker
  */
 public interface QcloudGroup {
 }
