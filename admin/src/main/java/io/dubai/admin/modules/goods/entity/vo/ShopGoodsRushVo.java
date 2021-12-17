@@ -1,6 +1,5 @@
 package io.dubai.admin.modules.goods.entity.vo;
 
-import io.dubai.admin.modules.goods.entity.ShopGoodsOnebuy;
 import io.dubai.admin.modules.goods.entity.ShopGoodsRush;
 import lombok.Data;
 

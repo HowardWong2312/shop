@@ -26,9 +26,10 @@
         <if test="params.status !=null and params.status !=''">
             and a.status = #{params.status}
         </if>
+        order by a.create_time desc
     </select>
 
-    <select id="queryPage" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsRushVo">
+    <select id="queryById" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsRushVo">
         SELECT
         a.*,
         sd.value as status_value,
@@ -39,7 +40,7 @@
         LEFT JOIN shop_goods b ON (a.goods_id = b.id)
         LEFT JOIN t_user_info u ON (b.user_id=u.userId)
         left join `sys_dict` sd on(a.status=sd.code and sd.type='goods_rush_status')
-        WHERE id = #{id}
+        WHERE a.id = #{id}
     </select>
 
 </mapper>

@@ -1,10 +1,7 @@
 package io.dubai.admin.modules.goods.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.dubai.admin.modules.goods.entity.ShopGoodsOnebuy;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class ShopGoodsOnebuyVo extends ShopGoodsOnebuy {

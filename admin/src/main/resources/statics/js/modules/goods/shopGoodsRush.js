@@ -3,14 +3,15 @@ $(function () {
         url: baseURL + 'goods/shopGoodsRush/list',
         datatype: "json",
         colModel: [
-            { label: 'id', name: 'id', index: 'id', width: 50, key: true },
-            { label: '商品名称', name: 'goodsName', width: 80 },
+            { label: 'id', name: 'id', index: 'a.id', width: 40, key: true },
+            { label: '商品名称', name: 'goodsName', width: 120 },
             { label: '商家名称', name: 'merchantName', width: 80 },
-            { label: '剩余份数', name: 'quantity', index: 'quantity', width: 80 },
-            { label: '到期时间', name: 'expireTime', index: 'expire_time', width: 80 },
+            { label: '参与份数', name: 'quantity', index: 'a.quantity', width: 80 },
+            { label: '结束时间', name: 'expireTime', index: 'a.expire_time', width: 80 },
             { label: '状态', name: 'status', width: 35, formatter: function (value, options, row) {
                 return '<span class="label ' + row.statusColor + '">' + row.statusValue + '</span>';
-            }}
+            }},
+            { label: '申请时间', name: 'createTime', index: 'a.create_time', width: 80 },
         ],
 		viewrecords: true,
         height: 600,

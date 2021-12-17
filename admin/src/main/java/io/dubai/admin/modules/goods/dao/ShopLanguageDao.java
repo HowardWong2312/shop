@@ -1,9 +1,8 @@
 package io.dubai.admin.modules.goods.dao;
 
-import io.dubai.admin.modules.goods.entity.ShopLanguage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.dubai.admin.modules.goods.entity.ShopLanguage;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 语言

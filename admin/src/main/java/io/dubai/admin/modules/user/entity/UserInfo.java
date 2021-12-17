@@ -4,14 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -28,7 +25,7 @@ public class UserInfo implements Serializable {
     /**
      * userId
      */
-    @TableId(value = "userId",type = IdType.INPUT)
+    @TableId(value = "userId", type = IdType.INPUT)
     private Integer userId;
     /**
      * 国家编码
@@ -275,7 +272,6 @@ public class UserInfo implements Serializable {
 
     @TableField("lotteryTimes")
     private Integer lotteryTimes;//免费抽奖次数
-
 
 
 }

@@ -1,9 +1,9 @@
 package io.dubai.admin.modules.goods.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.dubai.admin.modules.goods.entity.ShopGoodsRush;
 import io.dubai.admin.modules.goods.entity.vo.ShopGoodsRushVo;
 import io.dubai.common.utils.PageUtils;
-import io.dubai.admin.modules.goods.entity.ShopGoodsRush;
 
 import java.util.Map;
 

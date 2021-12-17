@@ -299,8 +299,15 @@ public class GoodsController {
         Goods goods = goodsService.getById(form.getGoodsId());
         GoodsOneBuy goodsOneBuy = goodsOneBuyService.getOne(
                 new QueryWrapper<GoodsOneBuy>()
-                        .eq("goods_id",form.getGoodsId()).last("limit 1")
+                        .eq("goods_id",form.getGoodsId())
+                        .eq("status",1)
+                        .last("limit 1")
         );
+        if(goodsOneBuy == null){
+            goods.setIsOneBuy(0);
+            goodsService.updateById(goods);
+            throw new RRException(ResponseStatusEnum.ONE_BUY_EVENT_OVER);
+        }
         GoodsOrder tempOrder = goodsOrderService.getOne(
                 new QueryWrapper<GoodsOrder>()
                 .eq("user_id",userInfo.getUserId())
@@ -309,11 +316,6 @@ public class GoodsController {
         );
         if(tempOrder != null){
             return R.ok(ResponseStatusEnum.ONLY_CAN_BUY_ONE);
-        }
-        if(goodsOneBuy == null){
-            goods.setIsOneBuy(0);
-            goodsService.updateById(goods);
-            throw new RRException(ResponseStatusEnum.ONE_BUY_EVENT_OVER);
         }
         if(goods.getStock() < 1){
             throw new RRException(ResponseStatusEnum.GOODS_STOCK_NOT_ENOUGH);
@@ -735,7 +737,9 @@ public class GoodsController {
     public R lottery(@PathVariable("goodsId") Long goodsId,@ApiIgnore @LoginUser UserInfo userInfo) {
         Goods goods = goodsService.getById(goodsId);
         GoodsRush goodsRush = goodsRushService.getOne(new QueryWrapper<GoodsRush>()
-                .eq("goods_id",goodsId).last("limit 1")
+                .eq("goods_id",goodsId)
+                .eq("status",1)
+                .last("limit 1")
         );
         if(goods.getIsRush().intValue() == 0 || goodsRush == null || goodsRush.getQuantity().intValue() < 1){
             return R.error(ResponseStatusEnum.RUSH_EVENT_OVER);
