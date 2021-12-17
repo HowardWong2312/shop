@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.admin.modules.goods.dao.ShopGoodsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.dubai.admin.modules.goods.entity.ShopGoods" id="shopGoodsMap">
+        <result property="id" column="id"/>
+        <result property="countryId" column="country_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="logoUrl" column="logo_url"/>
+        <result property="stock" column="stock"/>
+        <result property="price" column="price"/>
+        <result property="linkUrl" column="link_url"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="isGroup" column="is_group"/>
+        <result property="isRush" column="is_rush"/>
+        <result property="isOneBuy" column="is_one_buy"/>
+        <result property="status" column="status"/>
+        <result property="isDel" column="is_del"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

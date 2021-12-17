@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>免费抢活动</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-inline">
+            <#if shiro.hasPermission("goods:shopGoodsRush:list")>
+                <div class="form-group">
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="商家ID与名称，商品ID与名称">
+                </div>
+                <div v-if="statusList!=null && statusList.length > 0" class="form-group">
+                    <label class="control-label">状态:</label>
+                    <select class="form-control" v-model="q.status" placeholder="什么玩意">
+                        <option value="" selected="selected">请选择</option>
+                        <option v-for="item in statusList" :value="item.code">{{item.value}}</option>
+                    </select>
+                </div>
+                <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
+            </#if>
+            </div>
+        </div>
+        <div class="grid-btn">
+            <#if shiro.hasPermission("goods:shopGoodsRush:check")>
+                <a class="btn btn-warning" @click="check"><i class="fa fa-pencil-square-o"></i> 审核</a>
+            </#if>
+<!--            <#if shiro.hasPermission("goods:shopGoodsRush:update")>-->
+<!--                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>-->
+<!--            </#if>-->
+            <#if shiro.hasPermission("goods:shopGoodsRush:delete")>
+                <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">剩余份数</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="shopGoodsRush.quantity" placeholder="剩余份数"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">免费抢活动审核</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <label>商家：</label><span>{{shopGoodsRush.merchantName}}</span>
+                </p>
+                <p>
+                    <label>商品：</label><span>{{shopGoodsRush.goodsName}}</span>
+                </p>
+                <p>
+                    <label>份数：</label><span>{{shopGoodsRush.quantity}}</span>
+                </p>
+                <p>
+                    <label>到期时间：</label><span>{{shopGoodsRush.expireTime}}</span>
+                </p>
+                <p>
+                    <label>审核状态：</label><span :class="'label '+shopGoodsRush.statusColor">{{shopGoodsRush.statusValue}}</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button v-if="shopGoodsRush.status == 0" type="button" class="btn btn-success" @click="success"><i class="fa fa-check"></i> 通过</button>
+                <button v-if="shopGoodsRush.status == 0" type="button" class="btn btn-warning" @click="refuse"><i class="fa fa-times"></i> 拒绝</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/goods/shopGoodsRush.js?_${.now?long}"></script>
+</body>
+</html>

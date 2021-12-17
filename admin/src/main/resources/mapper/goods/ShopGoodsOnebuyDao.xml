@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.admin.modules.goods.dao.ShopGoodsOnebuyDao">
+
+    <select id="queryPage" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsOnebuyVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        sd.remark as status_color,
+        b.title as goods_name,
+        u.nickname as merchant_name
+        FROM shop_goods_onebuy a
+        LEFT JOIN shop_goods b ON (a.goods_id = b.id)
+        LEFT JOIN t_user_info u ON (b.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='goods_onebuy_status')
+        WHERE 1 = 1
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nick_name like '%${params.key}%'
+            or b.title like '%${params.key}%'
+            or a.goods_id=#{params.key}
+            or b.user_id=#{params.key}
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+    </select>
+
+    <select id="queryPage" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsOnebuyVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        sd.remark as status_color,
+        b.title as goods_name,
+        u.nickname as merchant_name
+        FROM shop_goods_onebuy a
+        LEFT JOIN shop_goods b ON (a.goods_id = b.id)
+        LEFT JOIN t_user_info u ON (b.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='goods_onebuy_status')
+        WHERE id = #{id}
+    </select>
+
+</mapper>
