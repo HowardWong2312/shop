@@ -61,7 +61,7 @@ public class ShopGoodsCategoryServiceImpl extends ServiceImpl<ShopGoodsCategoryD
             throw new RRException("id不存在");
         }
 
-        if (shopGoodsCategoryLangService.getBaseMapper().selectOne(new QueryWrapper<ShopGoodsCategoryLang>().eq("goods_category_id", shopGoodsCategoryFrom.getGoodsCategoryId()).eq("language_id", shopGoodsCategoryFrom.getLanguageId())) != null) {
+        if (shopGoodsCategoryLangService.getBaseMapper().selectOne(new QueryWrapper<ShopGoodsCategoryLang>().eq("goods_category_id", shopGoodsCategoryFrom.getGoodsCategoryId()).eq("language_id", shopGoodsCategoryFrom.getLanguageId()).eq("is_del", 0)) != null) {
             throw new RRException("语言包已存在");
         }
 
@@ -71,5 +71,25 @@ public class ShopGoodsCategoryServiceImpl extends ServiceImpl<ShopGoodsCategoryD
         shopGoodsCategoryLang.setIconUrl(shopGoodsCategoryFrom.getLanguageIconUrl());
         shopGoodsCategoryLang.setGoodsCategoryId(shopGoodsCategoryFrom.getGoodsCategoryId());
         return shopGoodsCategoryLangService.getBaseMapper().insert(shopGoodsCategoryLang);
+    }
+
+    @Override
+    public boolean updateById(ShopGoodsCategoryFrom shopGoodsCategoryFrom) {
+        ShopGoodsCategoryLang shopGoodsCategoryLang = shopGoodsCategoryLangService.getBaseMapper().selectOne(new QueryWrapper<ShopGoodsCategoryLang>().eq("goods_category_id", shopGoodsCategoryFrom.getGoodsCategoryId()).eq("language_id", shopGoodsCategoryFrom.getLanguageId()).eq("is_del", 0));
+        if (shopGoodsCategoryLang == null) {
+            throw new RRException("语言包不存在");
+        }
+        shopGoodsCategoryLang.setTitle(shopGoodsCategoryFrom.getLanguageTitle());
+        ShopGoodsCategory shopGoodsCategory = baseMapper.selectById(shopGoodsCategoryFrom.getGoodsCategoryId());
+        shopGoodsCategory.setTitle(shopGoodsCategoryFrom.getDefaultTitle());
+        if (shopGoodsCategory == null) {
+            throw new RRException("一级目录不存在");
+        }
+        if (shopGoodsCategoryFrom.getParentId().intValue() != 0) {
+            shopGoodsCategoryLang.setIconUrl(shopGoodsCategoryFrom.getLanguageIconUrl());
+            shopGoodsCategory.setIconUrl(shopGoodsCategoryFrom.getDefaultIconUrl());
+        }
+        baseMapper.updateById(shopGoodsCategory);
+        return shopGoodsCategoryLangService.updateById(shopGoodsCategoryLang);
     }
 }

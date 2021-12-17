@@ -21,5 +21,7 @@ public interface ShopGoodsCategoryService extends IService<ShopGoodsCategory> {
     Integer save(ShopGoodsCategoryFrom shopGoodsCategoryFrom);
 
     Integer addShopCategoryLang(ShopGoodsCategoryFrom shopGoodsCategoryFrom);
+
+    boolean updateById(ShopGoodsCategoryFrom shopGoodsCategoryFrom);
 }
 

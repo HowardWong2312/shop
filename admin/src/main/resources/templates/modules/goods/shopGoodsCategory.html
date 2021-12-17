@@ -45,7 +45,7 @@
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
 
-            <div class="form-group">
+            <div class="form-group" v-show="shopGoodsCategory.id==null">
                 <div class="col-sm-2 control-label">归属分类</div>
                 <div class="col-sm-10">
                     <input type="radio" id="male" value="0" v-model="isParent"> 一级目录
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" v-show="shopGoodsCategory.id==null">
                 <div class="col-sm-2 control-label">语言包</div>
                 <div class="col-sm-10">
                     <select class="form-control" v-model="selected" @change="fromLanguageCheck($event)">
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="form-group" v-if="isParent == 1">
+            <div class="form-group" v-if="isParent != 0" v-show="shopGoodsCategory.id==null">
                 <div class="col-sm-2 control-label">选择分类</div>
                 <div class="col-sm-10">
                     <select class="form-control" v-model="parentSelected" @change="fromParentCheck($event)" >
@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="form-group" v-show="isParent == 1">
+            <div class="form-group" v-show="isParent != 0">
                 <div class="col-sm-2 control-label">默认图标</div>
                 <div class="col-sm-10">
                     <div style="display: flex;flex-direction: row;justify-content: space-between">
@@ -104,7 +104,7 @@
                 </div>
             </div>
 
-            <div class="form-group" v-show="isParent == 1">
+            <div class="form-group" v-show="isParent != 0">
                 <div class="col-sm-2 control-label">语言图标</div>
                 <div class="col-sm-10" >
                    <div style="display: flex;flex-direction: row;justify-content: space-between">

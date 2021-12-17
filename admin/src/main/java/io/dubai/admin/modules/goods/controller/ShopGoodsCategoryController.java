@@ -63,11 +63,10 @@ public class ShopGoodsCategoryController {
 
     @PostMapping("/update")
     @RequiresPermissions("goods:shopGoodsCategory:update")
-    public R update(@RequestBody ShopGoodsCategory shopGoodsCategory) {
-        ValidatorUtils.validateEntity(shopGoodsCategory);
-        shopGoodsCategoryService.updateById(shopGoodsCategory);
+    public R update(@RequestBody ShopGoodsCategoryFrom shopGoodsCategoryFrom) {
 
-        return R.ok();
+        return shopGoodsCategoryService.updateById(shopGoodsCategoryFrom) ? R.ok() : R.error("服务器异常");
+
     }
 
     @DeleteMapping("/delete")
