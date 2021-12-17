@@ -4,7 +4,7 @@ $(function () {
         datatype: "json",
         postData: {
             "parentId": 0,
-            "languageId":1
+            "languageId": 1
         },
         colModel: [
             {label: 'id', name: 'id', index: 'id', width: 50, key: true},
@@ -171,17 +171,16 @@ const vm = new Vue({
         , fromLanguageCheck: function (event) {
             vm.shopGoodsCategory.languageId = vm.languages[event.target.value].id;
         },
-        update: function (event) {
+        update: async function (event) {
             var id = getSelectedRow();
             if (id == null) {
                 return;
             }
-            vm.shopGoodsCategory.languageId = vm.languages[0].id;
-            vm.shopGoodsCategory.parentId = vm.parentList[0].id;
+            await vm.getInfo(id)
+            vm.isParent = vm.shopGoodsCategory.parentId;
+            vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.showList = false;
             vm.title = "修改";
-
-            vm.getInfo(id)
         },
         saveOrUpdate: function (event) {
             if (vm.isParent === 0) {
@@ -262,8 +261,8 @@ const vm = new Vue({
             }, function () {
             });
         },
-        getInfo: function (id) {
-            $.get(baseURL + "goods/shopGoodsCategory/info/" + id, function (r) {
+        getInfo: async function (id) {
+            await $.get(baseURL + "goods/shopGoodsCategory/info/" + id, function (r) {
                 vm.shopGoodsCategory = r.shopGoodsCategory;
                 vm.shopGoodsCategory.goodsCategoryId = vm.shopGoodsCategory.id;
             });
