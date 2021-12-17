@@ -2,22 +2,22 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'user/userCreditsLog/list',
         datatype: "json",
-        colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '账户ID', name: 'userName', width: 80 },
-			{ label: '变动积分', name: 'amount', index: 'amount', width: 80 }, 
-			{ label: '变后结余', name: 'balance', index: 'balance', width: 80 },
-			{ label: '', name: 'status', index: 'status', width: 80 }, 
+        colModel: [
+            { label: 'id', name: 'id', index: 'id', width: 50, key: true },
+            { label: '用户昵称', name: 'userName', index: 'userName', width: 80 },
+            { label: '变动积分', name: 'amount', index: 'amount', width: 80 },
+            { label: '变后余额', name: 'balance', index: 'balance', width: 80 },
+            { label: '类型', name: 'statusValue', width: 35},
             { label: '方向', name: 'type', index: 'type', width: 60 ,formatter:function(value){
                 if(value === 1){
                     return '<span class="label label-success">收入</span>';
-                }else{
+                }
+                if(value === 2){
                     return '<span class="label label-danger">支出</span>';
                 }
             }},
-			{ label: '', name: 'desc', index: 'desc', width: 80 }, 
-			{ label: '', name: 'createtime', index: 'createTime', width: 80 }, 
-			{ label: '', name: 'updatetime', index: 'updateTime', width: 80 }
+            { label: '记录时间', name: 'createTime', index: 'create_time', width: 80 },
+            { label: '描述', name: 'desc', index: 'desc', width: 80 },
         ],
 		viewrecords: true,
         height: 600,
@@ -50,17 +50,21 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
+        statusList: [],
 		q: {},
 		userCreditsLog: {}
 	},
     created:function () {
+        this.getStatusList();
     },
 	methods: {
         query: function () {
             vm.showList = true;
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
-                    "key":vm.q.key
+                    "key":vm.q.key,
+                    "status":vm.q.status,
+                    "type":vm.q.type,
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -137,12 +141,19 @@ var vm = new Vue({
                 vm.userCreditsLog = r.userCreditsLog;
             });
 		},
+        getStatusList: function () {
+            $.get(baseURL + "sys/dict/list/user_credits_log_status", function (r) {
+                vm.statusList = r.list;
+            });
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
+                    "status":vm.q.status,
+                    "type":vm.q.type,
                 },
                 page:page
             }).trigger("reloadGrid");

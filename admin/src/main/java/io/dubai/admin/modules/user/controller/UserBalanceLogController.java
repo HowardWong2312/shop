@@ -30,7 +30,6 @@ public class UserBalanceLogController {
     @RequiresPermissions("user:userBalanceLog:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = userBalanceLogService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -41,31 +40,6 @@ public class UserBalanceLogController {
         UserBalanceLog userBalanceLog = userBalanceLogService.getById(id);
 
         return R.ok().put("userBalanceLog", userBalanceLog);
-    }
-
-    @PostMapping("/save")
-    @RequiresPermissions("user:userBalanceLog:save")
-    public R save(@RequestBody UserBalanceLog userBalanceLog) {
-        userBalanceLogService.save(userBalanceLog);
-
-        return R.ok();
-    }
-
-    @PostMapping("/update")
-    @RequiresPermissions("user:userBalanceLog:update")
-    public R update(@RequestBody UserBalanceLog userBalanceLog) {
-        ValidatorUtils.validateEntity(userBalanceLog);
-        userBalanceLogService.updateById(userBalanceLog);
-
-        return R.ok();
-    }
-
-    @DeleteMapping("/delete")
-    @RequiresPermissions("user:userBalanceLog:delete")
-    public R delete(@RequestBody Long[] ids) {
-        userBalanceLogService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
     }
 
 }

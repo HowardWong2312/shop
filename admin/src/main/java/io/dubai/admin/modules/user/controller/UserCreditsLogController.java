@@ -30,7 +30,6 @@ public class UserCreditsLogController {
     @RequiresPermissions("user:userCreditsLog:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = userCreditsLogService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.admin.modules.user.dao.UserCreditsLogDao;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
+import io.dubai.admin.modules.user.entity.vo.UserBalanceLogVo;
+import io.dubai.admin.modules.user.entity.vo.UserCreditsLogVo;
 import io.dubai.admin.modules.user.service.UserCreditsLogService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
@@ -18,11 +20,8 @@ public class UserCreditsLogServiceImpl extends ServiceImpl<UserCreditsLogDao, Us
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<UserCreditsLog> page = this.page(
-                new Query<UserCreditsLog>().getPage(params),
-                new QueryWrapper<UserCreditsLog>()
-        );
-
+        IPage<UserCreditsLogVo> page = new Query<UserCreditsLogVo>().getPage(params);
+        page.setRecords(baseMapper.queryPage(page,params));
         return new PageUtils(page);
     }
 

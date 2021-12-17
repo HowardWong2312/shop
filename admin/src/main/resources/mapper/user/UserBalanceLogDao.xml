@@ -3,7 +3,29 @@
 
 <mapper namespace="io.dubai.admin.modules.user.dao.UserBalanceLogDao">
 
-
-
+    <select id="queryPage" resultType="io.dubai.admin.modules.user.entity.vo.UserBalanceLogVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        sd.remark as status_color,
+        u.nickname as user_name
+        FROM t_user_balance_log a
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='user_balance_log_status')
+        WHERE 1 = 1
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nick_name like '%${params.key}%'
+            or a.user_id=#{params.key}
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+        <if test="params.type !=null and params.type !=''">
+            and a.type = #{params.type}
+        </if>
+        order by a.create_time desc
+    </select>
 
 </mapper>

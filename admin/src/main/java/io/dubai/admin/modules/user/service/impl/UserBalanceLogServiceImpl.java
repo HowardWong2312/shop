@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.admin.modules.user.dao.UserBalanceLogDao;
 import io.dubai.admin.modules.user.entity.UserBalanceLog;
+import io.dubai.admin.modules.user.entity.vo.UserBalanceLogVo;
 import io.dubai.admin.modules.user.service.UserBalanceLogService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
@@ -18,11 +19,8 @@ public class UserBalanceLogServiceImpl extends ServiceImpl<UserBalanceLogDao, Us
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<UserBalanceLog> page = this.page(
-                new Query<UserBalanceLog>().getPage(params),
-                new QueryWrapper<UserBalanceLog>()
-        );
-
+        IPage<UserBalanceLogVo> page = new Query<UserBalanceLogVo>().getPage(params);
+        page.setRecords(baseMapper.queryPage(page,params));
         return new PageUtils(page);
     }
 

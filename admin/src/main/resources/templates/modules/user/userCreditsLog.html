@@ -11,18 +11,24 @@
             <div class="form-inline">
             <#if shiro.hasPermission("user:userCreditsLog:list")>
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="关键字">
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户ID,昵称">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">方向:</label>
+                    <select class="form-control" v-model="q.type">
+                        <option value="" selected="selected">请选择</option>
+                        <option value="1" selected="selected">收入</option>
+                        <option value="2" selected="selected">支出</option>
+                    </select>
+                </div>
+                <div v-if="statusList!=null && statusList.length > 0" class="form-group">
+                    <label class="control-label">类型:</label>
+                    <select class="form-control" v-model="q.status">
+                        <option value="" selected="selected">请选择</option>
+                        <option v-for="item in statusList" :value="item.code">{{item.value}}</option>
+                    </select>
                 </div>
                 <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
-            </#if>
-            <#if shiro.hasPermission("user:userCreditsLog:save")>
-                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i> 新增</a>
-            </#if>
-            <#if shiro.hasPermission("user:userCreditsLog:update")>
-                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>
-            </#if>
-            <#if shiro.hasPermission("user:userCreditsLog:delete")>
-                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
             </#if>
             </div>
         </div>
@@ -30,64 +36,6 @@
         <div id="jqGridPager"></div>
     </div>
 
-    <div v-show="!showList" class="panel panel-default">
-        <div class="panel-heading">{{title}}</div>
-        <form class="form-horizontal">
-                                    <div class="form-group">
-                <div class="col-sm-2 control-label">账户ID</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.userid" placeholder="账户ID"/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label">变动积分</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.amount" placeholder="变动积分"/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label">变后积分余额</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.balance" placeholder="变后积分余额"/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.status" placeholder=""/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label">1收入，2支出</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.type" placeholder="1收入，2支出"/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.desc" placeholder=""/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.createtime" placeholder=""/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userCreditsLog.updatetime" placeholder=""/>
-                </div>
-            </div>
-                        <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
-                <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-            </div>
-        </form>
-    </div>
 </div>
 
 <script src="${request.contextPath}/statics/js/modules/user/userCreditsLog.js?_${.now?long}"></script>
