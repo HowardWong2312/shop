@@ -62,9 +62,11 @@ let vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
+        showGroup: true,
         title: null,
         q: {},
         shopGoods: {},
+        shopGoodsGroup: {},
         countryList: [],
         countrySelected: 0,
         categoryList: [],
@@ -102,7 +104,7 @@ let vm = new Vue({
                     formatter: function (item, index, data) {
                         console.log(data);
                         if (data.logoUrl != null) {
-                            return `<a href="javascript:openImg('` + data.logoUrl+"','"+ data.title+ `')"><img  style="width: 24px;height: 24px" src="` + data.logoUrl + `"/></a>`;
+                            return `<a href="javascript:openImg('` + data.logoUrl + "','" + data.title + `')"><img  style="width: 24px;height: 24px" src="` + data.logoUrl + `"/></a>`;
                         }
                         return '<span></span>'
                     }
@@ -217,6 +219,18 @@ let vm = new Vue({
                 page: 1
             }).trigger("reloadGrid");
         },
+        groupInfo: function () {
+            let id = getSelectedRow();
+            if (id == null) {
+                return;
+            }
+            vm.showGroup = false;
+            vm.showList = false;
+            vm.title = "查看拼团信息";
+            $.getJSON(baseURL + `goods/shopGoodsGroup/info/${id}`, function (res) {
+                vm.shopGoodsGroup = res.shopGoodsGroup;
+            });
+        },
         add: function () {
             vm.showList = false;
             vm.title = "新增";
@@ -291,6 +305,7 @@ let vm = new Vue({
         },
         reload: function (event) {
             vm.showList = true;
+            vm.showGroup = true;
             let page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
                 postData: {

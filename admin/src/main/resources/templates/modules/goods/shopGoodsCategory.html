@@ -25,7 +25,7 @@
                 <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
             </#if>
             <#if shiro.hasPermission("goods:shopGoodsCategory:save")>
-            <a class="btn btn-primary" @click="addLanguage"><i class="fa fa-plus"></i> 新增语言</a>
+            <a class="btn btn-primary" @click="addLanguage"><i class="fa fa-language"></i> 新增语言</a>
             </#if>
             <select class="form-control" v-model="selected" @change="languageCheck($event)">
                 <option  v-for="(item,index) in languages" :value="index">{{item.title}}</option>
