@@ -12,6 +12,7 @@ $(function () {
             {
                 label: '默认图标',
                 name: 'defaultIconUrl',
+                align:"center",
                 index: 'default_IconUrl',
                 width: 32,
                 formatter: function (value) {
@@ -25,6 +26,7 @@ $(function () {
                 label: '语言图标',
                 name: 'languageIconUrl',
                 index: 'language_iconUrl',
+                align:"center",
                 width: 32,
                 formatter: function (value) {
                     if (value != null) {
