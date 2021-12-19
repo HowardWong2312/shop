@@ -97,13 +97,12 @@ let vm = new Vue({
                 // {label: '备注(默认)', name: 'description', index: 'description', width: 80},
                 {
                     label: '产品logo(默认)',
-                    name: 'logoUrl',
-                    index: 'logo_url',
-                    width: 80,
+                    width: 60,
                     align: "center",
-                    formatter: function (value) {
-                        if (value != null) {
-                            return '<img style="width: 24px" src="' + value + '"/>';
+                    formatter: function (item, index, data) {
+                        console.log(data);
+                        if (data.logoUrl != null) {
+                            return `<a href="javascript:openImg('` + data.logoUrl+"','"+ data.title+ `')"><img  style="width: 24px" src="` + data.logoUrl + `"/></a>`;
                         }
                         return '<span></span>'
                     }
@@ -195,17 +194,17 @@ let vm = new Vue({
         categoryCheck(event) {
             vm.query();
         },
-        groupChange(b){
-            vm.shopGoods.isGroup = b?1:0;
+        groupChange(b) {
+            vm.shopGoods.isGroup = b ? 1 : 0;
         },
-        rushChange(b){
-            vm.shopGoods.isRush = b?1:0;
+        rushChange(b) {
+            vm.shopGoods.isRush = b ? 1 : 0;
         },
-        oneBuyChange(b){
-            vm.shopGoods.isOneBuy = b?1:0;
+        oneBuyChange(b) {
+            vm.shopGoods.isOneBuy = b ? 1 : 0;
         },
-        statusChange(b){
-            vm.shopGoods.status = b?1:0;
+        statusChange(b) {
+            vm.shopGoods.status = b ? 1 : 0;
         },
         query: function () {
             vm.showList = true;
