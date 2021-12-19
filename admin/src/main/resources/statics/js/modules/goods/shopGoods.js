@@ -96,13 +96,13 @@ let vm = new Vue({
                 {label: '商品名称(默认)', name: 'title', index: 'title', width: 150},
                 // {label: '备注(默认)', name: 'description', index: 'description', width: 80},
                 {
-                    label: '产品logo(默认)',
-                    width: 80,
+                    label: 'logo(默认)',
+                    width: 60,
                     align: "center",
                     formatter: function (item, index, data) {
                         console.log(data);
                         if (data.logoUrl != null) {
-                            return `<a href="javascript:openImg('` + data.logoUrl+"','"+ data.title+ `')"><img  style="width: 32px" src="` + data.logoUrl + `"/></a>`;
+                            return `<a href="javascript:openImg('` + data.logoUrl+"','"+ data.title+ `')"><img  style="width: 24px;height: 24px" src="` + data.logoUrl + `"/></a>`;
                         }
                         return '<span></span>'
                     }
