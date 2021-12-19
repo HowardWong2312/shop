@@ -103,7 +103,7 @@ let vm = new Vue({
                if(!lock) {
                     lock = true;
 		            $.ajax({
-                        type: "POST",
+                        type: "delete",
                         url: baseURL + "goods/Country/delete",
                         contentType: "application/json",
                         data: JSON.stringify(ids),
