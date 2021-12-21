@@ -12,7 +12,7 @@ $(function () {
             {
                 label: '默认图标',
                 name: 'defaultIconUrl',
-                align:"center",
+                align: "center",
                 index: 'default_IconUrl',
                 width: 32,
                 formatter: function (value) {
@@ -26,7 +26,7 @@ $(function () {
                 label: '语言图标',
                 name: 'languageIconUrl',
                 index: 'language_iconUrl',
-                align:"center",
+                align: "center",
                 width: 32,
                 formatter: function (value) {
                     if (value != null) {
@@ -122,20 +122,6 @@ const vm = new Vue({
                     }
                 }
             });
-            $.ajax({
-                url: baseURL + 'goods/shopGoodsCategory/list',
-                type: "GET",
-                contentType: "application/json",
-                success: function (r) {
-                    vm.parentList = [];
-                    for (let i = 0; i < r.page.list.length; i++) {
-                        vm.parentList.push({
-                            title: r.page.list[i].defaultTitle, id: r.page.list[i].id
-                        })
-                    }
-                }
-            });
-
         },
         query: function () {
             vm.showList = true;
@@ -149,12 +135,13 @@ const vm = new Vue({
             }).trigger("reloadGrid");
             vm.initLanguageAndCategory();
         },
-        add: function () {
+        add: async function () {
             vm.showList = false;
             vm.title = "新增";
+            await vm.getFirstCategoryList();
             vm.shopGoodsCategory = {};
-            vm.shopGoodsCategory.languageId = vm.languages[0].id;
-            vm.shopGoodsCategory.parentId = vm.parentList[0].id;
+            vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
+            vm.shopGoodsCategory.isParent = 0;
         },
         addLanguage: function (event) {
             var id = getSelectedRow();
@@ -164,13 +151,14 @@ const vm = new Vue({
             vm.showList = false;
             vm.showAddLanguage = false;
             vm.shopGoodsCategory = {};
-            vm.shopGoodsCategory.languageId = vm.languages[0].id;
+            vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.getInfo(id);
         },
         fromParentCheck: function (event) {
             vm.shopGoodsCategory.parentId = vm.parentList[event.target.value].id;
         }
-        , fromLanguageCheck: function (event) {
+        , fromLanguageCheck: async function (event) {
+            await vm.getFirstCategoryList();
             vm.shopGoodsCategory.languageId = vm.languages[event.target.value].id;
         },
         update: async function (event) {
@@ -179,14 +167,37 @@ const vm = new Vue({
                 return;
             }
             await vm.getInfo(id)
+            await vm.getFirstCategoryList();
             vm.isParent = vm.shopGoodsCategory.parentId;
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.showList = false;
             vm.title = "修改";
         },
+        async getFirstCategoryList() {
+            await $.ajax({
+                url: baseURL + `goods/shopGoodsCategory/list?languageId=${vm.languages[vm.selected].id}&parentId=0`,
+                type: "GET",
+                async: false,
+                contentType: "application/json",
+                success: function (r) {
+                    vm.parentList = [];
+                    for (let i = 0; i < r.page.list.length; i++) {
+                        vm.parentList.push({
+                            title: r.page.list[i].defaultTitle, id: r.page.list[i].id
+                        })
+                    }
+                    if (vm.parentList.length > 0) {
+                        vm.shopGoodsCategory.parentId = vm.parentList[0].id;
+                    }
+                }
+            });
+        },
         saveOrUpdate: function (event) {
             if (vm.isParent === 0) {
                 vm.shopGoodsCategory.parentId = 0;
+            } else if (vm.isParent === 1 || vm.parentList == null || vm.parentList.length === 0) {
+                layer.msg('请选择一级目录');
+                return;
             }
 
             $('#btnSaveOrUpdate').button('loading').delay(300).queue(function () {
