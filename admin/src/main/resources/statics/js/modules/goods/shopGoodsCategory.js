@@ -143,7 +143,7 @@ const vm = new Vue({
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.shopGoodsCategory.isParent = 0;
         },
-        addLanguage: function (event) {
+        addLanguage: async function (event) {
             var id = getSelectedRow();
             if (id == null) {
                 return;
@@ -151,14 +151,17 @@ const vm = new Vue({
             vm.showList = false;
             vm.showAddLanguage = false;
             vm.shopGoodsCategory = {};
+            await vm.getInfo(id);
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
-            vm.getInfo(id);
+
         },
         fromParentCheck: function (event) {
             vm.shopGoodsCategory.parentId = vm.parentList[event.target.value].id;
         }
-        , fromLanguageCheck: async function (event) {
-            await vm.getFirstCategoryList();
+        , fromLanguageCheck: async function (event, reload) {
+            if (reload) {
+                await vm.getFirstCategoryList();
+            }
             vm.shopGoodsCategory.languageId = vm.languages[event.target.value].id;
         },
         update: async function (event) {
@@ -193,6 +196,7 @@ const vm = new Vue({
             });
         },
         saveOrUpdate: function (event) {
+
             if (vm.isParent === 0) {
                 vm.shopGoodsCategory.parentId = 0;
             } else if (vm.isParent === 1 || vm.parentList == null || vm.parentList.length === 0) {
@@ -223,6 +227,11 @@ const vm = new Vue({
             });
         },
         AddLanguageOrUpdate(event) {
+            console.log(vm.shopGoodsCategory);
+            if (vm.shopGoodsCategory.languageId == null) {
+                layer.msg('请重新选择语言');
+                return;
+            }
 
             $('#btnAddLanguageOrUpdate').button('loading').delay(300).queue(function () {
                 $.ajax({

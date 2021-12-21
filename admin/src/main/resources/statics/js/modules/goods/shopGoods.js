@@ -224,11 +224,17 @@ let vm = new Vue({
             if (id == null) {
                 return;
             }
-            vm.showGroup = false;
-            vm.showList = false;
-            vm.title = "查看拼团信息";
+
             $.getJSON(baseURL + `goods/shopGoodsGroup/info/${id}`, function (res) {
-                vm.shopGoodsGroup = res.shopGoodsGroup;
+                if (res.shopGoodsGroup !=null ) {
+                    vm.shopGoodsGroup = res.shopGoodsGroup;
+                    vm.showGroup = false;
+                    vm.showList = false;
+                    vm.title = "查看拼团信息";
+                    return;
+                }
+                layer.msg("当前商品未查询到拼团信息", {icon: 5});
+
             });
         },
         add: function () {
