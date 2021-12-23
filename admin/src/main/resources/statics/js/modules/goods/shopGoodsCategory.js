@@ -138,8 +138,8 @@ const vm = new Vue({
         add: async function () {
             vm.showList = false;
             vm.title = "新增";
-            await vm.getFirstCategoryList();
             vm.shopGoodsCategory = {};
+            await vm.getFirstCategoryList();
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.shopGoodsCategory.isParent = 0;
         },
@@ -197,13 +197,12 @@ const vm = new Vue({
         },
         saveOrUpdate: function (event) {
 
-            if (vm.isParent === 0) {
+            if (vm.isParent === 0 || vm.isParent === '0') {
                 vm.shopGoodsCategory.parentId = 0;
-            } else if (vm.isParent === 1 || vm.parentList == null || vm.parentList.length === 0) {
+            } else if (vm.isParent === '1' && vm.parentId == null) {
                 layer.msg('请选择一级目录');
                 return;
             }
-
             $('#btnSaveOrUpdate').button('loading').delay(300).queue(function () {
                 var url = vm.shopGoodsCategory.id == null ? "goods/shopGoodsCategory/save" : "goods/shopGoodsCategory/update";
                 $.ajax({
@@ -271,7 +270,7 @@ const vm = new Vue({
                         contentType: "application/json",
                         data: JSON.stringify(ids),
                         success: function (r) {
-                            if (r.code == 200) {
+                            if (r.code === 200) {
                                 layer.msg("操作成功", {icon: 1});
                                 vm.reload();
                             } else {

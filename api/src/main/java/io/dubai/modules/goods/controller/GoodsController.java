@@ -126,6 +126,7 @@ public class GoodsController {
         return R.ok().put("page", goodsService.queryPage(query));
     }
 
+
     @ApiOperation("根据主键查商品详情")
     @GetMapping("/info/{id}")
     @Login
