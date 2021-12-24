@@ -66,4 +66,10 @@ public class UserInfoController {
         return R.ok();
     }
 
+    @GetMapping("/getTodayFundsAndUserData")
+    @RequiresPermissions("user:userInfo:count")
+    public R getTodayFundsAndUserData(){
+        return userInfoService.getTodayFundsAndUserData();
+    }
+
 }

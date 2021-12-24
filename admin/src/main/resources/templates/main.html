@@ -6,12 +6,94 @@
     <title>欢迎页</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui-v2.6.8/layui/css/layui.css">
+
 </head>
 <body>
-<div class="panel panel-default" id="main" style="border:none">
-    <div style="text-align: center">
-        <h1>邀请码:{{user.inviteCode}}</h1>
+<div class="panel panel-default" id="main"
+     style="border:none;padding: 20px; background-color: #F2F2F2;height: 100vh;width: 100vw;font-size: 16px">
+    <div class="layui-row layui-col-space15">
 
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">用户</div>
+                <div class="layui-card-body">
+                    用户总数:10
+                </div>
+                <div class="layui-card-body">
+                    今日新增:10
+                </div>
+                <div class="layui-card-body">
+                    今日新增(直属):10
+                </div>
+                <div class="layui-card-body">
+                    今日新增(分裂):10
+                </div>
+                <div class="layui-card-body">
+                    总充值用户数:10
+                </div>
+                <div class="layui-card-body">
+                    今日新增充值用户:10
+                </div>
+                <div class="layui-card-body">
+                    今日新增充值用户(直属):10
+                </div>
+                <div class="layui-card-body">
+                    今日新增充值用户(分裂):10
+                </div>
+                <div class="layui-card-body">
+                    当日提现用户数:10
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">资金</div>
+                <div class="layui-card-body">
+                    总充值:100
+                </div>
+                <div class="layui-card-body">
+                    总出金:100
+                </div>
+                <div class="layui-card-body">
+                    总资金余额:100
+                </div>
+                <div class="layui-card-body">
+                    当日充值总金额:100
+                </div>
+                <div class="layui-card-body">
+                    当日提现总金额:100
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">积分</div>
+                <div class="layui-card-body">
+                    用户获得积分总数:100
+                </div>
+                <div class="layui-card-body">
+                    已经兑换总数:100
+                </div>
+                <div class="layui-card-body">
+                    未兑换总数:100
+                </div>
+                <div class="layui-card-body">
+                    当日获取积分总数:100
+                </div>
+                <div class="layui-card-body">
+                    活跃度:100
+                </div>
+                <div class="layui-card-body">
+                    当日在线用户:100
+                </div>
+                <div class="layui-card-body">
+                    当日获取过积分的用户:100
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="${request.contextPath}/statics/libs/jquery.min.js"></script>

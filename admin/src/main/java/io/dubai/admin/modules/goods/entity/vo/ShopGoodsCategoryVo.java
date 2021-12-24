@@ -12,6 +12,8 @@ public class ShopGoodsCategoryVo {
 
     private Long parentId;
 
+    private Integer orderNum;
+
     private String defaultTitle;
 
     private String defaultIconUrl;

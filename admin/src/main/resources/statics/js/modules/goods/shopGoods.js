@@ -36,12 +36,13 @@ function fetchCategory() {
             dataType: 'json',
             timeout: 5000,
             data: {
-                "languageId": 1,
+                "languageId": vm.languages[vm.languageSelected].id,
                 "page": 1,
                 "limit": 1000
             },
             success: function (res) {
                 categoryMap = new Map();
+                vm.categoryList = [];
                 vm.categoryList.push({id: null, name: '全部'});
                 for (let i = 0; i < res.page.list.length; i++) {
                     if (res.page.list[i].defaultTitle == null || res.page.list[i].defaultTitle === "") res.page.list[i].defaultTitle = res.page.list[i].languageTtile
@@ -65,6 +66,8 @@ let vm = new Vue({
         showGroup: true,
         title: null,
         q: {},
+        languages: [{title: '中文', id: 0}, {title: '英文', id: 1},],
+        languageSelected: 0,
         shopGoods: {},
         shopGoodsGroup: {},
         countryList: [],
@@ -73,26 +76,22 @@ let vm = new Vue({
         categorySelected: 0,
     },
     created: async function () {
-        await fetchCountry();
+        // await fetchCountry();
+        await this.initLanguageAndCategory();
         await fetchCategory();
         $("#jqGrid").jqGrid({
             url: baseURL + 'goods/shopGoods/list',
             datatype: "json",
             colModel: [
                 {label: 'id', name: 'id', index: 'id', width: 30, key: true},
-                {
-                    label: '国家',
-                    name: 'countryId',
-                    index: 'country_id',
-                    width: 40,
-                    formatter: function (value) {
-                        return '<p>' + countryMap.get(value) + '</p>';
-                    }
-                },
                 {label: '用户ID-代表商家', name: 'userId', index: 'user_id', width: 40},
                 {
                     label: '分类', name: 'categoryId', index: 'category_id', width: 60, formatter: function (value) {
-                        return '<p>' + categoryMap.get(value) + '</p>';
+                        let newVar = categoryMap.get(value);
+                        if (newVar === null || newVar === undefined || newVar === "") {
+                            return `<span class="label label-danger">暂无分类</span>`;
+                        }
+                        return '<p>' + newVar + '</p>';
                     }
                 },
                 {label: '商品名称(默认)', name: 'title', index: 'title', width: 150},
@@ -102,7 +101,6 @@ let vm = new Vue({
                     width: 60,
                     align: "center",
                     formatter: function (item, index, data) {
-                        console.log(data);
                         if (data.logoUrl != null) {
                             return `<a href="javascript:openImg('` + data.logoUrl + "','" + data.title + `')"><img  style="width: 24px;height: 24px" src="` + data.logoUrl + `"/></a>`;
                         }
@@ -157,12 +155,13 @@ let vm = new Vue({
                             '<span class="label label-danger">下架</span>';
                     }
                 },
+                {label: '排序', name: 'orderNum', index: 'sgc.order_num', width: 50},
                 {label: '创建时间', name: 'createTime', index: 'create_time', width: 100},
             ],
             viewrecords: true,
             postData: {
                 "key": vm.q.key,
-                "countryId": vm.countrySelected,
+                "languageId": vm.languages[vm.languageSelected].id,
                 categoryId: null
             },
             height: 600,
@@ -190,7 +189,10 @@ let vm = new Vue({
         });
     },
     methods: {
-        countryCheck(event) {
+        async languagesCheck(event) {
+            //    切换语言更新分类
+            await fetchCategory();
+            vm.categorySelected = 0;
             vm.query();
         },
         categoryCheck(event) {
@@ -208,12 +210,29 @@ let vm = new Vue({
         statusChange(b) {
             vm.shopGoods.status = b ? 1 : 0;
         },
+        async initLanguageAndCategory() {
+            await $.ajax({
+                url: baseURL + 'goods/shopLanguage/list',
+                type: "GET",
+                contentType: "application/json",
+                success: function (r) {
+                    let row = [];
+                    for (let i = 0; i < r.page.list.length; i++) {
+                        row.push({
+                            title: r.page.list[i].name, id: r.page.list[i].id
+                        })
+                    }
+                    vm.$set(vm, 'languages', row)
+                    console.log(vm.languages);
+                }
+            });
+        },
         query: function () {
             vm.showList = true;
             $("#jqGrid").jqGrid('setGridParam', {
                 postData: {
                     "key": vm.q.key,
-                    "countryId": vm.countryList[vm.countrySelected].id,
+                    "languageId": vm.languages[vm.languageSelected].id,
                     "categoryId": vm.categoryList[vm.categorySelected].id
                 },
                 page: 1
@@ -226,7 +245,7 @@ let vm = new Vue({
             }
 
             $.getJSON(baseURL + `goods/shopGoodsGroup/info/${id}`, function (res) {
-                if (res.shopGoodsGroup !=null ) {
+                if (res.shopGoodsGroup != null) {
                     vm.shopGoodsGroup = res.shopGoodsGroup;
                     vm.showGroup = false;
                     vm.showList = false;

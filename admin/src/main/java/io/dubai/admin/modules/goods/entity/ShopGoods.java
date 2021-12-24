@@ -31,6 +31,8 @@ public class ShopGoods implements Serializable {
 	//国家ID,0为不限
 	private Long countryId;
 
+	private Integer orderNum;
+
 	//用户ID-代表商家
 	private Long userId;
 

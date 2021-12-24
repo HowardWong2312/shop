@@ -7,13 +7,14 @@ $(function () {
             "languageId": 1
         },
         colModel: [
-            {label: 'id', name: 'id', index: 'id', width: 50, key: true},
-            {label: '默认标题', name: 'defaultTitle', index: 'default_title', width: 100},
+            {label: 'id', name: 'id', index: 'sgc.id', width: 50, key: true},
+            {label: '父类id', name: 'parentId', index: 'sgc.parent_id', width: 50},
+            {label: '默认标题', name: 'defaultTitle', index: 'sgc.title', width: 100},
             {
                 label: '默认图标',
                 name: 'defaultIconUrl',
                 align: "center",
-                index: 'default_IconUrl',
+                index: 'sgc.icon_url',
                 width: 32,
                 formatter: function (value) {
                     if (value != null) {
@@ -25,7 +26,7 @@ $(function () {
             {
                 label: '语言图标',
                 name: 'languageIconUrl',
-                index: 'language_iconUrl',
+                index: 'sgcl.icon_url',
                 align: "center",
                 width: 32,
                 formatter: function (value) {
@@ -35,17 +36,18 @@ $(function () {
                     return '<span></span>'
                 }
             },
-            {label: '语言标题', name: 'languageTitle', index: 'language_title', width: 80},
+            {label: '语言标题', name: 'languageTitle', index: 'sgcl.title', width: 80},
             {label: '所属语言', name: 'name', index: 'name', width: 80},
+            {label: '排序', name: 'orderNum', index: 'sgc.order_num', width: 50},
             {
-                label: '是否删除', name: 'isDel', index: 'is_del', width: 80, formatter: function (value) {
+                label: '是否删除', name: 'isDel', index: 'sgc.is_del', width: 80, formatter: function (value) {
                     return value === 0 ?
                         '<span class="label label-success">正常</span>' :
                         '<span class="label label-danger">已删除</span>';
                 }
             },
-            {label: '创建时间', name: 'createTime', index: 'create_time', width: 80},
-            {label: '更新时间', name: 'updateTime', index: 'update_time', width: 80}
+            {label: '创建时间', name: 'createTime', index: 'sgc.create_time', width: 80},
+            {label: '更新时间', name: 'updateTime', index: 'sgc.create_time', width: 80}
             // {
             //     label: '操作',
             //     width: 60,
@@ -87,6 +89,7 @@ const vm = new Vue({
     data: {
         showList: true,
         showAddLanguage: true,
+        showCategory: false,
         title: null,
         q: {},
         shopGoodsCategory: {},
@@ -95,7 +98,8 @@ const vm = new Vue({
         parentId: 0,
         isParent: 0,
         parentList: [{title: '电商', id: 0}],
-        parentSelected: 0
+        parentSelected: 0,
+        parentTitle: '无父级分类'
     },
     created: function () {
         this.initLanguageAndCategory();
@@ -137,6 +141,7 @@ const vm = new Vue({
         },
         add: async function () {
             vm.showList = false;
+            vm.showCategory = false;
             vm.title = "新增";
             vm.shopGoodsCategory = {};
             await vm.getFirstCategoryList();
@@ -171,6 +176,18 @@ const vm = new Vue({
             }
             await vm.getInfo(id)
             await vm.getFirstCategoryList();
+            vm.parentTitle = '';
+            let rowData = $("#jqGrid").getRowData(id);
+            vm.shopGoodsCategory.defaultTitle = rowData.defaultTitle;
+            vm.shopGoodsCategory.languageTitle = rowData.languageTitle;
+            vm.shopGoodsCategory.orderNum = rowData.orderNum;
+            vm.parentList.forEach(e => {
+                if(e.id.toString() === rowData.parentId.toString()){
+                    vm.parentTitle = e.title;
+                    vm.showCategory = true;
+                    return;
+                }
+            });
             vm.isParent = vm.shopGoodsCategory.parentId;
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.showList = false;

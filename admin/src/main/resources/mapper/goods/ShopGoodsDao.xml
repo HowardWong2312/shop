@@ -3,7 +3,7 @@
 
 <mapper namespace="io.dubai.admin.modules.goods.dao.ShopGoodsDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.dubai.admin.modules.goods.entity.ShopGoods" id="shopGoodsMap">
         <result property="id" column="id"/>
         <result property="countryId" column="country_id"/>
@@ -26,6 +26,22 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
-
+    <select id="shopGoodsList" resultMap="shopGoodsMap">
+        SELECT
+        sg.*
+        FROM
+        shop_goods sg
+        INNER JOIN shop_goods_lang sgl ON sg.id = sgl.goods_id
+        where 1 = 1
+        <if test="params.ids !=null">
+            and sg.category_id in
+            <foreach collection="params.ids" index="index" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+         <if test="params.languageId !=null and params.languageId != '' ">
+            and sgl.language_id  = #{params.languageId}
+        </if>
+    </select>
 
 </mapper>

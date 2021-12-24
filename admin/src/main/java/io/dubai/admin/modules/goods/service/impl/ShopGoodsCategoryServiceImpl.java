@@ -82,6 +82,7 @@ public class ShopGoodsCategoryServiceImpl extends ServiceImpl<ShopGoodsCategoryD
         shopGoodsCategoryLang.setTitle(shopGoodsCategoryFrom.getLanguageTitle());
         ShopGoodsCategory shopGoodsCategory = baseMapper.selectById(shopGoodsCategoryFrom.getGoodsCategoryId());
         shopGoodsCategory.setTitle(shopGoodsCategoryFrom.getDefaultTitle());
+        shopGoodsCategory.setOrderNum(shopGoodsCategoryFrom.getOrderNum());
         if (shopGoodsCategoryFrom.getParentId().intValue() != 0) {
             shopGoodsCategoryLang.setIconUrl(shopGoodsCategoryFrom.getLanguageIconUrl());
             shopGoodsCategory.setIconUrl(shopGoodsCategoryFrom.getDefaultIconUrl());

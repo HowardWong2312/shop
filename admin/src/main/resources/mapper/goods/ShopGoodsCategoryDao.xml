@@ -21,6 +21,7 @@
         SELECT
         sgc.id,
         sgc.parent_id,
+        sgc.order_num,
         sgc.title defaultTitle,
         sgc.icon_url defaultIconUrl,
         sgcl.icon_url languageIconUrl,

@@ -3,6 +3,7 @@ package io.dubai.admin.modules.user.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.dubai.admin.modules.user.entity.UserInfo;
 import io.dubai.common.utils.PageUtils;
+import io.dubai.common.utils.R;
 
 import java.util.Map;
 
@@ -20,5 +21,7 @@ public interface UserInfoService extends IService<UserInfo> {
     UserInfo insert(UserInfo userInfo);
 
     UserInfo update(UserInfo userInfo);
+
+    R getTodayFundsAndUserData();
 }
 
