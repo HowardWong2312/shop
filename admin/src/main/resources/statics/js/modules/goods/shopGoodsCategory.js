@@ -147,6 +147,7 @@ const vm = new Vue({
             await vm.getFirstCategoryList();
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
             vm.shopGoodsCategory.isParent = 0;
+            vm.parentSelected = 0;
         },
         addLanguage: async function (event) {
             var id = getSelectedRow();
@@ -158,7 +159,6 @@ const vm = new Vue({
             vm.shopGoodsCategory = {};
             await vm.getInfo(id);
             vm.shopGoodsCategory.languageId = vm.languages[vm.selected].id;
-
         },
         fromParentCheck: function (event) {
             vm.shopGoodsCategory.parentId = vm.parentList[event.target.value].id;
@@ -213,7 +213,6 @@ const vm = new Vue({
             });
         },
         saveOrUpdate: function (event) {
-
             if (vm.isParent === 0 || vm.isParent === '0') {
                 vm.shopGoodsCategory.parentId = 0;
             } else if (vm.isParent === '1' && vm.parentId == null) {
