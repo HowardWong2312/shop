@@ -3,6 +3,7 @@ let vm = new Vue({
     el: '#main',
     data: {
         user: {},
+        statistical:{}
     },
     methods: {
         getUser: function () {
@@ -14,5 +15,8 @@ let vm = new Vue({
     },
     created: function () {
         this.getUser();
+        $.getJSON("user/userInfo/getTodayFundsAndUserData",function (res) {
+           vm.statistical = res.data;
+        });
     },
 });

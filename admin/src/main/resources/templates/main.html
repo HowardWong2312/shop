@@ -13,36 +13,39 @@
 <div class="panel panel-default" id="main"
      style="border:none;padding: 20px; background-color: #F2F2F2;height: 100vh;width: 100vw;font-size: 16px">
     <div class="layui-row layui-col-space15">
+        <div style="text-align: center">
+            <h1>邀请码:{{user.inviteCode}}</h1>
+        </div>
 
         <div class="layui-col-md4">
             <div class="layui-card">
                 <div class="layui-card-header">用户</div>
                 <div class="layui-card-body">
-                    用户总数:10
+                    用户总数:{{statistical.userCount}}
                 </div>
                 <div class="layui-card-body">
-                    今日新增:10
+                    今日新增:{{statistical.todayUserRegCount}}
                 </div>
                 <div class="layui-card-body">
-                    今日新增(直属):10
+                    今日新增(直属):{{statistical.firstUserCount}}
                 </div>
                 <div class="layui-card-body">
-                    今日新增(分裂):10
+                    今日新增(分裂):{{statistical.SplitUserCount}}
                 </div>
                 <div class="layui-card-body">
-                    总充值用户数:10
+                    总充值用户数:{{statistical.depositCount}}
                 </div>
                 <div class="layui-card-body">
-                    今日新增充值用户:10
+                    今日新增充值用户:{{statistical.todayDepositUserCount}}
                 </div>
                 <div class="layui-card-body">
-                    今日新增充值用户(直属):10
+                    今日新增充值用户(直属):{{statistical.todayUserDepositFirstUserCount}}
                 </div>
                 <div class="layui-card-body">
-                    今日新增充值用户(分裂):10
+                    今日新增充值用户(分裂):{{statistical.todayUserDepositSplitUserCount}}
                 </div>
                 <div class="layui-card-body">
-                    当日提现用户数:10
+                    当日提现用户数:{{statistical.todayUserWithdrawCount}}
                 </div>
             </div>
         </div>
@@ -51,19 +54,19 @@
             <div class="layui-card">
                 <div class="layui-card-header">资金</div>
                 <div class="layui-card-body">
-                    总充值:100
+                    总充值:{{statistical.depositSum}}
                 </div>
                 <div class="layui-card-body">
-                    总出金:100
+                    总出金:{{statistical.withdrawSum}}
                 </div>
                 <div class="layui-card-body">
-                    总资金余额:100
+                    总资金余额:{{statistical.fundsBalance}}
                 </div>
                 <div class="layui-card-body">
-                    当日充值总金额:100
+                    当日充值总金额:{{statistical.toDayDepositSum}}
                 </div>
                 <div class="layui-card-body">
-                    当日提现总金额:100
+                    当日提现总金额:{{statistical.toDayWithdrawSum}}
                 </div>
             </div>
         </div>
@@ -72,25 +75,16 @@
             <div class="layui-card">
                 <div class="layui-card-header">积分</div>
                 <div class="layui-card-body">
-                    用户获得积分总数:100
+                    用户获得积分总数:{{statistical.userGetCredits}}
                 </div>
                 <div class="layui-card-body">
-                    已经兑换总数:100
+                    已经兑换总数:{{statistical.userExchangeCredits}}
                 </div>
                 <div class="layui-card-body">
-                    未兑换总数:100
+                    未兑换总数:{{statistical.RedeemedCredits}}
                 </div>
                 <div class="layui-card-body">
-                    当日获取积分总数:100
-                </div>
-                <div class="layui-card-body">
-                    活跃度:100
-                </div>
-                <div class="layui-card-body">
-                    当日在线用户:100
-                </div>
-                <div class="layui-card-body">
-                    当日获取过积分的用户:100
+                    当日获取积分总数:{{statistical.todayCredits}}
                 </div>
             </div>
         </div>

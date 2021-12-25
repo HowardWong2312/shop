@@ -1,12 +1,16 @@
 package io.dubai.admin.modules.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.executor.MybatisBatchExecutor;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.admin.modules.user.dao.UserInfoDao;
+import io.dubai.admin.modules.user.entity.TCreditsHis;
 import io.dubai.admin.modules.user.entity.UserDeposit;
 import io.dubai.admin.modules.user.entity.UserInfo;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
+import io.dubai.admin.modules.user.service.TCreditsHisService;
 import io.dubai.admin.modules.user.service.UserDepositService;
 import io.dubai.admin.modules.user.service.UserInfoService;
 import io.dubai.admin.modules.user.service.UserWithdrawService;
@@ -38,6 +42,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     @Resource
     private UserWithdrawService userWithdrawService;
 
+    @Resource
+    private TCreditsHisService creditsHisService;
+
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<UserInfo> page = new Query<UserInfo>().getPage(params);
@@ -64,9 +72,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     @Override
     public R getTodayFundsAndUserData() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("userCount", this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().select("count(0) userId")).getUserId()); //借用userId取出用户总数
+        map.put("userCount", this.getBaseMapper().selectCount(new QueryWrapper<UserInfo>())); //借用userId取出用户总数
         getFatherIdByToDayAndNewUser(map);
         getFundingData(map);
+        getCredits(map);
         return R.ok().put("data", map);
     }
 
@@ -78,6 +87,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap) {
         List<UserInfo> toDayNewUserFatherIds = this.getBaseMapper().selectList(new QueryWrapper<UserInfo>().select("userId", "fatherId").apply("to_days(createTime) = TO_DAYS(now())"));
         if (toDayNewUserFatherIds.isEmpty()) {
+            hashMap.put("todayUserRegCount", 0);
+            hashMap.put("firstUserCount", 0);
+            hashMap.put("SplitUserCount", 0);
             return hashMap;
         }
         int todayUserRegCount = toDayNewUserFatherIds.size(); //今日注册数量
@@ -146,5 +158,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         List<Object> todayUserWithdrawItem = userWithdrawService.getBaseMapper().selectObjs(new QueryWrapper<UserWithdraw>().select("user_id").eq("`status`", 1).eq("to_days(create_time)", "TO_DAYS(now())").groupBy("user_id"));
         hashMap.put("todayUserWithdrawCount", todayUserWithdrawItem.size());
         return hashMap;
+    }
+
+    private HashMap<String, Long> getCredits(HashMap map) {
+        BigDecimal userGetCredits = creditsHisService.getBaseMapper().selectOne(new QueryWrapper<TCreditsHis>().select("IFNULL(sum(credits),0) credits").notIn("type", 5, 6)).getCredits();
+        BigDecimal userExchangeCredits = creditsHisService.getBaseMapper().selectOne(new QueryWrapper<TCreditsHis>().select("IFNULL(sum(credits),0) credits").eq("type", 6)).getCredits();
+        BigDecimal RedeemedCredits = userGetCredits.subtract(userExchangeCredits);
+        BigDecimal todayCredits = creditsHisService.getBaseMapper().selectOne(new QueryWrapper<TCreditsHis>().select("IFNULL(sum(credits),0) credits").notIn("type", 5, 6).eq("to_days(createTime)", "TO_DAYS(now())")).getCredits();
+        map.put("userGetCredits", userGetCredits); //用户获取的积分数
+        map.put("userExchangeCredits", userExchangeCredits);//已经兑换总数
+        map.put("RedeemedCredits", RedeemedCredits); //未兑换总数
+        map.put("todayCredits", todayCredits); //当日获取积分总数
+        return map;
     }
 }
