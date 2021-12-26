@@ -170,7 +170,7 @@ public class WalletController {
         userBalanceLog.setBalance(userInfo.getBalance());
         userBalanceLog.setAmount(form.getAmount().negate());
         userBalanceLog.setUserId(userInfo.getUserId().longValue());
-        userBalanceLog.setStatus(UserBalanceLogStatusEnum.FAIL_WITHDRAW.code);
+        userBalanceLog.setStatus(UserBalanceLogStatusEnum.WITHDRAW_TO_BANK.code);
         userBalanceLogService.save(userBalanceLog);
         return R.ok();
     }
@@ -246,11 +246,16 @@ public class WalletController {
         if(userInfo.getFatherId() == null){
             throw new RRException(ResponseStatusEnum.USER_NOT_JOIN_TEAM_YET);
         }
-        userInfo.setCredits(userInfo.getCredits().add(BigDecimal.ONE));
+        String temp = sysConfigService.getValue("DAILY_SIGN_CREDITS");
+        BigDecimal credits = BigDecimal.ONE;
+        if(temp != null){
+            credits = new BigDecimal(temp);
+        }
+        userInfo.setCredits(userInfo.getCredits().add(credits));
         userInfoService.update(userInfo);
         UserCreditsLog userCreditsLog = new UserCreditsLog();
         userCreditsLog.setUserId(userInfo.getUserId().longValue());
-        userCreditsLog.setAmount(BigDecimal.ONE);
+        userCreditsLog.setAmount(credits);
         userCreditsLog.setType(LogTypeEnum.INCOME.code);
         userCreditsLog.setStatus(UserCreditsLogStatusEnum.SIGNED.code);
         userCreditsLog.setBalance(userInfo.getCredits());

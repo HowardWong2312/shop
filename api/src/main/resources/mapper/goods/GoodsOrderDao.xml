@@ -16,9 +16,9 @@
         c.logo_url as language_logo_url
         from shop_goods_order a
         left join shop_goods b on(a.goods_id=b.id)
-        left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${query.languageId})
+        left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${query.languageId} and b.is_del=0)
         left join t_user_info m on(b.user_id=m.userId)
-        where 1=1 and a.user_id = #{query.userId}
+        where 1=1 and a.user_id = #{query.userId} and a.is_del=0
         <if test="query.status != null">
             and a.status=#{query.status}
         </if>

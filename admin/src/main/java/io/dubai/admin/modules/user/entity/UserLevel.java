@@ -27,29 +27,35 @@ public class UserLevel implements Serializable {
     private Integer id;
 
     //需要积分
-    private BigDecimal needscredits;
+    @TableField("needsCredits")
+    private BigDecimal needsCredits;
 
     //需要邀请人数
-    private Integer needsinvitenum;
+    @TableField("needsInviteNum")
+    private Integer needsInviteNum;
 
     //无条件升级价格
     private BigDecimal price;
 
     //每天可砍单次数
-    private Integer groupnum;
+    @TableField("groupNum")
+    private Integer groupNum;
 
     //累计可砍单次数
-    private Integer totalgroupnum;
+    @TableField("totalGroupNum")
+    private Integer totalGroupNum;
 
     //累计可签到获积分的次数
-    private Integer totalsignnum;
+    @TableField("totalSignNum")
+    private Integer totalSignNum;
 
     //累计可发视频获积分的次数
-    private Integer totalvideonum;
+    @TableField("totalVideoNum")
+    private Integer totalVideoNum;
 
-    //
+    @TableField("createTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createtime;
+    private LocalDateTime createTime;
 
     //
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

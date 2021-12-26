@@ -4,8 +4,15 @@ $(function () {
         datatype: "json",
         colModel: [
             { label: 'id', name: 'id', index: 'id', width: 50, key: true },
-            { label: '用户昵称', name: 'userName', index: 'userName', width: 80 },
-            { label: '变动积分', name: 'amount', index: 'amount', width: 80 },
+            { label: '用户ID', name: 'userId', index: 'user_id', width: 50 },
+            { label: '用户昵称', name: 'userName', width: 50 },
+            { label: '变动积分', name: 'amount', index: 'amount', width: 80, formatter:function(value){
+                if(value > 0){
+                    return '<span class="label label-success">+'+value+'</span>';
+                }else{
+                    return '<span class="label label-danger">'+value+'</span>';
+                }
+            }},
             { label: '变后余额', name: 'balance', index: 'balance', width: 80 },
             { label: '类型', name: 'statusValue', width: 35},
             { label: '方向', name: 'type', index: 'type', width: 60 ,formatter:function(value){

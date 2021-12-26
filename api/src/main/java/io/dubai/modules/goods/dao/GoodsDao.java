@@ -28,4 +28,6 @@ public interface GoodsDao extends BaseMapper<Goods> {
 
     List<GoodsVo> queryListByUserIdAndLanguageId(@Param("userId") Long userId,@Param("languageId") Long languageId);
 
+    List<GoodsVo> queryListIssueByUserIdAndLanguageId(@Param("userId") Long userId,@Param("languageId") Long languageId);
+
 }

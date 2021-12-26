@@ -12,7 +12,7 @@
         from shop_goods a
         left join shop_goods_lang b on(a.id=b.goods_id and b.language_id = ${query.languageId})
         left join t_user_info m on(a.user_id=m.userId)
-        where a.status=1 and b.title is not null
+        where a.status=1 and b.title is not null and a.is_del=0
         <if test="query.countryId !=null">
             and (a.country_id = 0 or a.country_id=#{query.countryId})
         </if>
@@ -44,6 +44,7 @@
             or m.nickName like '%${query.key}%'
             )
         </if>
+        order by a.order_num desc
     </select>
 
     <select id="queryInfoByIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsVo">
@@ -59,7 +60,7 @@
         from shop_goods a
         left join shop_goods_lang b on(a.id=b.goods_id and b.language_id = ${languageId})
         left join t_user_info m on(a.user_id=m.userId)
-        where a.id=#{id}
+        where a.id=#{id} and a.is_del=0
     </select>
 
     <select id="queryListByUserIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsVo">
@@ -69,8 +70,21 @@
             b.logo_url as language_logo_url,
             b.description as language_description
         from shop_goods a
-         left join shop_goods_lang b on(a.id=b.goods_id and b.language_id = ${languageId})
-        where a.user_id=#{userId}
+        left join shop_goods_lang b on(a.id=b.goods_id and b.language_id = ${languageId})
+        where a.user_id=#{userId} and a.is_del=0
+        order by a.order_num desc
+    </select>
+
+    <select id="queryListIssueByUserIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsVo">
+        SELECT
+            a.*,
+            b.title as language_title,
+            b.logo_url as language_logo_url,
+            b.description as language_description
+        from shop_goods a
+        left join shop_goods_lang b on(a.id=b.goods_id and b.language_id = ${languageId})
+        where a.user_id=#{userId} and a.status = 1 and a.is_del=0
+        order by a.order_num desc
     </select>
 
     <select id="queryFavoriteList" resultType="io.dubai.modules.goods.entity.vo.GoodsVo">
@@ -82,7 +96,8 @@
         from shop_user_favorite_goods a
         left join shop_goods b on(a.goods_id=b.id)
         left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${query.languageId})
-        where a.user_id=#{query.userId}
+        where a.user_id=#{query.userId} and a.is_del=0
+        order by a.create_time desc
     </select>
 
 </mapper>

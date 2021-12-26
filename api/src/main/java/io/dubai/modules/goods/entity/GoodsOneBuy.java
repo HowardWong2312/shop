@@ -29,6 +29,9 @@ public class GoodsOneBuy implements Serializable {
     @ApiModelProperty(value = "商品id")
     private Long goodsId;
 
+    @ApiModelProperty(value = "发布份数")
+    private Integer totalQuantity;
+
     @ApiModelProperty(value = "剩余份数")
     private Integer quantity;
 

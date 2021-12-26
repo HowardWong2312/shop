@@ -33,61 +33,49 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-                                    <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">需要积分</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.needscredits" placeholder="需要积分"/>
+                    <input type="text" class="form-control" v-model="userLevel.needsCredits" placeholder="需要积分"/>
                 </div>
             </div>
-                                <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">需要邀请人数</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.needsinvitenum" placeholder="需要邀请人数"/>
+                    <input type="text" class="form-control" v-model="userLevel.needsInviteNum" placeholder="需要邀请人数"/>
                 </div>
             </div>
-                                <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">无条件升级价格</div>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="userLevel.price" placeholder="无条件升级价格"/>
                 </div>
             </div>
-                                <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">每天可砍单次数</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.groupnum" placeholder="每天可砍单次数"/>
+                    <input type="text" class="form-control" v-model="userLevel.groupNum" placeholder="每天可砍单次数"/>
                 </div>
             </div>
-                                <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">累计可砍单次数</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.totalgroupnum" placeholder="累计可砍单次数"/>
+                    <input type="text" class="form-control" v-model="userLevel.totalGroupNum" placeholder="累计可砍单次数"/>
                 </div>
             </div>
-                                <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">累计可签到获积分的次数</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.totalsignnum" placeholder="累计可签到获积分的次数"/>
+                    <input type="text" class="form-control" v-model="userLevel.totalSignNum" placeholder="累计可签到获积分的次数"/>
                 </div>
             </div>
-                                <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label">累计可发视频获积分的次数</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.totalvideonum" placeholder="累计可发视频获积分的次数"/>
+                    <input type="text" class="form-control" v-model="userLevel.totalVideoNum" placeholder="累计可发视频获积分的次数"/>
                 </div>
             </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.createtime" placeholder=""/>
-                </div>
-            </div>
-                                <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="userLevel.updateTime" placeholder=""/>
-                </div>
-            </div>
-                        <div class="form-group">
+            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
                 <input type="button" class="btn btn-warning" @click="reload" value="返回"/>

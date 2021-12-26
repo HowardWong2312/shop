@@ -2,6 +2,7 @@ package io.dubai.admin.modules.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
+import io.dubai.admin.modules.user.entity.vo.UserWithdrawVo;
 import io.dubai.common.utils.PageUtils;
 
 import java.util.Map;
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface UserWithdrawService extends IService<UserWithdraw> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    UserWithdrawVo queryById(Long id);
 }
 

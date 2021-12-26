@@ -4,7 +4,8 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: 'userId', width: 40, key: true },
-			{ label: '昵称', name: 'nickName', index: 'nickName', width: 80 },
+			{ label: '上级用户', name: 'fatherName', index: 'fatherId', width: 50 },
+			{ label: '昵称', name: 'nickName', index: 'nickName', width: 50 },
             { label: '头像', name: 'header', index: 'header', width: 30, formatter: function(value, options, row){
                     return '<img src="'+value+'" style="width:100%" />';
             }},
@@ -14,7 +15,6 @@ $(function () {
 			{ label: '性别', name: 'sex', index: 'sex', width: 50 },
 			{ label: '年龄', name: 'age', index: 'age', width: 50 },
 			{ label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 70 },
-			{ label: '邀请人', name: 'fatherName', width: 60 },
 			{ label: '当前余额', name: 'balance', index: 'balance', width: 60 },
 			{ label: '当前积分', name: 'credits', index: 'credits', width: 60 },
             { label: '用户类型', name: 'isMerchant', index: 'isMerchant', width: 60 ,formatter:function(value){
@@ -70,16 +70,13 @@ var vm = new Vue({
             vm.showList = true;
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
-                    "key":vm.q.key
+                    "key":vm.q.key,
+                    "fatherId":vm.q.fatherId,
+                    "userLevelId":vm.q.userLevelId,
                 },
                 page:1
             }).trigger("reloadGrid");
         },
-		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.userInfo = {};
-		},
 		update: function (event) {
 			var userid = getSelectedRow();
 			if(userid == null){
@@ -113,13 +110,57 @@ var vm = new Vue({
                 });
 			});
 		},
+        rechargeCredits: function(){
+            vm.rechargeOrDeduction("充值积分","user/userInfo/rechargeCredits");
+        },
+        rechargeBalance: function(){
+            vm.rechargeOrDeduction("充值余额","user/userInfo/rechargeBalance");
+        },
+        rechargeOrDeduction: function(title,uri){
+            let ids = getSelectedRows();
+            if(ids == null){
+                return ;
+            }
+            layer.prompt({title: '请输入'+title+'数量'}, function(amount, index){
+                if(!isAmount(amount)){
+                    if(!amount < 0){
+                        layer.msg('请给数字一个面子!', {icon: 5});
+                        return ;
+                    }
+                }
+                let data={"ids":ids,"amount":amount};
+                let lock = false;
+                layer.close(index);
+                layer.confirm('确定要为选中的用户'+title+amount+'？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    if(!lock) {
+                        lock = true;
+                        $.ajax({
+                            type: "POST",
+                            url: baseURL + uri,
+                            contentType: "application/json",
+                            data: JSON.stringify(data),
+                            success: function(r){
+                                if(r.code == 200){
+                                    layer.msg(r.msg, {icon: 1});
+                                    vm.reload();
+                                }else{
+                                    layer.alert(r.msg);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        },
 		getInfo: function(userid){
 			$.get(baseURL + "user/userInfo/info/"+userid, function(r){
                 vm.userInfo = r.userInfo;
             });
 		},
         getUserLevelList: function(){
-            $.get(baseURL + "user/userLevel/list", function(r){
+            $.get(baseURL + "user/userLevel/listForSelect", function(r){
                 vm.userLevelList = r.list;
             });
         },
@@ -129,6 +170,8 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
+                    "fatherId":vm.q.fatherId,
+                    "userLevelId":vm.q.userLevelId,
                 },
                 page:page
             }).trigger("reloadGrid");

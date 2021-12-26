@@ -4,7 +4,7 @@ project:
 server:
   tomcat:
     uri-encoding: UTF-8
-  port: 8080
+  port: 9999
   servlet:
     context-path: /controller
 

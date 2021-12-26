@@ -24,5 +24,7 @@ public interface GoodsService extends IService<Goods> {
     GoodsVo queryInfoByIdAndLanguageId(Long id,Long languageId);
 
     List<GoodsVo> queryListByUserIdAndLanguageId(Long userId, Long languageId);
+
+    List<GoodsVo> queryListIssueByUserIdAndLanguageId(Long userId, Long languageId);
 }
 

@@ -3,6 +3,38 @@
 
 <mapper namespace="io.dubai.admin.modules.user.dao.UserWithdrawDao">
 
+    <select id="queryPage" resultType="io.dubai.admin.modules.user.entity.vo.UserWithdrawVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        sd.remark as status_color,
+        u.nickname as user_name
+        FROM t_user_withdraw a
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='user_withdraw_status')
+        WHERE 1 = 1 and a.is_del=0
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nickname like '%${params.key}%'
+            or a.user_id=#{params.key}
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+        order by a.create_time desc
+    </select>
 
+    <select id="queryById" resultType="io.dubai.admin.modules.user.entity.vo.UserWithdrawVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        sd.remark as status_color,
+        u.nickname as user_name
+        FROM t_user_withdraw a
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='user_withdraw_status')
+        WHERE a.id=#{id}
+    </select>
 
 </mapper>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -25,7 +26,12 @@ public class UserLevelController {
     private UserLevelService userLevelService;
 
     @GetMapping("/list")
-    public R list() {
+    public R list(@RequestParam Map<String, Object> params) {
+        return R.ok().put("page", userLevelService.queryPage(params));
+    }
+
+    @GetMapping("/listForSelect")
+    public R listForSelect() {
         return R.ok().put("list", userLevelService.list());
     }
 

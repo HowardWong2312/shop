@@ -17,7 +17,7 @@
         WHERE 1 = 1
         <if test="params.key !=null and params.key !=''">
             and (
-            u.nick_name like '%${params.key}%'
+            u.nickname like '%${params.key}%'
             or b.title like '%${params.key}%'
             or a.goods_id=#{params.key}
             or b.user_id=#{params.key}

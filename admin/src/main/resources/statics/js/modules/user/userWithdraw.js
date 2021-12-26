@@ -3,22 +3,23 @@ $(function () {
         url: baseURL + 'user/userWithdraw/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '用户id', name: 'userId', index: 'user_id', width: 80 }, 
-			{ label: '银行卡名称', name: 'bankName', index: 'bank_name', width: 80 }, 
-			{ label: '', name: 'accountName', index: 'account_name', width: 80 }, 
-			{ label: '', name: 'accountNumber', index: 'account_number', width: 80 }, 
-			{ label: '', name: 'branchName', index: 'branch_name', width: 80 }, 
-			{ label: '', name: 'iban', index: 'iban', width: 80 }, 
-			{ label: '', name: 'ifsc', index: 'ifsc', width: 80 }, 
-			{ label: '', name: 'upi', index: 'upi', width: 80 }, 
-			{ label: '提现金额', name: 'amount', index: 'amount', width: 80 }, 
-			{ label: '拒绝原因', name: 'remark', index: 'remark', width: 80 }, 
-			{ label: '0:等待审核,1:审核成功,2:审核失败', name: 'status', index: 'status', width: 80 }, 
-			{ label: '', name: 'isDel', index: 'is_del', width: 80 }, 
-			{ label: '', name: 'version', index: 'version', width: 80 }, 
-			{ label: '', name: 'createTime', index: 'create_time', width: 80 }, 
-			{ label: '', name: 'updateTime', index: 'update_time', width: 80 }
+			{ label: 'id', name: 'id', index: 'id', width: 30, key: true },
+            { label: '用户id', name: 'userId', index: 'user_id', width: 35 },
+            { label: '用户名称', name: 'userName', width: 35 },
+			{ label: '银行名称', name: 'bankName', index: 'bank_name', width: 35 },
+			{ label: '账户名称', name: 'accountName', index: 'account_name', width: 50 },
+			{ label: '账户号码', name: 'accountNumber', index: 'account_number', width: 50 },
+			{ label: '分行名称', name: 'branchName', index: 'branch_name', width: 50 },
+			{ label: 'IBAN', name: 'iban', index: 'iban', width: 50 },
+			{ label: 'IFSC', name: 'ifsc', index: 'ifsc', width: 50 },
+			{ label: 'UPI', name: 'upi', index: 'upi', width: 50 },
+			{ label: '提现金额', name: 'amount', index: 'amount', width: 40 },
+			{ label: '拒绝原因', name: 'remark', index: 'remark', width: 50 },
+            { label: '状态', name: 'status', index: 'status', width: 40, formatter:function(value, options, row){
+                return '<span class="label ' + row.statusColor + '">' + row.statusValue + '</span>';
+            }},
+			{ label: '申请时间', name: 'createTime', index: 'create_time', width: 80 },
+			{ label: '处理时间', name: 'updateTime', index: 'update_time', width: 80 }
         ],
 		viewrecords: true,
         height: 600,
@@ -51,59 +52,66 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
+        statusList: [],
 		q: {},
 		userWithdraw: {}
 	},
     created:function () {
+        this.getStatusList();
     },
 	methods: {
         query: function () {
             vm.showList = true;
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
-                    "key":vm.q.key
+                    "key":vm.q.key,
+                    "status":vm.q.status,
                 },
                 page:1
             }).trigger("reloadGrid");
         },
-		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.userWithdraw = {};
-		},
-		update: function (event) {
-			var id = getSelectedRow();
-			if(id == null){
-				return ;
-			}
-			vm.showList = false;
-            vm.title = "修改";
-            
-            vm.getInfo(id)
-		},
-		saveOrUpdate: function (event) {
-		    $('#btnSaveOrUpdate').button('loading').delay(300).queue(function() {
-                var url = vm.userWithdraw.id == null ? "user/userWithdraw/save" : "user/userWithdraw/update";
-                $.ajax({
-                    type: "POST",
-                    url: baseURL + url,
-                    contentType: "application/json",
-                    data: JSON.stringify(vm.userWithdraw),
-                    success: function(r){
-                        if(r.code == 200){
-                             layer.msg("操作成功", {icon: 1});
-                             vm.reload();
-                             $('#btnSaveOrUpdate').button('reset');
-                             $('#btnSaveOrUpdate').dequeue();
-                        }else{
-                            layer.alert(r.msg);
-                            $('#btnSaveOrUpdate').button('reset');
-                            $('#btnSaveOrUpdate').dequeue();
+        check: function () {
+            let id = getSelectedRow();
+            if(id == null){
+                return ;
+            }
+            vm.getInfo(id);
+            $("#myModal").modal('show');
+        },
+        success: function () {
+            vm.userWithdraw.status = 1;
+            vm.subCheck("通过")
+        },
+        refuse: function () {
+            vm.userWithdraw.status = 2;
+            vm.subCheck("拒绝")
+        },
+        subCheck: function (title) {
+            let lock = false;
+            layer.confirm('确定要对该活动申请执行 '+title+' 操作？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(!lock) {
+                    lock = true;
+                    $.ajax({
+                        type: "POST",
+                        url: baseURL + "user/userWithdraw/check",
+                        contentType: "application/json",
+                        data: JSON.stringify(vm.userWithdraw),
+                        success: function(r){
+                            if(r.code == 200){
+                                layer.msg(r.msg, {icon: 1});
+                                $("#myModal").modal('hide');
+                                vm.reload();
+                            }else{
+                                layer.alert(r.msg);
+                            }
                         }
-                    }
-                });
-			});
-		},
+                    });
+                }
+            }, function(){
+            });
+        },
 		del: function () {
 			var ids = getSelectedRows();
 			if(ids == null){
@@ -138,12 +146,18 @@ var vm = new Vue({
                 vm.userWithdraw = r.userWithdraw;
             });
 		},
+        getStatusList: function () {
+            $.get(baseURL + "sys/dict/list/user_withdraw_status", function (r) {
+                vm.statusList = r.list;
+            });
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
+                    "status":vm.q.status,
                 },
                 page:page
             }).trigger("reloadGrid");

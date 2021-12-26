@@ -11,12 +11,36 @@
             <div class="form-inline">
             <#if shiro.hasPermission("user:userInfo:list")>
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户ID，昵称">
+                    <label class="control-label">关键字:</label>
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户ID，昵称，bibi号">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">用户ID:</label>
+                    <input type="text" class="form-control" v-model="q.fatherId" @keyup.enter="query" placeholder="上级用户ID">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">认证状态:</label>
+                    <select class="form-control" v-model="q.isMerchant" placeholder="请选择">
+                        <option value="0" >未认证</option>
+                        <option value="1" >认证商家</option>
+                    </select>
+                </div>
+                <div v-if="userLevelList!=null && userLevelList.length > 0" class="form-group">
+                    <label class="control-label">用户等级:</label>
+                    <select class="form-control" v-model="q.userLevelId" placeholder="请选择">
+                        <option v-for="item in userLevelList" :value="item.id">{{item.id}}级</option>
+                    </select>
                 </div>
                 <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
             </#if>
             <#if shiro.hasPermission("user:userInfo:update")>
                 <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>
+            </#if>
+            <#if shiro.hasPermission("user:userInfo:rechargeCredits")>
+                <a class="btn btn-primary" @click="rechargeCredits"><i class="fa fa-plus"></i> 积分充值</a>
+            </#if>
+            <#if shiro.hasPermission("user:userInfo:rechargeBalance")>
+                <a class="btn btn-danger" @click="rechargeBalance"><i class="fa fa-plus"></i> 余额充值</a>
             </#if>
             </div>
         </div>

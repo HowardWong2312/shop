@@ -9,15 +9,16 @@
             b.title as language_title,
             b.icon_url as language_icon_url
         from shop_goods_category a
-        left join shop_goods_category_lang b on(a.id=b.goods_category_id and b.language_id = #{languageId})
-        where a.parent_id = #{parentId}
+        left join shop_goods_category_lang b on(a.id=b.goods_category_id and b.language_id = #{languageId} and b.is_del=0)
+        where a.parent_id = #{parentId} and b.title is not null and a.is_del=0
+        order by a.order_num desc
     </select>
 
     <select id="queryIdsByParentId" resultType="Long">
         SELECT
             id
         from shop_goods_category
-        where parent_id = #{parentId}
+        where parent_id = #{parentId} and is_del=0
     </select>
 
     <select id="queryByIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsCategoryVo">
@@ -26,8 +27,8 @@
             b.title as language_title,
             b.icon_url as language_icon_url
         from shop_goods_category a
-        left join shop_goods_category_lang b on(a.id=b.goods_category_id and b.language_id = #{languageId})
-        where a.id = #{id}
+        left join shop_goods_category_lang b on(a.id=b.goods_category_id and b.language_id = #{languageId} and b.is_del=0)
+        where a.id = #{id} and a.is_del=0
     </select>
 
 </mapper>

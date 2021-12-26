@@ -10,6 +10,7 @@ import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserCreditsLogStatusEnum;
 import io.dubai.common.exception.RRException;
 import io.dubai.common.sys.service.IMessageService;
+import io.dubai.common.sys.service.SysConfigService;
 import io.dubai.common.utils.OssUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.utils.StringUtils;
@@ -104,6 +105,9 @@ public class GoodsController {
 
     @Resource
     private IMessageService messageService;
+
+    @Resource
+    private SysConfigService sysConfigService;
 
     @ApiOperation("商品列表")
     @PostMapping("/list")
@@ -222,7 +226,12 @@ public class GoodsController {
         if(language != null){
             languageId = language.getId();
         }
-        List<GoodsVo> goodsList = goodsService.queryListByUserIdAndLanguageId(userId,languageId);
+        List<GoodsVo> goodsList = null;
+        if(userId.intValue() == userInfo.getUserId().intValue()){
+            goodsList = goodsService.queryListByUserIdAndLanguageId(userId,languageId);
+        }else{
+            goodsList = goodsService.queryListIssueByUserIdAndLanguageId(userId,languageId);
+        }
         return R.ok().put("list",goodsList);
     }
 
@@ -661,6 +670,7 @@ public class GoodsController {
         GoodsOneBuy goodsOneBuy = new GoodsOneBuy();
         goodsOneBuy.setGoodsId(form.getGoodsId());
         goodsOneBuy.setQuantity(form.getQuantity());
+        goodsOneBuy.setTotalQuantity(form.getQuantity());
         goodsOneBuy.setExpireTime(LocalDateTime.parse(form.getExpireTime(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         goodsOneBuy.setStatus(0);
         goodsOneBuyService.save(goodsOneBuy);
@@ -703,6 +713,7 @@ public class GoodsController {
         GoodsRush goodsRush = new GoodsRush();
         goodsRush.setGoodsId(form.getGoodsId());
         goodsRush.setQuantity(form.getQuantity());
+        goodsRush.setTotalQuantity(form.getQuantity());
         goodsRush.setExpireTime(LocalDateTime.parse(form.getExpireTime(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         goodsRush.setStatus(0);
         goodsRushService.save(goodsRush);
@@ -777,7 +788,7 @@ public class GoodsController {
             goodsOrderService.save(goodsOrder);
         }
         if(lotteryNumber == 3){
-            BigDecimal credits = BigDecimal.valueOf(5);
+            BigDecimal credits = new BigDecimal(sysConfigService.getValue("LOTTERY_CREDITS"));
             userInfo.setCredits(userInfo.getCredits().add(credits));
             //增加积分记录
             UserCreditsLog userCreditsLog = new UserCreditsLog();

@@ -18,6 +18,8 @@ public enum UserBalanceLogStatusEnum {
     PAID_FOR_USER_LEVEL(8, "付款升级"),
     FAIL_WITHDRAW(9, "提现失败，资金退回"),
     RETURN_DELIVERY(10, "订单退货"),
+    MANUAL_RECHARGE(11, "人工充值"),
+    MANUAL_DEDUCTION(12, "人工扣除"),
     OTHER(0, "其它");
 
 

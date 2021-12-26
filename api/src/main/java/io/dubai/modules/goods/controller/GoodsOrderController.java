@@ -9,6 +9,7 @@ import io.dubai.common.enums.UserBalanceLogStatusEnum;
 import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserCreditsLogStatusEnum;
 import io.dubai.common.exception.RRException;
+import io.dubai.common.sys.service.SysConfigService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.utils.StringUtils;
@@ -85,6 +86,9 @@ public class GoodsOrderController {
 
     @Resource
     private UserLevelService userLevelService;
+
+    @Resource
+    private SysConfigService sysConfigService;
 
     @Login
     @ApiOperation("商家订单列表")
@@ -249,7 +253,7 @@ public class GoodsOrderController {
             GoodsGroupRecord goodsGroupRecord = goodsGroupRecordService.getById(goodsGroupRecordDetails.getGoodsGroupRecordId());
             GoodsGroup goodsGroup = goodsGroupService.getById(goodsGroupRecord.getGoodsGroupId());
             if(goodsGroup.getAwardNum() > 1 && userInfo.getFatherId() != null){
-                BigDecimal credits = goodsGroup.getAward();
+                BigDecimal credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(goodsOrder.getQuantity()));
                 //判断是否符合返积分条件
                 Integer countToday = userCreditsLogService.queryCountByUserIdAndStatusToday(userInfo.getUserId().longValue(), UserCreditsLogStatusEnum.GROUP_AWARD.code);
                 UserLevel userLevel = userLevelService.getById(userInfo.getUserLevelId());
@@ -259,20 +263,22 @@ public class GoodsOrderController {
                         goodsGroupRecordDetails.setStatus(3);
                         goodsGroup.setAwardNum(goodsGroup.getAwardNum()-1);
                         userInfo.setCredits(userInfo.getCredits().add(credits));
-                        //增加积分记录
-                        UserCreditsLog userCreditsLog = new UserCreditsLog();
-                        userCreditsLog.setUserId(userInfo.getUserId().longValue());
-                        userCreditsLog.setAmount(credits);
-                        userCreditsLog.setType(LogTypeEnum.INCOME.code);
-                        userCreditsLog.setStatus(UserCreditsLogStatusEnum.GROUP_AWARD.code);
-                        userCreditsLog.setBalance(userInfo.getCredits());
-                        userCreditsLogService.save(userCreditsLog);
+                        for (int i = 0; i < goodsOrder.getQuantity(); i++) {
+                            //增加积分记录
+                            UserCreditsLog userCreditsLog = new UserCreditsLog();
+                            userCreditsLog.setUserId(userInfo.getUserId().longValue());
+                            userCreditsLog.setAmount(credits);
+                            userCreditsLog.setType(LogTypeEnum.INCOME.code);
+                            userCreditsLog.setStatus(UserCreditsLogStatusEnum.GROUP_AWARD.code);
+                            userCreditsLog.setBalance(userInfo.getCredits());
+                            userCreditsLogService.save(userCreditsLog);
+                        }
                         UserInfo direct = userInfoService.queryByUserId(userInfo.getFatherId().longValue());
                         if(direct != null){
-                            credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(0.10));
+                            credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("DIRECT_INCOME_RATE")));
                             direct.setCredits(direct.getCredits().add(credits));
                             userInfoService.update(direct);
-                            userCreditsLog = new UserCreditsLog();
+                            UserCreditsLog userCreditsLog = new UserCreditsLog();
                             userCreditsLog.setUserId(direct.getUserId().longValue());
                             userCreditsLog.setAmount(credits);
                             userCreditsLog.setType(LogTypeEnum.INCOME.code);
@@ -281,7 +287,7 @@ public class GoodsOrderController {
                             userCreditsLogService.save(userCreditsLog);
                             UserInfo second = userInfoService.queryByUserId(direct.getFatherId().longValue());
                             if(second != null){
-                                credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(0.03));
+                                credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("SECOND_INCOME_RATE")));
                                 second.setCredits(second.getCredits().add(credits));
                                 userInfoService.update(second);
                                 userCreditsLog = new UserCreditsLog();
@@ -293,7 +299,7 @@ public class GoodsOrderController {
                                 userCreditsLogService.save(userCreditsLog);
                                 UserInfo third = userInfoService.queryByUserId(second.getFatherId().longValue());
                                 if(third != null){
-                                    credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(0.02));
+                                    credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("THIRD_INCOME_RATE")));
                                     third.setCredits(third.getCredits().add(credits));
                                     userInfoService.update(third);
                                     userCreditsLog = new UserCreditsLog();
@@ -366,7 +372,7 @@ public class GoodsOrderController {
                     userCreditsLogService.save(userCreditsLog);
                     UserInfo direct = userInfoService.queryByUserId(userInfo.getFatherId().longValue());
                     if(direct != null){
-                        credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(0.10));
+                        credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("DIRECT_INCOME_RATE")));
                         direct.setCredits(direct.getCredits().add(credits));
                         userInfoService.update(direct);
                         userCreditsLog = new UserCreditsLog();
@@ -378,7 +384,7 @@ public class GoodsOrderController {
                         userCreditsLogService.save(userCreditsLog);
                         UserInfo second = userInfoService.queryByUserId(direct.getFatherId().longValue());
                         if(second != null){
-                            credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(0.03));
+                            credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("SECOND_INCOME_RATE")));
                             second.setCredits(second.getCredits().add(credits));
                             userInfoService.update(second);
                             userCreditsLog = new UserCreditsLog();
@@ -390,7 +396,7 @@ public class GoodsOrderController {
                             userCreditsLogService.save(userCreditsLog);
                             UserInfo third = userInfoService.queryByUserId(second.getFatherId().longValue());
                             if(third != null){
-                                credits = goodsGroup.getAward().multiply(BigDecimal.valueOf(0.02));
+                                credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("THIRD_INCOME_RATE")));
                                 third.setCredits(third.getCredits().add(credits));
                                 userInfoService.update(third);
                                 userCreditsLog = new UserCreditsLog();
