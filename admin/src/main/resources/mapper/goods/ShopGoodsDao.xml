@@ -32,7 +32,7 @@
         FROM
         shop_goods sg
         INNER JOIN shop_goods_lang sgl ON sg.id = sgl.goods_id
-        where 1 = 1
+        where 1 = 1 and sg.is_del = 0
         <if test="params.ids !=null">
             and sg.category_id in
             <foreach collection="params.ids" index="index" item="id" open="(" separator="," close=")">
