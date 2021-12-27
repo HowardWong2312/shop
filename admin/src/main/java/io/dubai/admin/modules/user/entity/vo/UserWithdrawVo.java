@@ -1,6 +1,5 @@
 package io.dubai.admin.modules.user.entity.vo;
 
-import io.dubai.admin.modules.user.entity.UserDeposit;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
 import lombok.Data;
 

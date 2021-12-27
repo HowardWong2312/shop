@@ -1,20 +1,17 @@
 package io.dubai.admin.modules.goods.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.dubai.common.validator.ValidatorUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-
 import io.dubai.admin.modules.goods.entity.ShopGoodsGroup;
 import io.dubai.admin.modules.goods.service.ShopGoodsGroupService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
+import io.dubai.common.validator.ValidatorUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**

@@ -314,8 +314,18 @@ public class GoodsController {
                         .last("limit 1")
         );
         if(goodsOneBuy == null){
-            goods.setIsOneBuy(0);
-            goodsService.updateById(goods);
+            if(goods.getIsOneBuy().intValue() == 1){
+                goods.setIsOneBuy(0);
+                goodsService.updateById(goods);
+            }
+            throw new RRException(ResponseStatusEnum.ONE_BUY_EVENT_OVER);
+        }
+        if(goodsOneBuy.getQuantity() < 1){
+            if(goods.getIsOneBuy().intValue() == 1){
+                goods.setIsOneBuy(0);
+                goodsService.updateById(goods);
+            }
+            goodsOneBuyService.removeById(goodsOneBuy.getId());
             throw new RRException(ResponseStatusEnum.ONE_BUY_EVENT_OVER);
         }
         GoodsOrder tempOrder = goodsOrderService.getOne(
@@ -345,6 +355,9 @@ public class GoodsController {
         if(form.getQuantity() > 1){
             return R.ok(ResponseStatusEnum.ONLY_CAN_BUY_ONE);
         }
+        //修改一元购参数
+        goodsOneBuy.setQuantity(goodsOneBuy.getQuantity()-1);
+        goodsOneBuyService.updateById(goodsOneBuy);
         goods.setStock(goods.getStock()-1);
         goodsService.updateById(goods);
         BigDecimal amount = BigDecimal.ONE;

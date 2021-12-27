@@ -1,11 +1,11 @@
 package io.dubai.admin.modules.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.admin.modules.goods.entity.ShopGoods;
 import io.dubai.admin.modules.goods.service.ShopGoodsService;
 import io.dubai.admin.modules.user.entity.UserBalanceLog;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
-import io.dubai.admin.modules.user.entity.UserInfo;
 import io.dubai.admin.modules.user.form.RechargeForm;
 import io.dubai.admin.modules.user.service.UserBalanceLogService;
 import io.dubai.admin.modules.user.service.UserCreditsLogService;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Map;
 
 

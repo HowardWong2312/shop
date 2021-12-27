@@ -4,12 +4,12 @@
 
 	<!-- 根据key，更新value -->
 	<update id="updateValueByKey" parameterType="map">
-		update sys_config set param_value = #{paramValue} where param_key = #{paramKey}
+		update sys_config set paramValue = #{paramValue} where paramKey = #{paramKey}
 	</update>
 
 	<!-- 根据key，查询value -->
 	<select id="queryByKey" parameterType="string" resultType="io.dubai.common.sys.entity.SysConfig">
-		select * from sys_config where param_key = #{paramKey}
+		select * from sys_config where paramKey = #{paramKey}
 	</select>
 
 </mapper>

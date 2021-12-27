@@ -1,13 +1,9 @@
 package io.dubai.admin.modules.goods.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.dubai.admin.modules.goods.entity.ShopGoodsOrder;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 
 /**

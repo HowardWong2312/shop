@@ -1,14 +1,12 @@
 package io.dubai.admin.modules.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.executor.MybatisBatchExecutor;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.admin.modules.user.dao.UserInfoDao;
 import io.dubai.admin.modules.user.entity.TCreditsHis;
 import io.dubai.admin.modules.user.entity.UserDeposit;
-import io.dubai.admin.modules.user.entity.UserInfo;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
 import io.dubai.admin.modules.user.service.TCreditsHisService;
 import io.dubai.admin.modules.user.service.UserDepositService;

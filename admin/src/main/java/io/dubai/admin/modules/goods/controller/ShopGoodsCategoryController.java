@@ -5,7 +5,6 @@ import io.dubai.admin.modules.goods.entity.ShopGoodsCategoryFrom;
 import io.dubai.admin.modules.goods.service.ShopGoodsCategoryService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
-import io.dubai.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 

@@ -3,7 +3,6 @@ package io.dubai.admin.modules.user.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
-import io.dubai.admin.modules.user.entity.vo.UserBalanceLogVo;
 import io.dubai.admin.modules.user.entity.vo.UserCreditsLogVo;
 import org.apache.ibatis.annotations.Mapper;
 

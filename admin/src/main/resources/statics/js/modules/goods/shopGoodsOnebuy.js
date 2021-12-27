@@ -6,7 +6,8 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'a.id', width: 40, key: true },
 			{ label: '商品名称', name: 'goodsName', width: 120 },
 			{ label: '商家名称', name: 'merchantName', width: 80 },
-			{ label: '参与份数', name: 'quantity', index: 'a.quantity', width: 80 },
+            { label: '发布份数', name: 'totalQuantity', index: 'a.totalQuantity', width: 40 },
+			{ label: '剩余份数', name: 'quantity', index: 'a.quantity', width: 40 },
 			{ label: '结束时间', name: 'expireTime', index: 'a.expire_time', width: 80 },
             { label: '状态', name: 'status', width: 35, formatter: function (value, options, row) {
                 return '<span class="label ' + row.statusColor + '">' + row.statusValue + '</span>';

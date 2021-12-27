@@ -1,7 +1,5 @@
 package io.dubai.admin.modules.user.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.dubai.admin.modules.user.entity.UserBalanceLog;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import lombok.Data;
 

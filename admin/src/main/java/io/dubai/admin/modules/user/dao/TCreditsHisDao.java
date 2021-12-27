@@ -1,9 +1,8 @@
 package io.dubai.admin.modules.user.dao;
 
-import io.dubai.admin.modules.user.entity.TCreditsHis;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.dubai.admin.modules.user.entity.TCreditsHis;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 积分明细

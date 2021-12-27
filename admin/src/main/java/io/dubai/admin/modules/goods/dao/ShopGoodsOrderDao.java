@@ -1,12 +1,10 @@
 package io.dubai.admin.modules.goods.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.dubai.admin.modules.goods.entity.ShopGoodsOrder;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.dubai.admin.modules.goods.entity.vo.ShopGoodsOnebuyVo;
 import io.dubai.admin.modules.goods.entity.vo.ShopGoodsOrderVo;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;

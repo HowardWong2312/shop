@@ -2,7 +2,7 @@ package io.dubai.admin.modules.user.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.dubai.admin.modules.user.entity.UserInfo;
+import com.cz.czUser.system.entity.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

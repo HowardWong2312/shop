@@ -1,9 +1,8 @@
 package io.dubai.admin.modules.goods.dao;
 
-import io.dubai.admin.modules.goods.entity.ShopGoodsGroup;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.dubai.admin.modules.goods.entity.ShopGoodsGroup;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 拼团商品

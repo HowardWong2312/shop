@@ -1,12 +1,10 @@
 package io.dubai.admin.modules.user.form;
 
-import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**

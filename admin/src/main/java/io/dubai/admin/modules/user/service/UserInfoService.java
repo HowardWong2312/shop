@@ -1,7 +1,7 @@
 package io.dubai.admin.modules.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.dubai.admin.modules.user.entity.UserInfo;
+import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 
