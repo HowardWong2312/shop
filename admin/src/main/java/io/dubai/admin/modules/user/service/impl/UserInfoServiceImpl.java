@@ -14,20 +14,14 @@ import io.dubai.admin.modules.user.service.TCreditsHisService;
 import io.dubai.admin.modules.user.service.UserDepositService;
 import io.dubai.admin.modules.user.service.UserInfoService;
 import io.dubai.admin.modules.user.service.UserWithdrawService;
-import io.dubai.common.utils.PageUtils;
-import io.dubai.common.utils.Query;
-import io.dubai.common.utils.R;
-import io.dubai.common.utils.RedisKeys;
+import io.dubai.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("userInfoService")
@@ -44,6 +38,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
 
     @Resource
     private TCreditsHisService creditsHisService;
+
+    @Resource
+    private RedisUtils redisUtils;
 
 
     @Override
@@ -73,9 +70,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     public R getTodayFundsAndUserData() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("userCount", this.getBaseMapper().selectCount(new QueryWrapper<UserInfo>())); //借用userId取出用户总数
+
         getFatherIdByToDayAndNewUser(map);
         getFundingData(map);
         getCredits(map);
+        HashSet userOnlineCount = redisUtils.get(RedisKeys.userOnlineKey, HashSet.class);
+        if (userOnlineCount == null) {
+            userOnlineCount = new HashSet();
+        }
+        map.put("userOnlineCount", userOnlineCount.size());
         return R.ok().put("data", map);
     }
 
