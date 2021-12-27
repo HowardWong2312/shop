@@ -25,6 +25,9 @@ public class ShopGoodsRush implements Serializable {
     //商品id
     private Long goodsId;
 
+    //发布份数
+    private Integer totalQuantity;
+
     //剩余份数
     private Integer quantity;
 

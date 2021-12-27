@@ -52,7 +52,7 @@ public class ShopGoodsRushController {
 
     @PostMapping("/check")
     @RequiresPermissions("goods:shopGoodsRush:check")
-    public R save(@RequestBody ShopGoodsRushVo shopGoodsRushVo) {
+    public R check(@RequestBody ShopGoodsRushVo shopGoodsRushVo) {
         ShopGoodsRush bean = shopGoodsRushService.getById(shopGoodsRushVo.getId());
         ShopGoods goods = shopGoodsService.getById(shopGoodsRushVo.getGoodsId());
         if (shopGoodsRushVo.getStatus() == 1) {

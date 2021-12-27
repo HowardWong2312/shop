@@ -19,6 +19,9 @@ public enum UserCreditsLogStatusEnum {
     GROUP_AWARD(9, "拼团积分奖励"),
     LOTTERY(10, "免费抽奖"),
     CREDITS_EXCHANGE(11, "积分兑现"),
+    MANUAL_RECHARGE(12, "人工充值"),
+    MANUAL_DEDUCTION(13, "人工扣除"),
+    NEW_USER(14, "新用户注册"),
     OTHER(0, "其它");
 
 

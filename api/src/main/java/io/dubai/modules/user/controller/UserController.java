@@ -178,7 +178,6 @@ public class UserController {
             throw new RRException(ResponseStatusEnum.SYSTEM_ERROR);
         }
         userInfo.setFatherId(father.getUserId());
-        userInfo.setFatherName(father.getNickName());
         userInfoService.update(userInfo);
         return R.ok();
     }

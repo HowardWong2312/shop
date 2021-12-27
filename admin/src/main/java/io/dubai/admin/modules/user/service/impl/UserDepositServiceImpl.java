@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.admin.modules.user.dao.UserDepositDao;
 import io.dubai.admin.modules.user.entity.UserDeposit;
+import io.dubai.admin.modules.user.entity.vo.UserDepositVo;
 import io.dubai.admin.modules.user.service.UserDepositService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
@@ -18,11 +19,8 @@ public class UserDepositServiceImpl extends ServiceImpl<UserDepositDao, UserDepo
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<UserDeposit> page = this.page(
-                new Query<UserDeposit>().getPage(params),
-                new QueryWrapper<UserDeposit>()
-        );
-
+        IPage<UserDepositVo> page = new Query<UserDepositVo>().getPage(params);
+        page.setRecords(baseMapper.queryPage(page,params));
         return new PageUtils(page);
     }
 

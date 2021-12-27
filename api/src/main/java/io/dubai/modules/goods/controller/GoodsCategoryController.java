@@ -57,4 +57,15 @@ public class GoodsCategoryController {
         return R.ok().put("list", list);
     }
 
+    @ApiOperation("根据父级和语言查子级列表")
+    @GetMapping("/list/{parentId}/{languageId}")
+    @Login
+    public R list(@PathVariable Long parentId,@PathVariable Long languageId) {
+        List<GoodsCategoryVo> list = goodsCategoryService.queryListByParentIdAndLanguageId(parentId,languageId);
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setKids(goodsCategoryService.queryListByParentIdAndLanguageId(list.get(i).getId(),languageId));
+        }
+        return R.ok().put("list", list);
+    }
+
 }

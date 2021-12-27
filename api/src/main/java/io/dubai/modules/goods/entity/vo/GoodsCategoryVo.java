@@ -27,7 +27,7 @@ public class GoodsCategoryVo extends GoodsCategory implements Serializable {
     @ApiModelProperty(value = "多语言icon")
     private String languageIconUrl;
 
-    @ApiModelProperty(value = "多语言icon")
+    @ApiModelProperty(value = "子级")
     private List<GoodsCategoryVo> kids;
 
 }

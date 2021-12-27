@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.admin.modules.goods.dao.ShopGoodsOrderDao">
+
+    <select id="queryPage" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsOrderVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        b.title as goods_name,
+        m.nickname as merchant_name,
+        u.nickname as user_name
+        FROM shop_goods_order a
+        LEFT JOIN shop_goods b ON (a.goods_id = b.id)
+        LEFT JOIN t_user_info m ON (b.user_id=m.userId)
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='goods_order_status')
+        WHERE 1 = 1
+        <if test="params.key !=null and params.key !=''">
+            and (
+            a.order_code=#{params.key}
+            or a.goods_id=#{params.key}
+            or b.title like '%${params.key}%'
+            )
+        </if>
+        <if test="params.merchantKey !=null and params.merchantKey !=''">
+            and (
+            m.userId=#{params.merchantKey}
+            or m.nickname like '%${params.merchantKey}%'
+            )
+        </if>
+        <if test="params.userKey !=null and params.userKey !=''">
+            and (
+            u.userId=#{params.userKey}
+            or u.nickname like '%${params.userKey}%'
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+    </select>
+
+    <select id="queryById" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsOrderVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        b.title as goods_name,
+        m.nickname as merchant_name,
+        u.nickname as user_name
+        FROM shop_goods_order a
+        LEFT JOIN shop_goods b ON (a.goods_id = b.id)
+        LEFT JOIN t_user_info m ON (b.user_id=m.userId)
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='goods_order_status')
+        WHERE a.order_code=#{id}
+    </select>
+
+</mapper>

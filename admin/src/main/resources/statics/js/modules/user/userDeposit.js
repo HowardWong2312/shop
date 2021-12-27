@@ -3,15 +3,15 @@ $(function () {
         url: baseURL + 'user/userDeposit/list',
         datatype: "json",
         colModel: [			
-			{ label: 'orderCode', name: 'orderCode', index: 'order_code', width: 50, key: true },
-			{ label: '用户id', name: 'userId', index: 'user_id', width: 80 }, 
-			{ label: '支付方式id', name: 'paymentId', index: 'payment_id', width: 80 }, 
+			{ label: '订单号', name: 'orderCode', index: 'order_code', width: 80, key: true },
+			{ label: '用户id', name: 'userId', index: 'user_id', width: 50 },
+			{ label: '用户名称', name: 'userName', width: 80 },
+			{ label: '支付方式', name: 'paymentName', index: 'payment_id', width: 80 },
 			{ label: '提现金额', name: 'amount', index: 'amount', width: 80 }, 
-			{ label: '0:待处理,1:充值成功,2:超时', name: 'status', index: 'status', width: 80 }, 
-			{ label: '', name: 'isDel', index: 'is_del', width: 80 }, 
-			{ label: '', name: 'version', index: 'version', width: 80 }, 
-			{ label: '', name: 'createTime', index: 'create_time', width: 80 }, 
-			{ label: '', name: 'updateTime', index: 'update_time', width: 80 }
+            { label: '状态', name: 'status', index: 'status', width: 80, formatter:function(value, options, row){
+                    return '<span class="label ' + row.statusColor + '">' + row.statusValue + '</span>';
+            }},
+            { label: '充值时间', name: 'createTime', index: 'create_time', width: 80 }
         ],
 		viewrecords: true,
         height: 600,
@@ -44,17 +44,20 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
+        statusList: [],
 		q: {},
 		userDeposit: {}
 	},
     created:function () {
+        this.getStatusList();
     },
 	methods: {
         query: function () {
             vm.showList = true;
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
-                    "key":vm.q.key
+                    "key":vm.q.key,
+                    "status":vm.q.status
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -131,12 +134,18 @@ var vm = new Vue({
                 vm.userDeposit = r.userDeposit;
             });
 		},
+        getStatusList: function () {
+            $.get(baseURL + "sys/dict/list/user_deposit_status", function (r) {
+                vm.statusList = r.list;
+            });
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
+                    "status":vm.q.status
                 },
                 page:page
             }).trigger("reloadGrid");

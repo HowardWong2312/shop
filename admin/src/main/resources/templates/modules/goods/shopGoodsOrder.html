@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品订单</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-inline">
+            <#if shiro.hasPermission("goods:shopGoodsOrder:list")>
+                <div class="form-group">
+                    <label class="control-label">商品关键字:</label>
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="商品ID，名称，订单号">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">商家关键字:</label>
+                    <input type="text" class="form-control" v-model="q.userKey" @keyup.enter="query" placeholder="商家ID，昵称">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">用户关键字:</label>
+                    <input type="text" class="form-control" v-model="q.merchantKey" @keyup.enter="query" placeholder="用户ID，昵称">
+                </div>
+                <div v-if="statusList!=null && statusList.length > 0" class="form-group">
+                    <label class="control-label">状态:</label>
+                    <select class="form-control" v-model="q.status">
+                        <option value="" selected="selected">请选择</option>
+                        <option v-for="item in statusList" :value="item.code">{{item.value}}</option>
+                    </select>
+                </div>
+                <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
+            </#if>
+            <#if shiro.hasPermission("goods:shopGoodsOrder:info")>
+                <a class="btn btn-primary" @click="check"><i class="fa fa-pencil-square-o"></i> 查看详情</a>
+            </#if>
+            </div>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <label>订单号：</label><span>{{shopGoodsOrder.orderCode}}</span>
+                </p>
+                <p>
+                    <label>商家：</label><span>{{shopGoodsOrder.merchantName}}</span>
+                </p>
+                <p>
+                    <label>商品：</label><span>{{shopGoodsOrder.goodsName}}</span>
+                </p>
+                <p>
+                    <label>买家：</label><span>{{shopGoodsOrder.userName}}</span>
+                </p>
+                <p>
+                    <label>份数：</label><span>{{shopGoodsOrder.quantity}}</span>
+                </p>
+                <p>
+                    <label>订单金额：</label><span>{{shopGoodsOrder.amount}}</span>
+                </p>
+                <p>
+                    <label>收货地址：</label>
+                    <span>{{shopGoodsOrder.receiverName}}</span>
+                    <span>{{shopGoodsOrder.receiverPhone}}</span>
+                    <span>{{shopGoodsOrder.receiverProvince}}</span>
+                    <span>{{shopGoodsOrder.receiverCity}}</span>
+                    <span>{{shopGoodsOrder.receiverArea}}</span>
+                    <span>{{shopGoodsOrder.receiverAddress}}</span>
+                </p>
+                <p v-if="shopGoodsOrder.logistics != null && shopGoodsOrder.logistics != ''">
+                    <label>物流公司：</label>
+                    <span>{{shopGoodsOrder.logistics}}</span>
+                </p>
+                <p v-if="shopGoodsOrder.logisticsCode != null && shopGoodsOrder.logisticsCode != ''">
+                    <label>物流单号：</label>
+                    <span>{{shopGoodsOrder.logisticsCode}}</span>
+                </p>
+                <p>
+                    <label>订单状态：</label><span>{{shopGoodsOrder.statusValue}}</span>
+                </p>
+                <p>
+                    <label>下单时间：</label><span>{{shopGoodsOrder.createTime}}</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/goods/shopGoodsOrder.js?_${.now?long}"></script>
+</body>
+</html>

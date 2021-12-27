@@ -51,7 +51,7 @@ public class ShopGoodsOnebuyController {
 
     @PostMapping("/check")
     @RequiresPermissions("goods:shopGoodsOnebuy:check")
-    public R save(@RequestBody ShopGoodsOnebuyVo shopGoodsOnebuyVo) {
+    public R check(@RequestBody ShopGoodsOnebuyVo shopGoodsOnebuyVo) {
         ShopGoodsOnebuy bean = shopGoodsOnebuyService.getById(shopGoodsOnebuyVo.getId());
         ShopGoods goods = shopGoodsService.getById(shopGoodsOnebuyVo.getGoodsId());
         if (shopGoodsOnebuyVo.getStatus() == 1) {

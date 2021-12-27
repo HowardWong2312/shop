@@ -30,7 +30,6 @@ public class UserDepositController {
     @RequiresPermissions("user:userDeposit:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = userDepositService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

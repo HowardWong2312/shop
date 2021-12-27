@@ -3,6 +3,28 @@
 
 <mapper namespace="io.dubai.admin.modules.user.dao.UserDepositDao">
 
-
+    <select id="queryPage" resultType="io.dubai.admin.modules.user.entity.vo.UserDepositVo">
+        SELECT
+        a.*,
+        sd.value as status_value,
+        sd.remark as status_color,
+        p.title as payment_name,
+        u.nickname as user_name
+        FROM t_user_deposit a
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        LEFT JOIN shop_payment p ON (a.payment_id=p.id)
+        left join `sys_dict` sd on(a.status=sd.code and sd.type='user_deposit_status')
+        WHERE 1 = 1 and a.is_del=0
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nickname like '%${params.key}%'
+            or a.user_id=#{params.key}
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+        order by a.create_time desc
+    </select>
 
 </mapper>

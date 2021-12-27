@@ -39,4 +39,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
         return baseMapper.queryListByUserIdAndLanguageId(userId,languageId);
     }
 
+    @Override
+    public List<GoodsVo> queryListIssueByUserIdAndLanguageId(Long userId, Long languageId) {
+        return baseMapper.queryListIssueByUserIdAndLanguageId(userId,languageId);
+    }
+
 }
