@@ -26,7 +26,7 @@ public class ShopGoodsServiceImpl extends ServiceImpl<ShopGoodsDao, ShopGoods> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        if (!StringUtils.isEmpty(params.get("categoryId"))) {
+        if (!StringUtils.isEmpty(params.get("categoryId")) && !params.get("categoryId").equals("-1")) {
             //根据一级分类
             List<Object> categoryIds = shopGoodsCategoryService.getBaseMapper().selectObjs(new QueryWrapper<ShopGoodsCategory>().select("id").eq("parent_id", params.get("categoryId")));
             params.put("ids", categoryIds);

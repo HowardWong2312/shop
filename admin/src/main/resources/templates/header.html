@@ -6,8 +6,10 @@
 <link rel="stylesheet" href="${request.contextPath}/statics/plugins/jqgrid/ui.jqgrid-bootstrap.css">
 <link rel="stylesheet" href="${request.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css">
 <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
-<link rel="stylesheet" href="${request.contextPath}/statics/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="${request.contextPath}/statics/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+<link rel="stylesheet"
+      href="${request.contextPath}/statics/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet"
+      href="${request.contextPath}/statics/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
 <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui-v2.6.8/layui/css/layui.css">
 <style>
     .weui-switch {
@@ -23,6 +25,7 @@
         transition: background-color 0.1s, border 0.1s;
         cursor: pointer;
     }
+
     .weui-switch:before {
         content: " ";
         position: absolute;
@@ -34,6 +37,7 @@
         background-color: #FDFDFD;
         transition: transform 0.35s cubic-bezier(0.45, 1, 0.4, 1);
     }
+
     .weui-switch:after {
         content: " ";
         position: absolute;
@@ -46,14 +50,17 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
         transition: transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
     }
+
     .weui-switch-on {
         border-color: #6F6F6F;
         background-color: #1AAD19;
     }
+
     .weui-switch-on:before {
         border-color: #1AAD19;
         background-color: #409eff;
     }
+
     .weui-switch-on:after {
         transform: translateX(28px);
     }
@@ -80,6 +87,11 @@
             text: {
                 type: String,
                 default: ''
+            },
+            stop: {
+                //阻止打开
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -106,6 +118,11 @@
         },
         methods: {
             toggle() {
+                if (this.stop && !this.isChecked) {
+                    //    知否阻止打开
+                    layer.msg("只能由商家开启活动", {icon: 2});
+                    return;
+                }
                 this.isChecked = !this.isChecked;
             }
         },

@@ -45,6 +45,7 @@ function fetchCategory() {
                 categoryMap = new Map();
                 vm.categoryList = [];
                 vm.categoryList.push({id: null, name: '全部'});
+                vm.categoryList.push({id: -1, name: '推荐'});
                 for (let i = 0; i < res.page.list.length; i++) {
                     if (res.page.list[i].defaultTitle == null || res.page.list[i].defaultTitle === "") res.page.list[i].defaultTitle = res.page.list[i].languageTtile
                     vm.categoryList.push({id: res.page.list[i].id, name: res.page.list[i].defaultTitle});
@@ -156,7 +157,7 @@ let vm = new Vue({
                             '<span class="label label-danger">下架</span>';
                     }
                 },
-                {label: '排序', name: 'orderNum', index: 'sgc.order_num', width: 50},
+                {label: '排序', name: 'orderNum', index: 'sg.order_num', width: 50},
                 {label: '创建时间', name: 'createTime', index: 'create_time', width: 100},
             ],
             viewrecords: true,
