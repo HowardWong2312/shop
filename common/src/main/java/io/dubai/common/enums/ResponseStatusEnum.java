@@ -50,6 +50,8 @@ public enum ResponseStatusEnum {
     RUSH_EVENT_OVER(3012, "该商品抽奖活动已结束"),
     EXCHANGE_CLOSED(4001, "积分兑现暂时关闭中"),
     MUST_BE_MORE_THAN_ONE(4002, "最少兑换1积分"),
+    NEEDS_BIND_BANK(4003, "请先绑定至少一张银行卡"),
+    CANNOT_EXCHANGE(4004, "该用户拥有多个账号，不符合积分兑现的资格"),
     PARAMS_IS_ERROR(502, "params error");
 
 

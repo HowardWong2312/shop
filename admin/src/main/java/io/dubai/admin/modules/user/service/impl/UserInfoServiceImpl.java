@@ -5,13 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.admin.modules.user.dao.UserInfoDao;
-import io.dubai.admin.modules.user.entity.TCreditsHis;
+import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import io.dubai.admin.modules.user.entity.UserDeposit;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
-import io.dubai.admin.modules.user.service.TCreditsHisService;
-import io.dubai.admin.modules.user.service.UserDepositService;
-import io.dubai.admin.modules.user.service.UserInfoService;
-import io.dubai.admin.modules.user.service.UserWithdrawService;
+import io.dubai.admin.modules.user.service.*;
 import io.dubai.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,7 +32,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     private UserWithdrawService userWithdrawService;
 
     @Resource
-    private TCreditsHisService creditsHisService;
+    private UserCreditsLogService userCreditsLogService;
 
     @Resource
     private RedisUtils redisUtils;
@@ -162,10 +159,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     }
 
     private HashMap<String, Long> getCredits(HashMap map) {
-        BigDecimal userGetCredits = creditsHisService.getBaseMapper().selectOne(new QueryWrapper<TCreditsHis>().select("IFNULL(sum(credits),0) credits").notIn("type", 5, 6)).getCredits();
-        BigDecimal userExchangeCredits = creditsHisService.getBaseMapper().selectOne(new QueryWrapper<TCreditsHis>().select("IFNULL(sum(credits),0) credits").eq("type", 6)).getCredits();
+        BigDecimal userGetCredits = userCreditsLogService.getBaseMapper().selectOne(new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 1)).getAmount();
+        BigDecimal userExchangeCredits = userCreditsLogService.getBaseMapper().selectOne(new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 2).eq("status",11)).getAmount();
         BigDecimal RedeemedCredits = userGetCredits.subtract(userExchangeCredits);
-        BigDecimal todayCredits = creditsHisService.getBaseMapper().selectOne(new QueryWrapper<TCreditsHis>().select("IFNULL(sum(credits),0) credits").notIn("type", 5, 6).eq("to_days(createTime)", "TO_DAYS(now())")).getCredits();
+        BigDecimal todayCredits = userCreditsLogService.getBaseMapper().selectOne(new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 1).eq("to_days(createTime)", "TO_DAYS(now())")).getAmount();
         map.put("userGetCredits", userGetCredits); //用户获取的积分数
         map.put("userExchangeCredits", userExchangeCredits);//已经兑换总数
         map.put("RedeemedCredits", RedeemedCredits); //未兑换总数

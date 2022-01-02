@@ -274,6 +274,9 @@ public class UserInfo implements Serializable {
 	@TableField("lotteryTimes")
 	private Integer lotteryTimes;//免费抽奖次数
 
+	@TableField("isLockCredits")
+	private Integer isLockCredits;//是否锁定积分
+
 }
 
 	

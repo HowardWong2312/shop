@@ -114,6 +114,15 @@ public class WalletController {
     @ApiOperation("添加银行卡")
     @PostMapping("/addBank")
     public R addAddress(@RequestBody UserBank bank, @ApiIgnore @LoginUser UserInfo userInfo) {
+        List<UserBank> temps = userBankService.list(
+                new QueryWrapper<UserBank>()
+                .eq("account_name",bank.getAccountName())
+                .eq("account_number",bank.getAccountNumber())
+        );
+        if (!temps.isEmpty()){
+            userInfo.setIsLockCredits(1);
+            userInfoService.update(userInfo);
+        }
         bank.setUserId(userInfo.getUserId().longValue());
         userBankService.save(bank);
         return R.ok().put("bank",bank);
@@ -123,6 +132,15 @@ public class WalletController {
     @ApiOperation("修改银行卡")
     @PostMapping("/updateBank")
     public R updateBank(@RequestBody UserBank bank, @ApiIgnore @LoginUser UserInfo userInfo) {
+        List<UserBank> temps = userBankService.list(
+                new QueryWrapper<UserBank>()
+                        .eq("account_name",bank.getAccountName())
+                        .eq("account_number",bank.getAccountNumber())
+        );
+        if (!temps.isEmpty()){
+            userInfo.setIsLockCredits(1);
+            userInfoService.update(userInfo);
+        }
         bank.setUserId(userInfo.getUserId().longValue());
         userBankService.updateById(bank);
         return R.ok().put("bank",bank);
@@ -303,6 +321,13 @@ public class WalletController {
     @ApiOperation("积分兑现")
     @PostMapping("/exchange")
     public R exchange(@RequestBody ExchangeForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
+        List<UserBank> userBanks = userBankService.list(new QueryWrapper<UserBank>().eq("user_id",userInfo.getUserId()).eq("is_del",0));
+        if(userBanks.isEmpty()){
+            return R.error(ResponseStatusEnum.NEEDS_BIND_BANK);
+        }
+        if(userInfo.getIsLockCredits().intValue() == 1){
+            return R.error(ResponseStatusEnum.CANNOT_EXCHANGE);
+        }
         if(null == form.getCredits() || form.getCredits().compareTo(BigDecimal.ONE) == -1){
             return R.error(ResponseStatusEnum.MUST_BE_MORE_THAN_ONE);
         }

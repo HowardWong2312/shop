@@ -96,7 +96,7 @@
         from shop_user_favorite_goods a
         left join shop_goods b on(a.goods_id=b.id)
         left join shop_goods_lang c on(b.id=c.goods_id and c.language_id = ${query.languageId})
-        where a.user_id=#{query.userId} and a.is_del=0
+        where a.user_id=#{query.userId} and b.is_del=0
         order by a.create_time desc
     </select>
 
