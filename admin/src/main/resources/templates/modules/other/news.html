@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+</head>
+<body style="overflow:hidden">
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-inline">
+            <#if shiro.hasPermission("news:list")>
+                <div class="form-group">
+                    <input type="text" class="form-control" v-model="q.title" @keyup.enter="query" placeholder="标题">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">资讯类型:</label>
+                    <select class="form-control" v-model="q.newsType">
+                        <option value="" selected="selected">所有类型</option>
+                        <option v-for="item in newsTypeList" :value="item.code">{{item.value}}</option>
+                    </select>
+                </div>
+                <a class="btn btn-success" @click="query"><i class="fa fa-search"></i> 查询</a>
+            </#if>
+
+			<#if shiro.hasPermission("news:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i> 新增</a>
+			</#if>
+			<#if shiro.hasPermission("news:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>
+			</#if>
+			<#if shiro.hasPermission("news:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
+			</#if>
+            </div>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">作者名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="news.author" placeholder="作者名字"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">图片</div>
+                        <div class="col-sm-10">
+                            <img :src="news.headUrl" id="upLoadPhoto"  style="width:100%;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">标题</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="news.title" placeholder="标题"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">文本内容</div>
+                        <div class="col-sm-10">
+                            <textarea placeholder="文本内容"  id="content" style="border:none;"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <div class="col-sm-2 control-label">资讯类型</div>
+                        <div class="col-sm-10">
+                            <select class="form-control" v-model="news.newsType" placeholder="请选择类型">
+                                <option v-for="item in newsTypeList" :value="item.code">{{item.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" id="btnSaveOrUpdate" data-loading-text="保存中..." @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+<script src="${request.contextPath}/statics/ueditor/ueditor.config.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/ueditor/ueditor.all.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/ueditor/lang/zh-cn/zh-cn.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/modules/other/news.js?_${.now?long}"></script>
+</body>
+</html>

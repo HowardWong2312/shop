@@ -28,6 +28,9 @@ public class Banner implements Serializable {
     @ApiModelProperty(value = "图片")
     private String imgUrl;
 
+    @ApiModelProperty(value = "链接类型")
+    private Integer linkType;
+
     @ApiModelProperty(value = "链接")
     private String linkUrl;
 

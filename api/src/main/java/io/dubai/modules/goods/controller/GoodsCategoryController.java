@@ -45,14 +45,9 @@ public class GoodsCategoryController {
     @GetMapping("/list/{parentId}")
     @Login
     public R list(@PathVariable Long parentId, @ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        List<GoodsCategoryVo> list = goodsCategoryService.queryListByParentIdAndLanguageId(parentId,languageId);
+        List<GoodsCategoryVo> list = goodsCategoryService.queryListByParentIdAndLanguageId(parentId,userInfo.getLanguage());
         for (int i = 0; i < list.size(); i++) {
-            list.get(i).setKids(goodsCategoryService.queryListByParentIdAndLanguageId(list.get(i).getId(),languageId));
+            list.get(i).setKids(goodsCategoryService.queryListByParentIdAndLanguageId(list.get(i).getId(),userInfo.getLanguage()));
         }
         return R.ok().put("list", list);
     }
@@ -60,7 +55,7 @@ public class GoodsCategoryController {
     @ApiOperation("根据父级和语言查子级列表")
     @GetMapping("/list/{parentId}/{languageId}")
     @Login
-    public R list(@PathVariable Long parentId,@PathVariable Long languageId) {
+    public R list(@PathVariable Long parentId,@PathVariable String languageId) {
         List<GoodsCategoryVo> list = goodsCategoryService.queryListByParentIdAndLanguageId(parentId,languageId);
         for (int i = 0; i < list.size(); i++) {
             list.get(i).setKids(goodsCategoryService.queryListByParentIdAndLanguageId(list.get(i).getId(),languageId));

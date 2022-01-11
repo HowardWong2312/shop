@@ -18,7 +18,6 @@ import io.dubai.common.utils.R;
 import io.dubai.common.validator.ValidatorUtils;
 import net.sf.json.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -116,15 +115,9 @@ public class SysOssController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "action", required = false) String action) throws Exception {
         if ("config".equals(action)) {
-            String rootPath = ResourceUtils.getURL("classpath:").getPath();
-            //获取文件路径
-            String configJsonPath = rootPath + "/statics/ueditor/config.json";
+            String configJsonPath = "/statics/ueditor/config.json";
             ConfigManager configManager = new ConfigManager(configJsonPath);
-            String config = "系统繁忙，请重试";
-            if (configManager != null) {
-                config = configManager.getAllConfig().toString();
-            }
-            return config;
+            return configManager.getAllConfig().toJSONString();
         }
 
         return JSONObject.fromObject(R.ok()
@@ -134,19 +127,23 @@ public class SysOssController {
                 .put("original", file.getOriginalFilename())).toString();
     }
 
-    public String uploadToOss(MultipartFile file) throws Exception {
-        if (file.isEmpty()) {
-            throw new RRException("上传文件不能为空");
+    public String uploadToOss(MultipartFile file) {
+        try{
+            if (file.isEmpty()) {
+                throw new RRException("上传文件不能为空");
+            }
+            //上传文件
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
+            //保存文件信息
+            SysOssEntity ossEntity = new SysOssEntity();
+            ossEntity.setUrl(url);
+            ossEntity.setCreateDate(new Date());
+            sysOssService.save(ossEntity);
+            return url;
+        }catch (Exception e){
+            throw new RRException("上传失败，请检查OSS阿里云存储的账户余额");
         }
-        //上传文件
-        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-        String url = OSSFactory.build().uploadSuffix(file.getBytes(), suffix);
-        //保存文件信息
-        SysOssEntity ossEntity = new SysOssEntity();
-        ossEntity.setUrl(url);
-        ossEntity.setCreateDate(new Date());
-        sysOssService.save(ossEntity);
-        return url;
     }
 
 

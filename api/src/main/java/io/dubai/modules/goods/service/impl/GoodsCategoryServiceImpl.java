@@ -21,12 +21,12 @@ import io.dubai.modules.goods.service.GoodsCategoryService;
 public class GoodsCategoryServiceImpl extends ServiceImpl<GoodsCategoryDao, GoodsCategory> implements GoodsCategoryService {
 
     @Override
-    public List<GoodsCategoryVo> queryListByParentIdAndLanguageId(Long parentId, Long languageId) {
+    public List<GoodsCategoryVo> queryListByParentIdAndLanguageId(Long parentId, String languageId) {
         return baseMapper.queryListByParentIdAndLanguageId(parentId,languageId);
     }
 
     @Override
-    public GoodsCategoryVo queryByIdAndLanguageId(Long id, Long languageId) {
+    public GoodsCategoryVo queryByIdAndLanguageId(Long id, String languageId) {
         return baseMapper.queryByIdAndLanguageId(id,languageId);
     }
 

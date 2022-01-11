@@ -34,12 +34,12 @@ public class GoodsOrderServiceImpl extends ServiceImpl<GoodsOrderDao, GoodsOrder
     }
 
     @Override
-    public GoodsOrderVo queryByOrderCodeAndLanguageId(String orderCode, Long languageId) {
+    public GoodsOrderVo queryByOrderCodeAndLanguageId(String orderCode, String languageId) {
         return baseMapper.queryByOrderCodeAndLanguageId(orderCode,languageId);
     }
 
     @Override
-    public GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(String orderCode, Long languageId) {
+    public GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(String orderCode, String languageId) {
         return baseMapper.queryByOrderCodeAndLanguageIdForMerchant(orderCode, languageId);
     }
 

@@ -53,46 +53,6 @@ public class DataFilterAspect {
 
     }
 
-    @Pointcut("execution(public * io.dubai.modules.*.controller.*.list(..))")
-    public void dataFilterCut2() {
-
-    }
-
-    @AfterReturning(value = "dataFilterCut2()", returning = "rvt")
-    public void dataFilter2(JoinPoint point, Object rvt) {
-        SysUserEntity user = ShiroUtils.getUserEntity();
-
-        //如果不是超级管理员，则进行数据过滤
-        if (user.getUserId() == Constant.SUPER_ADMIN) {
-            return;
-        }
-        MethodSignature sig1 = (MethodSignature) point.getSignature();
-        Method method1 = sig1.getMethod();
-        if (null != rvt && null != method1.getDeclaringClass()) {
-            try {
-                if (rvt instanceof R) {
-                    R r = (R) rvt;
-                    if (r.containsKey("page")) {
-                        JSONObject page = JSONObject.parseObject(JSON.toJSONStringWithDateFormat(r, "yyyy-MM-dd HH:mm:ss")).getJSONObject("page");
-                        for (int i = 0; i < page.getJSONArray("list").size(); i++) {
-                            page.getJSONArray("list").getJSONObject(i).put("phone", "*******");
-                            page.getJSONArray("list").getJSONObject(i).put("idCard", "*******");
-                            page.getJSONArray("list").getJSONObject(i).put("bankNumber", "*******");
-                            page.getJSONArray("list").getJSONObject(i).put("bankRealName", "*******");
-                            page.getJSONArray("list").getJSONObject(i).put("bankAddress", "*******");
-                            page.getJSONArray("list").getJSONObject(i).put("regIp", "*******");
-                            page.getJSONArray("list").getJSONObject(i).put("lastLoginIp", "*******");
-                        }
-                        r.put("page", page);
-                    }
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
     @Before("dataFilterCut()")
     public void dataFilter(JoinPoint point) throws Throwable {
         Object params = point.getArgs()[0];

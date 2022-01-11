@@ -28,11 +28,11 @@
             <#if shiro.hasPermission("goods:shopGoodsOnebuy:check")>
                 <a class="btn btn-warning" @click="check"><i class="fa fa-pencil-square-o"></i> 审核</a>
             </#if>
-<!--            <#if shiro.hasPermission("goods:shopGoodsOnebuy:update")>-->
-<!--                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>-->
-<!--            </#if>-->
-            <#if shiro.hasPermission("goods:shopGoodsOnebuy:delete")>
-                <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i> 删除</a>
+            <#if shiro.hasPermission("goods:shopGoodsOnebuy:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i> 修改</a>
+            </#if>
+            <#if shiro.hasPermission("goods:shopGoodsOnebuy:details")>
+                <a class="btn btn-primary" @click="details"><i class="fa fa-search"></i> 查看详情</a>
             </#if>
         </div>
         <table id="jqGrid"></table>
@@ -42,6 +42,12 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">发布份数</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="shopGoodsOnebuy.totalQuantity" placeholder="发布份数"/>
+                </div>
+            </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">剩余份数</div>
                 <div class="col-sm-10">
@@ -55,6 +61,41 @@
             </div>
         </form>
     </div>
+
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="detailsModalLabel">一元购活动参与记录</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>用户昵称</th>
+                        <th>商品昵称</th>
+                        <th>参与份数</th>
+                        <th>参与时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in goodsOnebuyDetailsList">
+                        <td>{{item.userName}}</td>
+                        <td>{{item.goodsName}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.createTime}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

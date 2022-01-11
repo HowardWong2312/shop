@@ -29,7 +29,7 @@ public class GoodsQuery extends Query {
     private Integer isOneBuy;
 
     @ApiModelProperty("语言ID")
-    private Long languageId = 1L;
+    private String languageId;
 
     @ApiModelProperty("用户ID")
     private Long userId;

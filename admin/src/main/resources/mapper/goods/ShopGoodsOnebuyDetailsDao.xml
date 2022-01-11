@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.admin.modules.goods.dao.ShopGoodsOnebuyDetailsDao">
+
+
+    <select id="queryList" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsOnebuyDetailsVo">
+        SELECT
+        a.*,
+        b.title as goods_name,
+        u.nickname as user_name
+        FROM shop_goods_onebuy_details a
+        LEFT JOIN shop_goods b ON (a.goods_id = b.id)
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        WHERE a.goods_onebuy_id=#{goodsOnebuyId}
+        order by a.create_time desc
+    </select>
+
+</mapper>

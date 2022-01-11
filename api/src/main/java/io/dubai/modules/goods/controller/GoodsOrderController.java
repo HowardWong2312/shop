@@ -94,12 +94,7 @@ public class GoodsOrderController {
     @ApiOperation("商家订单列表")
     @PostMapping("/listForMerchant")
     public R queryMerchantOrderList(@RequestBody GoodsOrderQuery query,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        query.setLanguageId(languageId);
+        query.setLanguageId(userInfo.getLanguage());
         query.setUserId(userInfo.getUserId().longValue());
         return R.ok().put("list", goodsOrderService.queryPageForMerchant(query));
     }
@@ -108,12 +103,7 @@ public class GoodsOrderController {
     @ApiOperation("商家订单详情")
     @GetMapping("/infoForMerchant/{orderCode}")
     public R infoForMerchant(@PathVariable String orderCode,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        GoodsOrderVo goodsOrderVo = goodsOrderService.queryByOrderCodeAndLanguageIdForMerchant(orderCode,languageId);
+        GoodsOrderVo goodsOrderVo = goodsOrderService.queryByOrderCodeAndLanguageIdForMerchant(orderCode,userInfo.getLanguage());
         return R.ok().put("order", goodsOrderVo);
     }
 
@@ -121,12 +111,7 @@ public class GoodsOrderController {
     @ApiOperation("用户订单列表")
     @PostMapping("/list")
     public R list(@RequestBody GoodsOrderQuery query,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        query.setLanguageId(languageId);
+        query.setLanguageId(userInfo.getLanguage());
         query.setUserId(userInfo.getUserId().longValue());
         PageUtils page = goodsOrderService.queryPage(query);
         return R.ok().put("page", page);
@@ -136,12 +121,7 @@ public class GoodsOrderController {
     @ApiOperation("用户订单详情")
     @GetMapping("/info/{orderCode}")
     public R info(@PathVariable String orderCode,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        GoodsOrderVo goodsOrderVo = goodsOrderService.queryByOrderCodeAndLanguageId(orderCode,languageId);
+        GoodsOrderVo goodsOrderVo = goodsOrderService.queryByOrderCodeAndLanguageId(orderCode,userInfo.getLanguage());
         GoodsGroupRecordDetails goodsGroupRecordDetails = goodsGroupRecordDetailsService.getOne(
                 new QueryWrapper<GoodsGroupRecordDetails>()
                 .eq("goods_order_code",orderCode)
@@ -224,12 +204,7 @@ public class GoodsOrderController {
             goodsGroupRecordDetails.setStatus(2);
         }
         if(goodsOrder.getStatus() == 1){
-            Long languageId = 1L;
-            Language language = languageService.queryByName(userInfo.getLanguage());
-            if(language != null){
-                languageId = language.getId();
-            }
-            GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(goodsOrder.getGoodsId(),languageId);
+            GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(goodsOrder.getGoodsId(),userInfo.getLanguage());
             //待分享订单取消，只返还金额
             userInfo.setBalance(userInfo.getBalance().add(goodsOrder.getAmount()));
             userInfoService.update(userInfo);

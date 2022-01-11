@@ -2,7 +2,10 @@ package io.dubai.admin.modules.goods.controller;
 
 import io.dubai.admin.modules.goods.entity.ShopGoods;
 import io.dubai.admin.modules.goods.entity.ShopGoodsOnebuy;
+import io.dubai.admin.modules.goods.entity.ShopGoodsOnebuyDetails;
+import io.dubai.admin.modules.goods.entity.vo.ShopGoodsOnebuyDetailsVo;
 import io.dubai.admin.modules.goods.entity.vo.ShopGoodsOnebuyVo;
+import io.dubai.admin.modules.goods.service.ShopGoodsOnebuyDetailsService;
 import io.dubai.admin.modules.goods.service.ShopGoodsOnebuyService;
 import io.dubai.admin.modules.goods.service.ShopGoodsService;
 import io.dubai.common.utils.PageUtils;
@@ -32,6 +35,9 @@ public class ShopGoodsOnebuyController {
     private ShopGoodsOnebuyService shopGoodsOnebuyService;
 
     @Resource
+    private ShopGoodsOnebuyDetailsService shopGoodsOnebuyDetailsService;
+
+    @Resource
     private ShopGoodsService shopGoodsService;
 
     @GetMapping("/list")
@@ -52,18 +58,18 @@ public class ShopGoodsOnebuyController {
     @PostMapping("/check")
     @RequiresPermissions("goods:shopGoodsOnebuy:check")
     public R check(@RequestBody ShopGoodsOnebuyVo shopGoodsOnebuyVo) {
-        ShopGoodsOnebuy bean = shopGoodsOnebuyService.getById(shopGoodsOnebuyVo.getId());
+        ShopGoodsOnebuy goodsOnebuy = shopGoodsOnebuyService.getById(shopGoodsOnebuyVo.getId());
         ShopGoods goods = shopGoodsService.getById(shopGoodsOnebuyVo.getGoodsId());
         if (shopGoodsOnebuyVo.getStatus() == 1) {
-            bean.setStatus(1);
+            goodsOnebuy.setStatus(1);
             goods.setIsOneBuy(1);
         }
         if (shopGoodsOnebuyVo.getStatus() == 2) {
-            bean.setStatus(2);
+            goodsOnebuy.setStatus(2);
             goods.setIsOneBuy(0);
         }
         shopGoodsService.updateById(goods);
-        shopGoodsOnebuyService.updateById(bean);
+        shopGoodsOnebuyService.updateById(goodsOnebuy);
         return R.ok();
     }
 
@@ -75,17 +81,11 @@ public class ShopGoodsOnebuyController {
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
-    @RequiresPermissions("goods:shopGoodsOnebuy:delete")
-    public R delete(@RequestBody Long[] ids) {
-        List<ShopGoodsOnebuy> list = shopGoodsOnebuyService.listByIds(Arrays.asList(ids));
-        list.forEach(s -> {
-            ShopGoods goods = shopGoodsService.getById(s.getGoodsId());
-            goods.setIsOneBuy(0);
-            shopGoodsService.updateById(goods);
-            shopGoodsOnebuyService.removeById(s.getId());
-        });
-        return R.ok();
+    @GetMapping("/details/{goodsOnebuyId}")
+    @RequiresPermissions("goods:shopGoodsOnebuy:details")
+    public R details(@PathVariable("goodsOnebuyId") Long goodsOnebuyId) {
+        List<ShopGoodsOnebuyDetailsVo> list = shopGoodsOnebuyDetailsService.queryList(goodsOnebuyId);
+        return R.ok().put("goodsOnebuyDetailsList",list);
     }
 
 }

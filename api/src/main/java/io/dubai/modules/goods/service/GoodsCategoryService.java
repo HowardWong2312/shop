@@ -18,9 +18,9 @@ import java.util.Map;
  */
 public interface GoodsCategoryService extends IService<GoodsCategory> {
 
-    List<GoodsCategoryVo> queryListByParentIdAndLanguageId(Long parentId, Long languageId);
+    List<GoodsCategoryVo> queryListByParentIdAndLanguageId(Long parentId, String languageId);
 
-    GoodsCategoryVo queryByIdAndLanguageId(Long id, Long languageId);
+    GoodsCategoryVo queryByIdAndLanguageId(Long id, String languageId);
 
     List<Long> queryIterativeIdsByParentId(Long parentId);
 

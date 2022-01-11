@@ -22,9 +22,9 @@ public interface GoodsOrderService extends IService<GoodsOrder> {
 
     PageUtils queryPageForMerchant(GoodsOrderQuery query);
 
-    GoodsOrderVo queryByOrderCodeAndLanguageId(String orderCode, Long languageId);
+    GoodsOrderVo queryByOrderCodeAndLanguageId(String orderCode, String languageId);
 
-    GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(String orderCode, Long languageId);
+    GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(String orderCode, String languageId);
 
 }
 

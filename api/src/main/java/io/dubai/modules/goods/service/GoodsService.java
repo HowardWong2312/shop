@@ -21,10 +21,10 @@ public interface GoodsService extends IService<Goods> {
 
     PageUtils queryPage(GoodsQuery query);
 
-    GoodsVo queryInfoByIdAndLanguageId(Long id,Long languageId);
+    GoodsVo queryInfoByIdAndLanguageId(Long id,String languageId);
 
-    List<GoodsVo> queryListByUserIdAndLanguageId(Long userId, Long languageId);
+    List<GoodsVo> queryListByUserIdAndLanguageId(Long userId, String languageId);
 
-    List<GoodsVo> queryListIssueByUserIdAndLanguageId(Long userId, Long languageId);
+    List<GoodsVo> queryListIssueByUserIdAndLanguageId(Long userId, String languageId);
 }
 

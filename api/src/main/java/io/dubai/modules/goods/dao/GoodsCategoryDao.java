@@ -19,9 +19,9 @@ import java.util.List;
 @Mapper
 public interface GoodsCategoryDao extends BaseMapper<GoodsCategory> {
 
-    List<GoodsCategoryVo> queryListByParentIdAndLanguageId(@Param("parentId") Long parentId, @Param("languageId") Long languageId);
+    List<GoodsCategoryVo> queryListByParentIdAndLanguageId(@Param("parentId") Long parentId, @Param("languageId") String languageId);
 
-    GoodsCategoryVo queryByIdAndLanguageId(@Param("id") Long id, @Param("languageId") Long languageId);
+    GoodsCategoryVo queryByIdAndLanguageId(@Param("id") Long id, @Param("languageId") String languageId);
 
     List<Long> queryIdsByParentId(@Param("parentId") Long parentId);
 

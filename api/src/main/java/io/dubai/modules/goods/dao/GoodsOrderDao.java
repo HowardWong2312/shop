@@ -22,9 +22,9 @@ public interface GoodsOrderDao extends BaseMapper<GoodsOrder> {
 
     List<GoodsOrderVo> queryPage(IPage page, @Param("query") GoodsOrderQuery query);
 
-    GoodsOrderVo queryByOrderCodeAndLanguageId(@Param("orderCode") String orderCode, @Param("languageId") Long languageId);
+    GoodsOrderVo queryByOrderCodeAndLanguageId(@Param("orderCode") String orderCode, @Param("languageId") String languageId);
 
-    GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(@Param("orderCode") String orderCode, @Param("languageId") Long languageId);
+    GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(@Param("orderCode") String orderCode, @Param("languageId") String languageId);
 
     List<GoodsOrderVo> queryPageForMerchant(IPage page, @Param("query") GoodsOrderQuery query);
 

@@ -24,10 +24,10 @@ public interface GoodsDao extends BaseMapper<Goods> {
 
     List<GoodsVo> queryPage(IPage page, @Param("query") GoodsQuery query);
 
-    GoodsVo queryInfoByIdAndLanguageId(@Param("id") Long id,@Param("languageId") Long languageId);
+    GoodsVo queryInfoByIdAndLanguageId(@Param("id") Long id,@Param("languageId") String languageId);
 
-    List<GoodsVo> queryListByUserIdAndLanguageId(@Param("userId") Long userId,@Param("languageId") Long languageId);
+    List<GoodsVo> queryListByUserIdAndLanguageId(@Param("userId") Long userId,@Param("languageId") String languageId);
 
-    List<GoodsVo> queryListIssueByUserIdAndLanguageId(@Param("userId") Long userId,@Param("languageId") Long languageId);
+    List<GoodsVo> queryListIssueByUserIdAndLanguageId(@Param("userId") Long userId,@Param("languageId") String languageId);
 
 }

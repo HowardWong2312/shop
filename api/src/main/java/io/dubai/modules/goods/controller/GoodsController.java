@@ -1,6 +1,7 @@
 package io.dubai.modules.goods.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.common.annotation.Login;
 import io.dubai.common.annotation.LoginUser;
@@ -101,6 +102,9 @@ public class GoodsController {
     private GoodsOneBuyService goodsOneBuyService;
 
     @Resource
+    private GoodsOnebuyDetailsService goodsOnebuyDetailsService;
+
+    @Resource
     private GoodsRushService goodsRushService;
 
     @Resource
@@ -116,12 +120,7 @@ public class GoodsController {
         if(userInfo != null && userInfo.getCountryId() != null){
             query.setCountryId(userInfo.getCountryId().longValue());
         }
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        query.setLanguageId(languageId);
+        query.setLanguageId(userInfo.getLanguage());
         if(query.getCategoryId() != null){
             List<Long> ids = goodsCategoryService.queryIterativeIdsByParentId(query.getCategoryId());
             ids.add(query.getCategoryId());
@@ -135,12 +134,7 @@ public class GoodsController {
     @GetMapping("/info/{id}")
     @Login
     public R info(@PathVariable("id") Long id,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(id,languageId);
+        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(id,userInfo.getLanguage());
         if(goodsVo == null){
             throw new RRException(ResponseStatusEnum.PARAMS_IS_ERROR);
         }
@@ -155,7 +149,7 @@ public class GoodsController {
         List<GoodsImg> bannerList = goodsImgService.list(
                 new QueryWrapper<GoodsImg>()
                         .eq("goods_id",id)
-                        .eq("language_id",languageId)
+                        .eq("language_id",userInfo.getLanguage())
                         .eq("type",1)
                         .orderByDesc("order_num")
         );
@@ -163,7 +157,7 @@ public class GoodsController {
         List<GoodsImg> descImgList = goodsImgService.list(
                 new QueryWrapper<GoodsImg>()
                         .eq("goods_id",id)
-                        .eq("language_id",languageId)
+                        .eq("language_id",userInfo.getLanguage())
                         .eq("type",2)
                         .orderByDesc("order_num")
         );
@@ -189,13 +183,8 @@ public class GoodsController {
     @Login
     @ApiOperation("根据主键和语言ID查商品详情")
     @GetMapping("/goodsInfo/{id}/{languageId}")
-    public R goodsInfo(@PathVariable Long id, @PathVariable Long languageId,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long defaultLanguageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            defaultLanguageId = language.getId();
-        }
-        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(id,languageId);
+    public R goodsInfo(@PathVariable Long id, @PathVariable String languageId,@ApiIgnore @LoginUser UserInfo userInfo) {
+        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(id,userInfo.getLanguage());
         List<GoodsImg> bannerList = goodsImgService.list(
                 new QueryWrapper<GoodsImg>()
                         .eq("goods_id",id)
@@ -213,7 +202,7 @@ public class GoodsController {
         );
         goodsVo.setBannerList(bannerList);
         goodsVo.setDescImgList(descImgList);
-        goodsVo.setCategory(goodsCategoryService.queryByIdAndLanguageId(goodsVo.getCategoryId(), defaultLanguageId));
+        goodsVo.setCategory(goodsCategoryService.queryByIdAndLanguageId(goodsVo.getCategoryId(), userInfo.getLanguage()));
         return R.ok().put("goods", goodsVo);
     }
 
@@ -221,16 +210,11 @@ public class GoodsController {
     @GetMapping("/queryListByUserId/{userId}")
     @Login
     public R queryListByUserId(@PathVariable Long userId,@ApiIgnore @LoginUser UserInfo userInfo) {
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
         List<GoodsVo> goodsList = null;
         if(userId.intValue() == userInfo.getUserId().intValue()){
-            goodsList = goodsService.queryListByUserIdAndLanguageId(userId,languageId);
+            goodsList = goodsService.queryListByUserIdAndLanguageId(userId,userInfo.getLanguage());
         }else{
-            goodsList = goodsService.queryListIssueByUserIdAndLanguageId(userId,languageId);
+            goodsList = goodsService.queryListIssueByUserIdAndLanguageId(userId,userInfo.getLanguage());
         }
         return R.ok().put("list",goodsList);
     }
@@ -313,21 +297,12 @@ public class GoodsController {
                         .eq("status",1)
                         .last("limit 1")
         );
-        if(goodsOneBuy == null){
-            if(goods.getIsOneBuy().intValue() == 1){
-                goods.setIsOneBuy(0);
-                goodsService.updateById(goods);
-            }
+        if(goodsOneBuy == null || goods.getIsOneBuy().intValue() == 0 || goodsOneBuy.getQuantity() < 1){
+            goods.setIsOneBuy(0);
+            goodsService.updateById(goods);
             throw new RRException(ResponseStatusEnum.ONE_BUY_EVENT_OVER);
         }
-        if(goodsOneBuy.getQuantity() < 1){
-            if(goods.getIsOneBuy().intValue() == 1){
-                goods.setIsOneBuy(0);
-                goodsService.updateById(goods);
-            }
-            goodsOneBuyService.removeById(goodsOneBuy.getId());
-            throw new RRException(ResponseStatusEnum.ONE_BUY_EVENT_OVER);
-        }
+
         GoodsOrder tempOrder = goodsOrderService.getOne(
                 new QueryWrapper<GoodsOrder>()
                 .eq("user_id",userInfo.getUserId())
@@ -355,12 +330,19 @@ public class GoodsController {
         if(form.getQuantity() > 1){
             return R.ok(ResponseStatusEnum.ONLY_CAN_BUY_ONE);
         }
+        BigDecimal amount = BigDecimal.ONE;
+        if(userInfo.getBalance().compareTo(amount) == -1){
+            return R.ok(ResponseStatusEnum.BALANCE_INSUFFICIENT);
+        }
         //修改一元购参数
         goodsOneBuy.setQuantity(goodsOneBuy.getQuantity()-1);
+        if(goodsOneBuy.getQuantity() < 1){
+            goodsOneBuy.setStatus(3);
+            goods.setIsOneBuy(0);
+        }
         goodsOneBuyService.updateById(goodsOneBuy);
         goods.setStock(goods.getStock()-1);
         goodsService.updateById(goods);
-        BigDecimal amount = BigDecimal.ONE;
         UserAddress userAddress = userAddressService.getById(form.getUserAddressId());
         //创建订单
         GoodsOrder goodsOrder = new GoodsOrder();
@@ -371,18 +353,20 @@ public class GoodsController {
         goodsOrder.setReceiverArea(userAddress.getArea());
         goodsOrder.setReceiverAddress(userAddress.getAddress());
         goodsOrder.setQuantity(form.getQuantity());
-        goodsOrder.setStatus(0);
+        goodsOrder.setStatus(3);
         goodsOrder.setOrderCode(StringUtils.createOrderNum());
         goodsOrder.setGoodsId(goods.getId());
         goodsOrder.setAmount(amount);
         goodsOrder.setUserId(userInfo.getUserId().longValue());
         goodsOrder.setPaymentId(form.getPaymentId());
         goodsOrderService.save(goodsOrder);
-        if(userInfo.getBalance().compareTo(goodsOrder.getAmount()) == -1){
-            return R.ok(ResponseStatusEnum.BALANCE_INSUFFICIENT).put("orderCode",goodsOrder.getOrderCode());
-        }
-        goodsOrder.setStatus(3);
-        goodsOrderService.updateById(goodsOrder);
+        //增加一元购活动参与记录
+        GoodsOnebuyDetails goodsOnebuyDetails = new GoodsOnebuyDetails();
+        goodsOnebuyDetails.setUserId(userInfo.getUserId().longValue());
+        goodsOnebuyDetails.setGoodsId(goods.getId());
+        goodsOnebuyDetails.setGoodsOnebuyId(goodsOneBuy.getId());
+        goodsOnebuyDetails.setQuantity(form.getQuantity());
+        goodsOnebuyDetailsService.save(goodsOnebuyDetails);
         //扣除账户余额
         userInfo.setBalance(userInfo.getBalance().subtract(goodsOrder.getAmount()));
         userInfoService.update(userInfo);
@@ -618,12 +602,7 @@ public class GoodsController {
     @Login
     public R favoriteList(@ApiIgnore @LoginUser UserInfo userInfo) {
         GoodsQuery query = new GoodsQuery();
-        Long languageId = 1L;
-        Language language = languageService.queryByName(userInfo.getLanguage());
-        if(language != null){
-            languageId = language.getId();
-        }
-        query.setLanguageId(languageId);
+        query.setLanguageId(userInfo.getLanguage());
         query.setUserId(userInfo.getUserId().longValue());
         return R.ok().put("list", goodsService.queryFavoriteList(query));
     }
@@ -665,6 +644,8 @@ public class GoodsController {
         GoodsOneBuy goodsOneBuy = goodsOneBuyService.getOne(
                 new QueryWrapper<GoodsOneBuy>()
                 .eq("goods_id",goodsId)
+                .ne("status",3)
+                .last("limit 1")
         );
         return R.ok().put("goodsOneBuy",goodsOneBuy);
     }
@@ -677,8 +658,9 @@ public class GoodsController {
             goods.setIsOneBuy(0);
             goodsService.updateById(goods);
         }
-        goodsOneBuyService.remove(new QueryWrapper<GoodsOneBuy>()
+        goodsOneBuyService.update(new UpdateWrapper<GoodsOneBuy>()
                 .eq("goods_id",form.getGoodsId())
+                .set("status",3)
         );
         GoodsOneBuy goodsOneBuy = new GoodsOneBuy();
         goodsOneBuy.setGoodsId(form.getGoodsId());
@@ -696,8 +678,9 @@ public class GoodsController {
         Goods goods = goodsService.getById(goodsId);
         goods.setIsOneBuy(0);
         goodsService.updateById(goods);
-        goodsOneBuyService.remove(new QueryWrapper<GoodsOneBuy>()
+        goodsOneBuyService.update(new UpdateWrapper<GoodsOneBuy>()
                 .eq("goods_id",goodsId)
+                .set("status",3)
         );
         return R.ok();
     }
@@ -707,7 +690,9 @@ public class GoodsController {
     public R getRushInfo(@PathVariable("goodsId") Long goodsId) {
         GoodsRush goodsRush = goodsRushService.getOne(
                 new QueryWrapper<GoodsRush>()
-                        .eq("goods_id",goodsId)
+                .eq("goods_id",goodsId)
+                .ne("status",3)
+                .last("limit 1")
         );
         return R.ok().put("goodsRush",goodsRush);
     }
@@ -720,8 +705,9 @@ public class GoodsController {
             goods.setIsRush(0);
             goodsService.updateById(goods);
         }
-        goodsRushService.remove(new QueryWrapper<GoodsRush>()
+        goodsRushService.update(new UpdateWrapper<GoodsRush>()
                 .eq("goods_id",form.getGoodsId())
+                .set("status",3)
         );
         GoodsRush goodsRush = new GoodsRush();
         goodsRush.setGoodsId(form.getGoodsId());
@@ -739,8 +725,9 @@ public class GoodsController {
         Goods goods = goodsService.getById(goodsId);
         goods.setIsRush(0);
         goodsService.updateById(goods);
-        goodsRushService.remove(new QueryWrapper<GoodsRush>()
+        goodsRushService.update(new UpdateWrapper<GoodsRush>()
                 .eq("goods_id",goodsId)
+                .set("status",3)
         );
         return R.ok();
     }
@@ -759,6 +746,7 @@ public class GoodsController {
 
     @ApiOperation("根据商品ID抽奖")
     @GetMapping("/lottery/{goodsId}")
+    @Transactional
     public R lottery(@PathVariable("goodsId") Long goodsId,@ApiIgnore @LoginUser UserInfo userInfo) {
         Goods goods = goodsService.getById(goodsId);
         GoodsRush goodsRush = goodsRushService.getOne(new QueryWrapper<GoodsRush>()
@@ -766,7 +754,9 @@ public class GoodsController {
                 .eq("status",1)
                 .last("limit 1")
         );
-        if(goods.getIsRush().intValue() == 0 || goodsRush == null || goodsRush.getQuantity().intValue() < 1){
+        if(goodsRush == null || goods.getIsRush().intValue() == 0 || goodsRush.getQuantity().intValue() < 1){
+            goods.setIsRush(0);
+            goodsService.updateById(goods);
             return R.error(ResponseStatusEnum.RUSH_EVENT_OVER);
         }
         if(userInfo.getLotteryTimes() == null || userInfo.getLotteryTimes() < 1){
@@ -776,6 +766,11 @@ public class GoodsController {
         int lotteryNumber = r.nextInt(5) + 1;
         if(lotteryNumber == 1){
             goodsRush.setQuantity(goodsRush.getQuantity()-1);
+            if(goodsRush.getQuantity().intValue() == 0){
+                goodsRush.setStatus(3);
+                goods.setIsRush(0);
+                goodsService.updateById(goods);
+            }
             goodsRushService.updateById(goodsRush);
             UserAddress userAddress = userAddressService.getOne(
                     new QueryWrapper<UserAddress>()

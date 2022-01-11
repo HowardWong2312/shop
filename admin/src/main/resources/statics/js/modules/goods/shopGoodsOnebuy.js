@@ -46,6 +46,7 @@ let vm = new Vue({
 		showList: true,
 		title: null,
         statusList: [],
+        goodsOnebuyDetailsList: [],
 		q: {},
 		shopGoodsOnebuy: {}
 	},
@@ -101,6 +102,16 @@ let vm = new Vue({
                 });
 			});
 		},
+        details: function () {
+            let id = getSelectedRow();
+            if(id == null){
+                return ;
+            }
+            $.get(baseURL + "goods/shopGoodsOnebuy/details/"+id, function(r){
+                vm.goodsOnebuyDetailsList = r.goodsOnebuyDetailsList;
+                $("#detailsModal").modal('show');
+            });
+        },
         check: function () {
             let id = getSelectedRow();
             if(id == null){

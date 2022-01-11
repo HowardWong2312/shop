@@ -29,18 +29,18 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, Goods> implements Go
     }
 
     @Override
-    public GoodsVo queryInfoByIdAndLanguageId(Long id,Long languageId) {
+    public GoodsVo queryInfoByIdAndLanguageId(Long id,String languageId) {
         GoodsVo goodsVo = baseMapper.queryInfoByIdAndLanguageId(id,languageId);
         return goodsVo;
     }
 
     @Override
-    public List<GoodsVo> queryListByUserIdAndLanguageId(Long userId, Long languageId) {
+    public List<GoodsVo> queryListByUserIdAndLanguageId(Long userId, String languageId) {
         return baseMapper.queryListByUserIdAndLanguageId(userId,languageId);
     }
 
     @Override
-    public List<GoodsVo> queryListIssueByUserIdAndLanguageId(Long userId, Long languageId) {
+    public List<GoodsVo> queryListIssueByUserIdAndLanguageId(Long userId, String languageId) {
         return baseMapper.queryListIssueByUserIdAndLanguageId(userId,languageId);
     }
 
