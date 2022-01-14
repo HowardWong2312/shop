@@ -33,6 +33,7 @@
             // 指定Root节点值
             var _root = options.rootCodeValue?options.rootCodeValue:null
             var result = [];
+            console.log(data);
             $.each(data, function(index, item) {
                 // 这里兼容几种常见Root节点写法
                 // 默认的几种判断

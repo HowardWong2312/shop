@@ -4,16 +4,16 @@
  * @author cyf
  */
 (function () {
-    var TreeTable = function (tableId, url, columns) {
+    var TreeTable = function (tableId, url, columns,idName) {
         this.btInstance = null;					//jquery和bootstrapTreeTable绑定的对象
         this.bstableId = tableId;
         this.url = url;
         this.method = "GET";
         this.columns = columns;
         this.data = {};// ajax的参数
-        this.expandColumn = null;// 展开显示的列 
-        this.id = 'menuId';// 选取记录返回的值
-        this.code = 'menuId';// 用于设置父子关系
+        this.expandColumn = null;// 展开显示的列
+        this.id = idName;// 选取记录返回的值
+        this.code = idName;// 用于设置父子关系
         this.parentCode = 'parentId';// 用于设置父子关系
         this.expandAll = false;// 是否默认全部展开
         this.toolbarId = tableId + "Toolbar";

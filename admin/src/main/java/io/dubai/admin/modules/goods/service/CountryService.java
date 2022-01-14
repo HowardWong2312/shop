@@ -2,8 +2,10 @@ package io.dubai.admin.modules.goods.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.dubai.admin.modules.goods.entity.Country;
+import io.dubai.admin.modules.goods.entity.vo.CityVo;
 import io.dubai.common.utils.PageUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +17,14 @@ import java.util.Map;
  */
 public interface CountryService extends IService<Country> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    List<CityVo> queryPage(Map<String, Object> params);
+
+
+    /**
+     * @param id
+     * @param type
+     * @param action 0.新增 1.修改 2.删除
+     */
+    void reload(Integer id, Integer type, Integer action, CityVo cityVo);
 }
 

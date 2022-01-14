@@ -1,37 +1,38 @@
 package io.dubai.admin.modules.goods.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 /**
  * @author mother fucker
- * @name 国家表
- * @date 2021-12-19 14:07:37
+ * @name 城市表
+ * @date 2022-01-14 18:50:25
  */
 @Data
-@TableName("t_country")
-public class Country implements Serializable {
+@TableName("t_city")
+public class TCity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //
     @TableId
     private Integer id;
 
-    //名称
+    //城市名
     private String name;
 
-    //区号
-    private String code;
+    //省id
+    private Integer provinceid;
 
     @TableField(exist = false)
     private Integer type;
 
     @TableField(exist = false)
     private Integer parentId;
+
 
 }

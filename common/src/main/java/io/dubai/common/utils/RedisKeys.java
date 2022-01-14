@@ -16,6 +16,8 @@ public class RedisKeys {
 
     public static final String userOnlineKey = "userOnline";
 
+    public static final String citiesKey = "cities";
+
 
     public static String getSysConfigKey(String key) {
         return "sys:config:" + key;

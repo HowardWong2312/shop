@@ -10,12 +10,12 @@ import java.io.Serializable;
 
 /**
  * @author mother fucker
- * @name 国家表
- * @date 2021-12-19 14:07:37
+ * @name 省级表
+ * @date 2022-01-14 18:51:41
  */
 @Data
-@TableName("t_country")
-public class Country implements Serializable {
+@TableName("t_province")
+public class TProvince implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //
@@ -25,13 +25,14 @@ public class Country implements Serializable {
     //名称
     private String name;
 
-    //区号
-    private String code;
+    //国家id
+    private Integer countryid;
+
 
     @TableField(exist = false)
     private Integer type;
 
+
     @TableField(exist = false)
     private Integer parentId;
-
 }
