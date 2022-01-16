@@ -18,23 +18,25 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
-        menu: {
-            parentName: null,
-            parentId: 0,
-            type: 1,
-            orderNum: 0
-        }
+        countrySelected: 0,
+        provinceSelected: 0,
+        provinceList: [],
+        countryList: [],
+        isProvince: false,
+        name: ''
     },
     methods: {
-        getMenu: function (menuId) {
-            //加载菜单树
-            // $.get(baseURL + "sys/menu/select", function (r) {
-            //     ztree = $.fn.zTree.init($("#menuTree"), setting, r.menuList);
-            //     var node = ztree.getNodeByParam("id", vm.menu.parentId);
-            //     ztree.selectNode(node);
-            //
-            //     vm.menu.parentName = node.name;
-            // })
+        fromCountryCheck: function (event) {
+            if (!vm.isProvince) {
+                layer.load();
+                $.getJSON(baseURL + `goods/tProvince/list?countryId=${vm.countryList[event.target.value].id}`, function (r) {
+                    vm.provinceList = r;
+                    layer.closeAll('loading');
+                });
+            }
+        },
+        fromProvinceCheck: function (event) {
+
         },
         addCountry: function () {
 
@@ -52,8 +54,8 @@ var vm = new Vue({
                     contentType: "application/json",
                     data: JSON.stringify({
                         name: value,
-                        type:0,
-                        parentId:0
+                        type: 0,
+                        parentId: 0
                     }),
                     success: function (r) {
                         if (r.code == 200) {
@@ -70,24 +72,51 @@ var vm = new Vue({
             });
         },
         addProvince: function () {
-        //选择国家
+            //选择国家
+            layer.load();
+            $.getJSON(baseURL + `goods/Country/list`, function (r) {
+                vm.countryList = r;
+                vm.showList = !vm.showList;
+                layer.closeAll('loading');
+                vm.isProvince = true;
+            });
         },
         addCity: function () {
-        //选择省份
+            //选择省份
+            layer.load();
+            $.getJSON(baseURL + `goods/Country/list`, function (r) {
+                vm.countryList = r;
+                $.getJSON(baseURL + `goods/tProvince/list?countryId=${r[0].id}`, function (r2) {
+                    vm.provinceList = r2;
+                    vm.showList = !vm.showList;
+                    layer.closeAll('loading');
+                    vm.isProvince = false;
+                });
+            });
         },
         saveOrUpdate: function () {
-            if (vm.validator()) {
-                return;
+            let data = {
+                name: vm.name,
             }
-
-            var url = vm.menu.menuId == null ? "sys/menu/save" : "sys/menu/update";
+            let url = vm.isProvince ? "goods/tProvince/save" : "goods/tCity/save";
+            if (vm.isProvince) {
+                data.countryid = vm.countryList[vm.countrySelected].id;
+                data.type = 1;
+                data.parentId = data.countryid;
+            } else {
+                data.provinceid = vm.provinceList[vm.provinceSelected].id;
+                data.type = 2;
+                data.parentId = data.provinceid;
+            }
+            layer.load();
             $.ajax({
                 type: "POST",
                 url: baseURL + url,
                 contentType: "application/json",
-                data: JSON.stringify(vm.menu),
+                data: JSON.stringify(data),
                 success: function (r) {
-                    if (r.code == 200) {
+                    layer.closeAll('loading');
+                    if (r.code === 200) {
                         alert('操作成功', function () {
                             vm.reload();
                         });
@@ -121,6 +150,11 @@ var vm = new Vue({
         reload: function () {
             vm.showList = true;
             Menu.table.refresh();
+            vm.name = '';
+            vm.countryList = [];
+            vm.provinceList = [];
+            vm.provinceSelected = 0;
+            vm.countrySelected = 0;
         },
         validator: function () {
             if (isBlank(vm.menu.name)) {
@@ -285,7 +319,7 @@ function getMenuId() {
 
 $(function () {
     var colunms = Menu.initColumn();
-    var table = new TreeTable(Menu.id, baseURL + "goods/Country/list", colunms, "id");
+    var table = new TreeTable(Menu.id, baseURL + "goods/Country/treeList", colunms, "id");
     table.setExpandColumn(2);
     table.setIdField("id");
     table.setCodeField("id");

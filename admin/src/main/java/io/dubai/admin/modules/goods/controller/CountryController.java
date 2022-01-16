@@ -33,11 +33,18 @@ public class CountryController {
     @Resource
     private RedisUtils redisUtils;
 
+    @GetMapping("/treeList")
+    @RequiresPermissions("goods:Country:list")
+    public List treeList(@RequestParam Map<String, Object> params) {
+
+        return countryService.queryPage(params);
+    }
+
     @GetMapping("/list")
     @RequiresPermissions("goods:Country:list")
     public List list(@RequestParam Map<String, Object> params) {
 
-        return countryService.queryPage(params);
+        return countryService.list();
     }
 
 

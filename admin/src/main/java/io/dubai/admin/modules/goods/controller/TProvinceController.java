@@ -1,16 +1,20 @@
 package io.dubai.admin.modules.goods.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.dubai.admin.modules.goods.entity.TProvince;
 import io.dubai.admin.modules.goods.entity.vo.CityVo;
 import io.dubai.admin.modules.goods.service.CountryService;
 import io.dubai.admin.modules.goods.service.TProvinceService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
+import io.dubai.common.utils.StringUtils;
 import io.dubai.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,10 +36,12 @@ public class TProvinceController {
 
     @GetMapping("/list")
     @RequiresPermissions("goods:tProvince:list")
-    public R list(@RequestParam Map<String, Object> params) {
-        PageUtils page = tProvinceService.queryPage(params);
-
-        return R.ok().put("page", page);
+    public List<TProvince> list(@RequestParam Map<String, Object> params) {
+        QueryWrapper<TProvince> eq = new QueryWrapper<TProvince>();
+        if (!StringUtils.isEmpty(params.get("countryId"))) {
+            eq.eq("countryId", params.get("countryId"));
+        }
+        return tProvinceService.list(eq);
     }
 
 
