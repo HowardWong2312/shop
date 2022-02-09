@@ -1,6 +1,9 @@
 package io.dubai.modules.user.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -36,12 +39,15 @@ public class UserBalanceLog implements Serializable {
     private BigDecimal balance;
 
     @ApiModelProperty(value = "类型")
+    @TableField(value="`status`")
     private Integer status;
 
     @ApiModelProperty(value = "方向")
+    @TableField("`type`")
     private Integer type;
 
     @ApiModelProperty(value = "备注")
+    @TableField(value="`desc`")
     private String desc;
 
     @ApiModelProperty(value = "创建时间")

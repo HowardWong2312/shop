@@ -18,9 +18,9 @@ public interface UserBalanceLogService extends IService<UserBalanceLog> {
 
     PageUtils queryPage(LogQuery query);
 
-    BigDecimal querySumAmountByUserIdType(Long userId,Integer type);
+    BigDecimal querySumAmountByUserIdType(Long userId, Integer type);
 
-    Integer queryCountByUserIdType(Long userId,Integer type);
+    Integer queryCountByUserIdType(Long userId, Integer type);
 
 }
 

@@ -2,7 +2,6 @@ package io.dubai.modules.user.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.dubai.modules.user.entity.UserDeposit;
-import io.dubai.modules.user.entity.UserWithdraw;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

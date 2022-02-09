@@ -32,7 +32,7 @@ public class PaymentController {
     @ApiOperation("支付方式")
     @GetMapping("/list")
     public R list() {
-        return R.ok().put("list", paymentService.list(new QueryWrapper<Payment>().eq("status",1)));
+        return R.ok().put("list", paymentService.list(new QueryWrapper<Payment>().eq("status",1).eq("is_payment",1)));
     }
 
     @ApiOperation("充值方式")

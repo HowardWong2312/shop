@@ -4,25 +4,39 @@
 <mapper namespace="io.dubai.admin.modules.user.dao.UserInfoDao">
 
     <select id="queryPage" resultType="com.cz.czUser.system.entity.UserInfo">
-        select a.*,b.nickName as father_name from `t_user_info` a
-        left join t_user_info b on (a.fatherId=b.userId)
+        select
+               u.*,
+               su.username as sys_user_name,
+               sd.name as sys_dept_name,
+               f.nickName as father_name
+        from `t_user_info` u
+        left join sys_user su on (su.user_id=u.sysUserId)
+        left join sys_dept sd on(su.dept_id = sd.dept_id)
+        left join t_user_info f on (u.fatherId=f.userId)
         where 1=1
         <if test="obj.key !=null and obj.key !=''">
             and (
-            a.userId=#{obj.key}
-            or a.bibiCode=#{obj.key}
-            or a.`nickName` like '%${obj.key}%'
+            u.userId=#{obj.key}
+            or u.bibiCode=#{obj.key}
+            or u.`nickName` like '%${obj.key}%'
             )
         </if>
         <if test="obj.fatherId !=null and obj.fatherId !=''">
-            and a.fatherId = #{obj.fatherId}
+            and u.fatherId = #{obj.fatherId}
         </if>
         <if test="obj.isMerchant !=null and obj.isMerchant !=''">
-            and a.`isMerchant`=#{obj.isMerchant}
+            and u.`isMerchant`=#{obj.isMerchant}
         </if>
         <if test="obj.userLevelId !=null and obj.userLevelId !=''">
-            and a.userLevelId=#{obj.userLevelId}
+            and u.userLevelId=#{obj.userLevelId}
         </if>
+        <if test="obj.sysUserId !=null and obj.sysUserId !=''">
+            and u.sysUserId=#{obj.sysUserId}
+        </if>
+        <if test="obj.sysDeptId !=null and obj.sysDeptId !=''">
+            and su.dept_id=#{obj.sysDeptId}
+        </if>
+        order by u.createTime desc
     </select>
 
 </mapper>

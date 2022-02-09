@@ -12,6 +12,7 @@
         from shop_goods a
         left join shop_goods_lang b on(a.id=b.goods_id and b.language_id = ${query.languageId})
         left join t_user_info m on(a.user_id=m.userId)
+        left join shop_goods_group g on(a.id=g.goods_id)
         where a.status=1 and b.title is not null and a.is_del=0
         <if test="query.countryId !=null">
             and (a.country_id = 0 or a.country_id=#{query.countryId})
@@ -30,6 +31,9 @@
         </if>
         <if test="query.isGroup != null">
             and a.is_group=#{query.isGroup}
+        </if>
+        <if test="query.isGroup == 1">
+            and g.award_num > 0
         </if>
         <if test="query.isRush != null">
             and a.is_rush=#{query.isRush}

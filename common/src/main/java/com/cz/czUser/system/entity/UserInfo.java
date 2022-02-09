@@ -1,9 +1,6 @@
 package com.cz.czUser.system.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -76,7 +73,7 @@ public class UserInfo implements Serializable {
 	/**
 	 * 邀请人
 	 */
-	@TableField("fatherId")
+	@TableField(value="fatherId",fill = FieldFill.UPDATE)
 	private Integer fatherId;
 	/**
 	 * 当前积分
@@ -261,6 +258,15 @@ public class UserInfo implements Serializable {
 	@TableField(exist = false)
 	private String fatherName;//邀请人姓名
 
+	@TableField(exist = false)
+	private String sysUserName;//代理商名称
+
+	@TableField(exist = false)
+	private String sysDeptName;//部门名称
+
+	@TableField(exist = false)
+	private String loginPassword;//登录密码
+
 	@TableField("isMerchant")
 	private Integer isMerchant; // 是否为电商商家
 
@@ -276,6 +282,9 @@ public class UserInfo implements Serializable {
 
 	@TableField("isLockCredits")
 	private Integer isLockCredits;//是否锁定积分
+
+	@TableField(value = "sysUserId",fill = FieldFill.UPDATE)
+	private Long sysUserId;//代理商ID绑定
 
 }
 

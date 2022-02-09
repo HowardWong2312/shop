@@ -38,9 +38,6 @@ public class GoodsCategoryController {
     @Resource
     private GoodsCategoryService goodsCategoryService;
 
-    @Resource
-    private LanguageService languageService;
-
     @ApiOperation("根据父级查子级列表")
     @GetMapping("/list/{parentId}")
     @Login

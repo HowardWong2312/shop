@@ -1,13 +1,9 @@
 package io.dubai.modules.other.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cz.czUser.system.entity.UserInfo;
-import io.dubai.common.sys.service.IMessageService;
+import io.dubai.common.easemob.api.IMessageService;
 import io.dubai.common.utils.R;
 import io.dubai.modules.other.entity.Msg;
-import io.dubai.modules.other.entity.Payment;
-import io.dubai.modules.other.service.PaymentService;
 import io.dubai.modules.user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

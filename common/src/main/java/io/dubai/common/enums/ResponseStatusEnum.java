@@ -52,6 +52,7 @@ public enum ResponseStatusEnum {
     MUST_BE_MORE_THAN_ONE(4002, "最少兑换1积分"),
     NEEDS_BIND_BANK(4003, "请先绑定至少一张银行卡"),
     CANNOT_EXCHANGE(4004, "该用户拥有多个账号，不符合积分兑现的资格"),
+    CREDITS_SOLD(5001, "购买失败，该积分已卖出"),
     PARAMS_IS_ERROR(502, "params error");
 
 

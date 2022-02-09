@@ -1,7 +1,9 @@
 package io.dubai.admin.modules.user.controller;
 
+import io.dubai.admin.modules.sys.controller.AbstractController;
 import io.dubai.admin.modules.user.entity.UserAddress;
 import io.dubai.admin.modules.user.service.UserAddressService;
+import io.dubai.common.utils.Constant;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.validator.ValidatorUtils;
@@ -22,13 +24,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("user/userAddress")
-public class UserAddressController {
+public class UserAddressController extends AbstractController  {
     @Resource
     private UserAddressService userAddressService;
 
     @GetMapping("/list")
     @RequiresPermissions("user:userAddress:list")
     public R list(@RequestParam Map<String, Object> params) {
+        if(getUserId() != Constant.SUPER_ADMIN){
+            params.put("sysUserId",getUserId().toString());
+        }
         PageUtils page = userAddressService.queryPage(params);
 
         return R.ok().put("page", page);

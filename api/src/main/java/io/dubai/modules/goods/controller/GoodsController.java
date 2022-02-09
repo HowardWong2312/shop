@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.common.annotation.Login;
 import io.dubai.common.annotation.LoginUser;
+import io.dubai.common.easemob.api.IMessageService;
 import io.dubai.common.enums.ResponseStatusEnum;
 import io.dubai.common.enums.UserBalanceLogStatusEnum;
 import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserCreditsLogStatusEnum;
 import io.dubai.common.exception.RRException;
-import io.dubai.common.sys.service.IMessageService;
 import io.dubai.common.sys.service.SysConfigService;
 import io.dubai.common.utils.OssUtils;
 import io.dubai.common.utils.R;
@@ -22,7 +22,6 @@ import io.dubai.modules.goods.entity.vo.PrizeVo;
 import io.dubai.modules.goods.form.*;
 import io.dubai.modules.goods.query.GoodsQuery;
 import io.dubai.modules.goods.service.*;
-import io.dubai.modules.other.entity.Language;
 import io.dubai.modules.other.service.LanguageService;
 import io.dubai.modules.user.entity.UserAddress;
 import io.dubai.modules.user.entity.UserBalanceLog;
@@ -183,8 +182,8 @@ public class GoodsController {
     @Login
     @ApiOperation("根据主键和语言ID查商品详情")
     @GetMapping("/goodsInfo/{id}/{languageId}")
-    public R goodsInfo(@PathVariable Long id, @PathVariable String languageId,@ApiIgnore @LoginUser UserInfo userInfo) {
-        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(id,userInfo.getLanguage());
+    public R goodsInfo(@PathVariable Long id, @PathVariable String languageId) {
+        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(id,languageId);
         List<GoodsImg> bannerList = goodsImgService.list(
                 new QueryWrapper<GoodsImg>()
                         .eq("goods_id",id)
@@ -202,7 +201,7 @@ public class GoodsController {
         );
         goodsVo.setBannerList(bannerList);
         goodsVo.setDescImgList(descImgList);
-        goodsVo.setCategory(goodsCategoryService.queryByIdAndLanguageId(goodsVo.getCategoryId(), userInfo.getLanguage()));
+        goodsVo.setCategory(goodsCategoryService.queryByIdAndLanguageId(goodsVo.getCategoryId(), languageId));
         return R.ok().put("goods", goodsVo);
     }
 

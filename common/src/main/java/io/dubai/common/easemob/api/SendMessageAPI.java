@@ -1,4 +1,4 @@
-package io.dubai.common.sys.service;
+package io.dubai.common.easemob.api;
 
 
 /**

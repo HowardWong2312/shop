@@ -37,6 +37,9 @@ public class Payment implements Serializable {
     @ApiModelProperty(value = "是否为充值方式")
     private Integer isDeposit;
 
+    @ApiModelProperty(value = "是否为充值方式")
+    private Integer isPayment;
+
     @ApiModelProperty(value = "软删除")
     @TableField(fill = FieldFill.INSERT)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

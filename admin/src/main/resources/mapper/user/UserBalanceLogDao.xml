@@ -6,12 +6,16 @@
     <select id="queryPage" resultType="io.dubai.admin.modules.user.entity.vo.UserBalanceLogVo">
         SELECT
         a.*,
-        sd.value as status_value,
-        sd.remark as status_color,
+        dict.value as status_value,
+        dict.remark as status_color,
+        su.username as sys_user_name,
+        sd.name as sys_dept_name,
         u.nickname as user_name
         FROM t_user_balance_log a
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
-        left join `sys_dict` sd on(a.status=sd.code and sd.type='user_balance_log_status')
+        left join `sys_dict` dict on(a.status=dict.code and dict.type='user_balance_log_status')
+        left join sys_user su on (su.user_id=u.sysUserId)
+        left join sys_dept sd on(su.dept_id = sd.dept_id)
         WHERE 1 = 1
         <if test="params.key !=null and params.key !=''">
             and (
@@ -24,6 +28,12 @@
         </if>
         <if test="params.type !=null and params.type !=''">
             and a.type = #{params.type}
+        </if>
+        <if test="params.sysUserId !=null and params.sysUserId !=''">
+            and u.sysUserId=#{obj.sysUserId}
+        </if>
+        <if test="params.sysDeptId !=null and params.sysDeptId !=''">
+            and su.dept_id=#{params.sysDeptId}
         </if>
         order by a.create_time desc
     </select>

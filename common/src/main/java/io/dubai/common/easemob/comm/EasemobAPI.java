@@ -1,4 +1,4 @@
-package io.dubai.common.easemob;
+package io.dubai.common.easemob.comm;
 
 import io.swagger.client.ApiException;
 

@@ -1,7 +1,7 @@
-package io.dubai.common.sys.service.impl;
+package io.dubai.common.easemob.api.impl;
 
-import io.dubai.common.sys.service.IMessageService;
-import io.dubai.common.sys.service.SendMessageAPI;
+import io.dubai.common.easemob.api.IMessageService;
+import io.dubai.common.easemob.api.SendMessageAPI;
 import io.swagger.client.model.Msg;
 import io.swagger.client.model.UserName;
 import net.sf.json.JSONObject;

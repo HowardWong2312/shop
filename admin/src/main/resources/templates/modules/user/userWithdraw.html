@@ -13,6 +13,20 @@
                 <div class="form-group">
                     <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="关键字">
                 </div>
+                <div v-if="sysDeptList!=null && sysDeptList.length > 0" class="form-group">
+                    <label class="control-label">部门:</label>
+                    <select class="form-control" v-model="q.sysDeptId" @change="getSysUserListByDeptId">
+                        <option value="" selected="selected">请选择</option>
+                        <option v-for="item in sysDeptList" :value="item.deptId">{{item.name}}</option>
+                    </select>
+                </div>
+                <div v-if="sysUserList!=null && sysUserList.length > 0" class="form-group">
+                    <label class="control-label">代理商:</label>
+                    <select class="form-control" v-model="q.sysUserId">
+                        <option value="" selected="selected">请选择</option>
+                        <option v-for="item in sysUserList" :value="item.userId">{{item.username}}</option>
+                    </select>
+                </div>
                 <div v-if="statusList!=null && statusList.length > 0" class="form-group">
                     <label class="control-label">状态:</label>
                     <select class="form-control" v-model="q.status">

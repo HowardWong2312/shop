@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.admin.modules.user.dao.UserAddressDao;
 import io.dubai.admin.modules.user.entity.UserAddress;
+import io.dubai.admin.modules.user.entity.vo.UserAddressVo;
 import io.dubai.admin.modules.user.service.UserAddressService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
@@ -18,11 +19,8 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressDao, UserAddr
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<UserAddress> page = this.page(
-                new Query<UserAddress>().getPage(params),
-                new QueryWrapper<UserAddress>()
-        );
-
+        IPage<UserAddressVo> page = new Query<UserAddressVo>().getPage(params);
+        page.setRecords(baseMapper.queryPage(page,params));
         return new PageUtils(page);
     }
 

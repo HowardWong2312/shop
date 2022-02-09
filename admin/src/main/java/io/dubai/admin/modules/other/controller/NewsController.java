@@ -31,7 +31,7 @@ public class NewsController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @RequiresPermissions("news:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = newsService.queryPage(params);
@@ -43,7 +43,7 @@ public class NewsController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
     @RequiresPermissions("news:info")
     public R info(@PathVariable("id") Long id){
         NewsEntity news = newsService.getById(id);
@@ -54,7 +54,7 @@ public class NewsController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @RequiresPermissions("news:save")
     public R save(NewsEntity news){
         ValidatorUtils.validateEntity(news);
@@ -66,7 +66,7 @@ public class NewsController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
     @RequiresPermissions("news:update")
     public R update(NewsEntity news){
         ValidatorUtils.validateEntity(news);
@@ -79,7 +79,7 @@ public class NewsController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     @RequiresPermissions("news:delete")
     public R delete(@RequestBody Long[] ids){
         newsService.removeByIds(Arrays.asList(ids));

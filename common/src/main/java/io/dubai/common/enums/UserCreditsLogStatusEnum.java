@@ -21,7 +21,9 @@ public enum UserCreditsLogStatusEnum {
     CREDITS_EXCHANGE(11, "积分兑现"),
     MANUAL_RECHARGE(12, "人工充值"),
     MANUAL_DEDUCTION(13, "人工扣除"),
-    NEW_USER(14, "新用户注册"),
+    NEW_USER(14, "新用户注册奖励"),
+    CREDITS_BOUGHT(15, "积分购买"),
+    CREDITS_SOLD(16, "积分卖出"),
     OTHER(0, "其它");
 
 
