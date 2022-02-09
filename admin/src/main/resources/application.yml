@@ -1,12 +1,10 @@
 project:
-  enable-https: false
+  enable-https: true
 # Tomcat
 server:
   tomcat:
     uri-encoding: UTF-8
-  port: 9999
-  servlet:
-    context-path: /controller
+  port: 8091
 
 springfox:
   documentation:
@@ -14,7 +12,7 @@ springfox:
 
 spring:
   profiles:
-    active: dev
+    active: prod
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
