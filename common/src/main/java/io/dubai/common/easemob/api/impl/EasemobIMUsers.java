@@ -26,7 +26,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, (RegisterUsers) payload, TokenUtil.getAccessToken());
 			}
@@ -39,7 +39,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, (RegisterUsers) payload, TokenUtil.getAccessToken());
 			}
@@ -52,7 +52,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 		}
@@ -65,7 +65,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),limit+"",cursor);
 			}
@@ -78,7 +78,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -91,7 +91,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),limit+"",cursor);
 			}
@@ -104,7 +104,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernamePasswordPut(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER,userName, (NewPassword) payload, TokenUtil.getAccessToken());
 			}
@@ -117,7 +117,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernamePut(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER,userName, (Nickname) payload, TokenUtil.getAccessToken());
 			}
@@ -130,7 +130,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameContactsUsersFriendUsernamePost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName,friendName);
 			}
@@ -143,7 +143,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameContactsUsersFriendUsernameDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName,friendName);
 			}
@@ -156,7 +156,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameContactsUsersGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -169,7 +169,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameBlocksUsersGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -182,7 +182,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameBlocksUsersPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName, (UserNames) payload);
 			}
@@ -195,7 +195,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameBlocksUsersBlockedUsernameDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName,blackListName);
 			}
@@ -208,7 +208,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameStatusGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -221,7 +221,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersOwnerUsernameOfflineMsgCountGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -234,7 +234,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameOfflineMsgStatusMsgIdGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName,msgId);
 			}
@@ -247,7 +247,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameDeactivatePost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -260,7 +260,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameActivatePost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -273,7 +273,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameDisconnectGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -286,7 +286,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameJoinedChatgroupsGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}
@@ -299,7 +299,7 @@ public class EasemobIMUsers  implements IMUserAPI {
 			@Override
 			public Object invokeEasemobAPI() throws ApiException {
 				ApiClient apiClient = new ApiClient();
-				apiClient.setBasePath("http://a1-sgp.easemob.com");
+				apiClient.setBasePath("http://a61.easemob.com");
 				api.setApiClient(apiClient);
 				return api.orgNameAppNameUsersUsernameJoinedChatroomsGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),userName);
 			}

@@ -6,6 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -54,7 +55,7 @@ public class UserInfo implements Serializable {
 	 * 生日
 	 */
 	@TableField("birthday")
-	private Timestamp birthday;
+	private LocalDate birthday;
 	/**
 	 * 年龄
 	 */

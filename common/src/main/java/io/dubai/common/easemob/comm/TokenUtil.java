@@ -49,7 +49,7 @@ public class TokenUtil {
     public static void initTokenByProp() {
         String resp = null;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("http://a1-sgp.easemob.com");
+        apiClient.setBasePath("http://a61.easemob.com");
         try {
             API.setApiClient(apiClient);
             resp = API.orgNameAppNameTokenPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, BODY);

@@ -21,7 +21,7 @@ public class EasemobSendMessage implements SendMessageAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameMessagesPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(), (Msg) payload);
             }

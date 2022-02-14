@@ -23,7 +23,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),limit+"",cursor);
             }
@@ -36,7 +36,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdsGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(), StringUtil.join(groupIds,","));
             }
@@ -48,7 +48,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(), (Group) payload);
             }
@@ -61,7 +61,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdPut(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId, (ModifyGroup) payload);
             }
@@ -74,7 +74,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId);
             }
@@ -87,7 +87,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdUsersGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId);
             }
@@ -104,7 +104,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdUsersPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId,userNames);
             }
@@ -117,7 +117,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdUsersPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId, (UserNames) payload);
             }
@@ -130,7 +130,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdUsersUsernameDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId,userId);
             }
@@ -143,7 +143,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdUsersMembersDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId, StringUtil.join(userIds,","));
             }
@@ -156,7 +156,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupidPut(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId, (NewOwner) payload);
             }
@@ -169,7 +169,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdBlocksUsersGet(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId);
             }
@@ -182,7 +182,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdBlocksUsersUsernamePost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId,userId);
             }
@@ -195,7 +195,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdBlocksUsersPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId, (UserNames) payload);
             }
@@ -208,7 +208,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdBlocksUsersUsernameDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId,userId);
             }
@@ -221,7 +221,7 @@ public class EasemobChatGroup implements ChatGroupAPI {
             @Override
             public Object invokeEasemobAPI() throws ApiException {
                 ApiClient apiClient = new ApiClient();
-                apiClient.setBasePath("http://a1-sgp.easemob.com");
+                apiClient.setBasePath("http://a61.easemob.com");
                 api.setApiClient(apiClient);
                 return api.orgNameAppNameChatgroupsGroupIdBlocksUsersUsernamesDelete(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, TokenUtil.getAccessToken(),groupId, StringUtil.join(userIds,","));
             }
