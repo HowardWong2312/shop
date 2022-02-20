@@ -18,7 +18,7 @@ public class UserBalanceLogServiceImpl extends ServiceImpl<UserBalanceLogDao, Us
     @Override
     public PageUtils queryPage(LogQuery query) {
         IPage<UserBalanceLog> page = query.getPage();
-        page.setRecords(baseMapper.queryPage(page,query));
+        page.setRecords(baseMapper.queryPage(page, query));
         return new PageUtils(page);
     }
 

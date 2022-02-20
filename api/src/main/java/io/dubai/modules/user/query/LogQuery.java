@@ -5,8 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @ApiModel("资金记录或者积分记录查询参数")
 public class LogQuery extends Query {

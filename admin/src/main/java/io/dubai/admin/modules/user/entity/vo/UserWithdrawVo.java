@@ -18,6 +18,10 @@ public class UserWithdrawVo extends UserWithdraw implements Serializable {
 
     private String userName;
 
+    private String sysUserName;
+
+    private String sysDeptName;
+
     private String statusValue;
 
     private String statusColor;

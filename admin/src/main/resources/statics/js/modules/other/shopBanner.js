@@ -122,7 +122,7 @@ let vm = new Vue({
                if(!lock) {
                     lock = true;
 		            $.ajax({
-                        type: "POST",
+                        type: "DELETE",
                         url: baseURL + "other/shopBanner/delete",
                         contentType: "application/json",
                         data: JSON.stringify(ids),
@@ -168,7 +168,7 @@ new AjaxUpload('#upLoadPhoto', {
         }
     },
     onComplete : function(file, r){
-        if(r.status == 200){
+        if(r.code == 200){
             vm.shopBanner.imgUrl = r.url;
         }else{
             alert(r.msg);

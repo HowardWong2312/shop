@@ -3,5 +3,30 @@
 
 <mapper namespace="io.dubai.admin.modules.user.dao.UserBankDao">
 
+    <select id="queryPage" resultType="io.dubai.admin.modules.user.entity.vo.UserBankVo">
+        SELECT
+        a.*,
+        su.username as sys_user_name,
+        sd.name as sys_dept_name,
+        u.nickname as user_name
+        FROM t_user_bank a
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join sys_user su on (su.user_id=u.sysUserId)
+        left join sys_dept sd on(su.dept_id = sd.dept_id)
+        WHERE 1 = 1
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nickname like '%${params.key}%'
+            or a.user_id=#{params.key}
+            )
+        </if>
+        <if test="params.sysUserId !=null and params.sysUserId !=''">
+            and u.sysUserId=#{params.sysUserId}
+        </if>
+        <if test="params.sysDeptId !=null and params.sysDeptId !=''">
+            and su.dept_id=#{params.sysDeptId}
+        </if>
+        order by a.create_time desc
+    </select>
 
 </mapper>

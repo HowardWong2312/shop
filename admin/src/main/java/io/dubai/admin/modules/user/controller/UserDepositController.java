@@ -1,7 +1,9 @@
 package io.dubai.admin.modules.user.controller;
 
+import io.dubai.admin.modules.sys.controller.AbstractController;
 import io.dubai.admin.modules.user.entity.UserDeposit;
 import io.dubai.admin.modules.user.service.UserDepositService;
+import io.dubai.common.utils.Constant;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.validator.ValidatorUtils;
@@ -22,13 +24,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("user/userDeposit")
-public class UserDepositController {
+public class UserDepositController extends AbstractController {
     @Resource
     private UserDepositService userDepositService;
 
     @GetMapping("/list")
     @RequiresPermissions("user:userDeposit:list")
     public R list(@RequestParam Map<String, Object> params) {
+        if(getUserId() != Constant.SUPER_ADMIN){
+            params.put("sysUserId",getUserId().toString());
+        }
         PageUtils page = userDepositService.queryPage(params);
         return R.ok().put("page", page);
     }

@@ -2,7 +2,6 @@ package io.dubai.modules.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.dubai.modules.user.entity.UserLevel;
-import io.dubai.modules.user.entity.UserWithdraw;
 
 /**
  * 用户提现

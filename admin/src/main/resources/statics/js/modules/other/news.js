@@ -126,12 +126,12 @@ var vm = new Vue({
                if(!lock) {
                     lock = true;
 		            $.ajax({
-                        type: "POST",
+                        type: "DELETE",
                         url: baseURL + "news/delete",
                         contentType: "application/json",
                         data: JSON.stringify(ids),
                         success: function(r){
-                            if(r.status == 200){
+                            if(r.code == 200){
                                 layer.msg("操作成功", {icon: 1});
                                 vm.reload();
                             }else{
@@ -185,7 +185,7 @@ new AjaxUpload('#upLoadPhoto', {
         }
     },
     onComplete : function(file, r){
-        if(r.status == 200){
+        if(r.code == 200){
             vm.news.headUrl = r.url;
         }else{
             alert(r.msg);

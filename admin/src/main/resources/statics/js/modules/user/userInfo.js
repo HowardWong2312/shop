@@ -4,14 +4,22 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: 'userId', width: 40, key: true },
-			{ label: '上级用户', name: 'fatherName', index: 'fatherId', width: 50 },
+            { label: '部门', name: 'sysDeptName', width: 35 },
+            { label: '代理商', name: 'sysUserName', width: 35 },
+            { label: '上级用户', name: 'fatherName', index: 'fatherId', width: 50, formatter: function(value, options, row){
+                if(row.fatherId == 0){
+                    return '<span class="label label-primary">业务员</span>';
+                }else{
+                    return row.fatherName == null ? '' : row.fatherName;
+                }
+            }},
 			{ label: '昵称', name: 'nickName', index: 'nickName', width: 50 },
             { label: '头像', name: 'header', index: 'header', width: 30, formatter: function(value, options, row){
-                    return '<img src="'+value+'" style="width:100%" />';
+                return '<img src="'+value+'" style="width:100%" />';
             }},
             { label: '手机号', width: 80, formatter: function(value, options, row){
-                    return '<span>'+row.countryCode+row.phone+'</span>';
-                }},
+                return '<span>'+row.countryCode+row.phone+'</span>';
+            }},
 			{ label: '性别', name: 'sex', index: 'sex', width: 50 },
 			{ label: '年龄', name: 'age', index: 'age', width: 50 },
 			{ label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 70 },
@@ -59,10 +67,15 @@ var vm = new Vue({
 		showList: true,
 		title: null,
         userLevelList: [],
+        sysDeptList: [],
+        sysUserList: [],
 		q: {},
-		userInfo: {}
+		userInfo: {
+            header:"http://oss.capitalfloatcredit.com/20220119/2a30b55d8d174d10b63d3395ed7576dc.png",
+        }
 	},
     created:function () {
+        this.getSysDeptList();
 	    this.getUserLevelList();
     },
 	methods: {
@@ -73,18 +86,28 @@ var vm = new Vue({
                     "key":vm.q.key,
                     "fatherId":vm.q.fatherId,
                     "userLevelId":vm.q.userLevelId,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:1
             }).trigger("reloadGrid");
         },
+        add: function(){
+            vm.showList = false;
+            vm.title = "新增";
+            vm.userInfo = {
+                header:"http://oss.capitalfloatcredit.com/20220119/2a30b55d8d174d10b63d3395ed7576dc.png",
+            };
+        },
 		update: function (event) {
+
 			var userid = getSelectedRow();
 			if(userid == null){
 				return ;
 			}
 			vm.showList = false;
             vm.title = "修改";
-            
+            vm.sysUserList = null;
             vm.getInfo(userid)
 		},
 		saveOrUpdate: function (event) {
@@ -164,6 +187,31 @@ var vm = new Vue({
                 vm.userLevelList = r.list;
             });
         },
+        getSysDeptList: function(){
+            $.get(baseURL + "sys/dept/listForSelect", function(r){
+                vm.sysDeptList = r.list;
+            });
+        },
+        getSysUserListByDeptId: function(){
+            vm.q.sysUserId = null;
+            if(vm.q.sysDeptId != null  && vm.q.sysDeptId != ''){
+                $.get(baseURL + "sys/user/listForSelectByDeptId/"+vm.q.sysDeptId, function(r){
+                    vm.sysUserList = r.list;
+                });
+            }else{
+                vm.sysUserList = null;
+            }
+        },
+        getSysUserListByDeptIdForFrom: function(){
+            vm.userInfo.sysUserId = null;
+            if(vm.userInfo.sysDeptId != null  && vm.userInfo.sysDeptId != ''){
+                $.get(baseURL + "sys/user/listForSelectByDeptId/"+vm.userInfo.sysDeptId, function(r){
+                    vm.sysUserList = r.list;
+                });
+            }else{
+                vm.sysUserList = null;
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
@@ -172,9 +220,31 @@ var vm = new Vue({
                     "key":vm.q.key,
                     "fatherId":vm.q.fatherId,
                     "userLevelId":vm.q.userLevelId,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:page
             }).trigger("reloadGrid");
 		}
 	}
+});
+new AjaxUpload('#upLoadPhoto', {
+    action: baseURL + "sys/oss/upload",
+    name: 'file',
+    autoSubmit:true,
+    responseType:"json",
+    onSubmit:function(file, extension){
+        if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
+            alert('只支持jpg、png、gif格式的图片！');
+            return false;
+        }
+    },
+    onComplete : function(file, r){
+        if(r.code == 200){
+            vm.userInfo.header = r.url;
+        }else{
+            alert(r.msg);
+        }
+    }
+
 });

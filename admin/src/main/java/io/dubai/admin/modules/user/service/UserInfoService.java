@@ -2,6 +2,7 @@ package io.dubai.admin.modules.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cz.czUser.system.entity.UserInfo;
+import io.dubai.admin.modules.user.form.UserInfoForm;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 
@@ -21,6 +22,8 @@ public interface UserInfoService extends IService<UserInfo> {
     UserInfo insert(UserInfo userInfo);
 
     UserInfo update(UserInfo userInfo);
+
+    UserInfo save(UserInfoForm form);
 
     R getTodayFundsAndUserData();
 }

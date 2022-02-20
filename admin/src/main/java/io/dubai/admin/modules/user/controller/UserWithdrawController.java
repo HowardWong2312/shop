@@ -1,6 +1,7 @@
 package io.dubai.admin.modules.user.controller;
 
 import com.cz.czUser.system.entity.UserInfo;
+import io.dubai.admin.modules.sys.controller.AbstractController;
 import io.dubai.admin.modules.user.entity.UserBalanceLog;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
 import io.dubai.admin.modules.user.service.UserBalanceLogService;
@@ -8,6 +9,7 @@ import io.dubai.admin.modules.user.service.UserInfoService;
 import io.dubai.admin.modules.user.service.UserWithdrawService;
 import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserBalanceLogStatusEnum;
+import io.dubai.common.utils.Constant;
 import io.dubai.common.utils.R;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,7 +28,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("user/userWithdraw")
-public class UserWithdrawController {
+public class UserWithdrawController extends AbstractController {
     @Resource
     private UserWithdrawService userWithdrawService;
 
@@ -39,6 +41,9 @@ public class UserWithdrawController {
     @GetMapping("/list")
     @RequiresPermissions("user:userWithdraw:list")
     public R list(@RequestParam Map<String, Object> params) {
+        if(getUserId() != Constant.SUPER_ADMIN){
+            params.put("sysUserId",getUserId().toString());
+        }
         return R.ok().put("page", userWithdrawService.queryPage(params));
     }
 

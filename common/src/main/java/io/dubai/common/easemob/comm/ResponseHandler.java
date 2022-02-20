@@ -1,4 +1,4 @@
-package io.dubai.common.easemob;
+package io.dubai.common.easemob.comm;
 
 import com.google.gson.Gson;
 import io.swagger.client.ApiException;

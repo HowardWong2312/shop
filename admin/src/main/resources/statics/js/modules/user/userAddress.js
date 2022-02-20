@@ -4,7 +4,10 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '用户ID', name: 'userId', index: 'user_id', width: 80 }, 
+            { label: '部门', name: 'sysDeptName', width: 35 },
+            { label: '代理商', name: 'sysUserName', width: 35 },
+            { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
+            { label: '用户昵称', name: 'userName', index: 'user_id', width: 80 },
 			{ label: '收货人姓名', name: 'name', index: 'name', width: 80 }, 
 			{ label: '国家代码', name: 'countryCode', index: 'country_code', width: 80 }, 
 			{ label: '电话', name: 'phone', index: 'phone', width: 80 }, 
@@ -13,11 +16,10 @@ $(function () {
 			{ label: '市', name: 'city', index: 'city', width: 80 }, 
 			{ label: '区', name: 'area', index: 'area', width: 80 }, 
 			{ label: '详细地址', name: 'address', index: 'address', width: 80 }, 
-			{ label: '是否默认', name: 'isDefault', index: 'is_default', width: 80 }, 
-			{ label: '', name: 'isDel', index: 'is_del', width: 80 }, 
-			{ label: '', name: 'version', index: 'version', width: 80 }, 
-			{ label: '', name: 'createTime', index: 'create_time', width: 80 }, 
-			{ label: '', name: 'updateTime', index: 'update_time', width: 80 }
+            { label: '是否默认', name: 'isDefault', index: 'is_default', width: 80, formatter: function(value, options, row){
+                    return row.isDefault == 1 ? '是' : '否';
+            }},
+            { label: '添加时间', name: 'createTime', index: 'create_time', width: 80 }
         ],
 		viewrecords: true,
         height: 600,
@@ -50,17 +52,22 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
+        sysDeptList: [],
+        sysUserList: [],
 		q: {},
 		userAddress: {}
 	},
     created:function () {
+        this.getSysDeptList();
     },
 	methods: {
         query: function () {
             vm.showList = true;
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
-                    "key":vm.q.key
+                    "key":vm.q.key,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -137,12 +144,29 @@ var vm = new Vue({
                 vm.userAddress = r.userAddress;
             });
 		},
+        getSysDeptList: function(){
+            $.get(baseURL + "sys/dept/listForSelect", function(r){
+                vm.sysDeptList = r.list;
+            });
+        },
+        getSysUserListByDeptId: function(){
+            vm.q.sysUserId = null;
+            if(vm.q.sysDeptId != null  && vm.q.sysDeptId != ''){
+                $.get(baseURL + "sys/user/listForSelectByDeptId/"+vm.q.sysDeptId, function(r){
+                    vm.sysUserList = r.list;
+                });
+            }else{
+                vm.sysUserList = null;
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:page
             }).trigger("reloadGrid");

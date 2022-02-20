@@ -3,19 +3,32 @@ package io.dubai.admin.modules.user.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cz.czUser.system.entity.AppUser;
 import com.cz.czUser.system.entity.UserInfo;
+import io.dubai.admin.modules.user.dao.AppUserDao;
 import io.dubai.admin.modules.user.dao.UserInfoDao;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import io.dubai.admin.modules.user.entity.UserDeposit;
 import io.dubai.admin.modules.user.entity.UserWithdraw;
+import io.dubai.admin.modules.user.form.UserInfoForm;
 import io.dubai.admin.modules.user.service.*;
+import io.dubai.common.easemob.api.IMUserAPI;
+import io.dubai.common.enums.LogTypeEnum;
+import io.dubai.common.enums.UserCreditsLogStatusEnum;
+import io.dubai.common.exception.RRException;
+import io.dubai.common.sys.service.SysConfigService;
 import io.dubai.common.utils.*;
+import io.swagger.client.model.RegisterUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -33,6 +46,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
 
     @Resource
     private UserCreditsLogService userCreditsLogService;
+
+    @Resource
+    private SysConfigService sysConfigService;
+
+    @Resource
+    private AppUserDao appUserDao;
+
+    @Resource
+    private IMUserAPI imUserAPI;
 
     @Resource
     private RedisUtils redisUtils;
@@ -53,10 +75,89 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
 
     @Override
     public UserInfo update(UserInfo userInfo) {
+        if(!StringUtils.isEmpty(userInfo.getLoginPassword())){
+            AppUser appUser = appUserDao.selectById(userInfo.getUserId());
+            appUser.setPassword(CryptAES.AES_Encrypt(userInfo.getLoginPassword()));
+            appUserDao.updateById(appUser);
+        }
         baseMapper.updateById(userInfo);
         Object temp = redisTemplate.opsForValue().get(RedisKeys.userInfoKey + userInfo.getUserId());
         if (temp != null) {
             redisTemplate.opsForValue().set(RedisKeys.userInfoKey + userInfo.getUserId(), userInfo);
+        }
+        return userInfo;
+    }
+
+    @Override
+    @Transactional
+    public UserInfo save(UserInfoForm form) {
+        UserInfo userInfo = new UserInfo();
+        try{
+            AppUser appUser = new AppUser();
+            appUser.setCountryCode(form.getCountryCode());
+            appUser.setPhone(form.getPhone());
+            appUser.setPassword(CryptAES.AES_Encrypt(form.getLoginPassword()));
+            appUserDao.insert(appUser);
+            userInfo.setFatherId(form.getFatherId());
+            userInfo.setSysUserId(form.getSysUserId());
+            userInfo.setUserId(appUser.getId());
+            userInfo.setPhone(appUser.getPhone()); //手机号
+            userInfo.setCountryCode(appUser.getCountryCode());
+            userInfo.setCreateTime(Timestamp.from(Instant.now()));  //注册时间
+            userInfo.setDel(0);
+            userInfo.setSex("");
+            userInfo.setUserLevelId(form.getUserLevelId());
+            userInfo.setBalance(BigDecimal.ZERO);
+            userInfo.setIsMerchant(form.getIsMerchant());
+            userInfo.setLotteryTimes(form.getLotteryTimes());
+            userInfo.setIsLockCredits(0);
+            if(StringUtils.isEmpty(form.getBibiCode())){
+                form.setBibiCode(createBiBiCode());
+            }
+            userInfo.setBibiCode(form.getBibiCode());
+            userInfo.setNickName(form.getNickName());
+            userInfo.setHeader(form.getHeader());
+            userInfo.setInviteCode(createInviteCode());
+            BigDecimal credits = BigDecimal.ZERO;
+            String temp = sysConfigService.getValue("NEW_USER_CREDITS");
+            if(temp != null){
+                credits = new BigDecimal(temp);
+            }
+            userInfo.setCredits(credits);
+            userInfo.setIncomeCredits(credits);
+            userInfo.setWealth(new BigDecimal(0));
+            userInfo.setWealthLevel(0);
+            userInfo.setECode(createEwm(appUser.getId(),userInfo.getNickName(),userInfo.getInviteCode()));
+            userInfo.setVerifyFriend(0);
+            userInfo.setIsPhoneAddFriend(1);
+            userInfo.setIsBiBiCodeAddFriend(1);
+            userInfo.setIsGroupAddFriend(1);
+            userInfo.setIsECodeAddFriend(1);
+            userInfo.setIsApprove(0);
+            userInfo.setLanguage("1");
+            userInfo.setIsCanCreateGroup(1);
+            userInfo.setSearchPhone(appUser.getCountryCode()+appUser.getPhone());
+            //注册环信信息
+            io.swagger.client.model.User imUser = new io.swagger.client.model.User() ;
+            imUser.setUsername("u"+appUser.getId());
+            imUser.setPassword(String.valueOf(appUser.getId()));
+            RegisterUsers ru = new RegisterUsers() ;
+            ru.add(imUser) ;
+            imUserAPI.createNewIMUserSingle(ru) ;
+            userInfo.setEasemobId(imUser.getUsername());
+            userInfo.setEasemobPwd(imUser.getPassword());
+            baseMapper.insert(userInfo) ;
+            UserCreditsLog userCreditsLog = new UserCreditsLog();
+            userCreditsLog.setUserId(userInfo.getUserId().longValue());
+            userCreditsLog.setStatus(UserCreditsLogStatusEnum.NEW_USER.code);
+            userCreditsLog.setType(LogTypeEnum.INCOME.code);
+            userCreditsLog.setAmount(credits);
+            userCreditsLog.setBalance(userInfo.getCredits());
+            userCreditsLog.setCreateTime(LocalDateTime.now());
+            userCreditsLogService.save(userCreditsLog);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new RRException("系统错误");
         }
         return userInfo;
     }
@@ -168,5 +269,54 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         map.put("RedeemedCredits", RedeemedCredits); //未兑换总数
         map.put("todayCredits", todayCredits); //当日获取积分总数
         return map;
+    }
+
+    /**
+     * 生成8位BB号
+     */
+    public static String createBiBiCode(){
+        String randomcode = "";
+        // 用字符数组的方式随机
+        String model = "0123456789";
+        char[] m = model.toCharArray();
+        for (int j = 0; j < 8; j++) {
+            char c = m[(int) (Math.random() * 10)];
+            randomcode = randomcode + c;
+        }
+        Integer code = Integer.valueOf(randomcode);
+        if (code<=10000){
+            createBiBiCode();
+        }
+        return randomcode;
+    }
+
+
+    /**
+     * 生成邀请码
+     */
+    public static String createInviteCode(){
+        String randomcode = "";
+        // 用字符数组的方式随机
+        String model = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        char[] m = model.toCharArray();
+        for (int j = 0; j < 6; j++) {
+            char c = m[(int) (Math.random() * 36)];
+            // 保证六位随机数之间没有重复的
+            if (randomcode.contains(String.valueOf(c))) {
+                j--;
+                continue;
+            }
+            randomcode = randomcode + c;
+        }
+        return randomcode;
+    }
+
+    /**
+     * 生成邀请码
+     */
+    public String createEwm(Integer userId,String userName,String inviteCode) throws Exception {
+        String url = sysConfigService.getValue("BIBIMO_DOMAIN")+"/share/#/pages/tabbar/regist?inviteCode="+inviteCode+"&inviteUserName="+userName+"&userId="+userId;
+        String QRCode =  QRCodeUtils.getQRCode(url);
+        return  QRCode;
     }
 }

@@ -1,5 +1,7 @@
-package io.dubai.common.easemob;
+package io.dubai.common.easemob.comm;
 
+import io.dubai.common.sys.service.SysConfigService;
+import io.dubai.common.utils.SpringContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,16 +19,12 @@ public class OrgInfo {
 //    public static String APP_NAME_DOC;
     public static final Logger logger = LoggerFactory.getLogger(OrgInfo.class);
 
+    private static SysConfigService sysConfigService;
+
     static {
-        InputStream inputStream = OrgInfo.class.getClassLoader().getResourceAsStream("config.properties");
-        Properties prop = new Properties();
-        try {
-            prop.load(inputStream);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        ORG_NAME = prop.getProperty("ORG_NAME");
-        APP_NAME_USER = prop.getProperty("APP_NAME_USER");
+        OrgInfo.sysConfigService = (SysConfigService) SpringContextUtils.getBean("sysConfigService");
+        ORG_NAME = sysConfigService.getValue("ORG_NAME");
+        APP_NAME_USER = sysConfigService.getValue("APP_NAME_USER");
 //        APP_NAME_DOC = prop.getProperty("APP_NAME_DOC");
     }
 }

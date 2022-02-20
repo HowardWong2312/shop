@@ -20,6 +20,10 @@ public class UserDepositVo extends UserDeposit implements Serializable {
 
     private String paymentName;
 
+    private String sysUserName;
+
+    private String sysDeptName;
+
     private String statusValue;
 
     private String statusColor;

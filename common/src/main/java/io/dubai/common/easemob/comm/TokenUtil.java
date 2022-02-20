@@ -1,6 +1,8 @@
-package io.dubai.common.easemob;
+package io.dubai.common.easemob.comm;
 
 import com.google.gson.Gson;
+import io.dubai.common.sys.service.SysConfigService;
+import io.dubai.common.utils.SpringContextUtils;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import io.swagger.client.api.AuthenticationApi;
@@ -17,6 +19,7 @@ import java.util.Properties;
  * Created by easemob on 2017/3/14.
  */
 public class TokenUtil {
+
     public static String GRANT_TYPE;
     private static String CLIENT_ID_USER;
     private static String CLIENT_SECRET_USER;
@@ -28,27 +31,25 @@ public class TokenUtil {
     private static Double EXPIREDAT_DOC = -1D;
     private static final Logger logger = LoggerFactory.getLogger(TokenUtil.class);
 
+    private static SysConfigService sysConfigService;
+
     /**
      * get token from server
      */
     static {
-        InputStream inputStream = TokenUtil.class.getClassLoader().getResourceAsStream("config.properties");
-        Properties prop = new Properties();
-        try {
-            prop.load(inputStream);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        GRANT_TYPE = prop.getProperty("GRANT_TYPE");
-        CLIENT_ID_USER = prop.getProperty("CLIENT_ID_USER");
-        CLIENT_SECRET_USER = prop.getProperty("CLIENT_SECRET_USER");
+        TokenUtil.sysConfigService = (SysConfigService) SpringContextUtils.getBean("sysConfigService");
+    }
+    static {
+        GRANT_TYPE = sysConfigService.getValue("GRANT_TYPE");
+        CLIENT_ID_USER = sysConfigService.getValue("CLIENT_ID_USER");
+        CLIENT_SECRET_USER = sysConfigService.getValue("CLIENT_SECRET_USER");
         BODY = new Token().clientId(CLIENT_ID_USER).grantType(GRANT_TYPE).clientSecret(CLIENT_SECRET_USER);
     }
 
     public static void initTokenByProp() {
         String resp = null;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("http://a1-sgp.easemob.com");
+        apiClient.setBasePath("http://a61.easemob.com");
         try {
             API.setApiClient(apiClient);
             resp = API.orgNameAppNameTokenPost(OrgInfo.ORG_NAME, OrgInfo.APP_NAME_USER, BODY);

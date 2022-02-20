@@ -18,6 +18,10 @@ public class UserBalanceLogVo extends UserBalanceLog implements Serializable {
 
     private String userName;
 
+    private String sysUserName;
+
+    private String sysDeptName;
+
     private String statusValue;
 
     private String statusColor;

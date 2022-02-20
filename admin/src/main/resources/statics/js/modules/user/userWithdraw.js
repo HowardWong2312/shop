@@ -4,7 +4,9 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 30, key: true },
-            { label: '用户id', name: 'userId', index: 'user_id', width: 35 },
+            { label: '部门', name: 'sysDeptName', width: 35 },
+            { label: '代理商', name: 'sysUserName', width: 35 },
+            { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
             { label: '用户名称', name: 'userName', width: 35 },
 			{ label: '银行名称', name: 'bankName', index: 'bank_name', width: 35 },
 			{ label: '账户名称', name: 'accountName', index: 'account_name', width: 50 },
@@ -53,10 +55,13 @@ var vm = new Vue({
 		showList: true,
 		title: null,
         statusList: [],
+        sysDeptList: [],
+        sysUserList: [],
 		q: {},
 		userWithdraw: {}
 	},
     created:function () {
+        this.getSysDeptList();
         this.getStatusList();
     },
 	methods: {
@@ -66,6 +71,8 @@ var vm = new Vue({
                 postData:{
                     "key":vm.q.key,
                     "status":vm.q.status,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -151,6 +158,21 @@ var vm = new Vue({
                 vm.statusList = r.list;
             });
         },
+        getSysDeptList: function(){
+            $.get(baseURL + "sys/dept/listForSelect", function(r){
+                vm.sysDeptList = r.list;
+            });
+        },
+        getSysUserListByDeptId: function(){
+            vm.q.sysUserId = null;
+            if(vm.q.sysDeptId != null  && vm.q.sysDeptId != ''){
+                $.get(baseURL + "sys/user/listForSelectByDeptId/"+vm.q.sysDeptId, function(r){
+                    vm.sysUserList = r.list;
+                });
+            }else{
+                vm.sysUserList = null;
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
@@ -158,6 +180,8 @@ var vm = new Vue({
                 postData:{
                     "key":vm.q.key,
                     "status":vm.q.status,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:page
             }).trigger("reloadGrid");

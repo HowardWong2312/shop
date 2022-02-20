@@ -1,7 +1,9 @@
 package io.dubai.admin.modules.user.controller;
 
+import io.dubai.admin.modules.sys.controller.AbstractController;
 import io.dubai.admin.modules.user.entity.UserBalanceLog;
 import io.dubai.admin.modules.user.service.UserBalanceLogService;
+import io.dubai.common.utils.Constant;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -20,13 +22,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("user/userBalanceLog")
-public class UserBalanceLogController {
+public class UserBalanceLogController extends AbstractController {
     @Resource
     private UserBalanceLogService userBalanceLogService;
 
     @GetMapping("/list")
     @RequiresPermissions("user:userBalanceLog:list")
     public R list(@RequestParam Map<String, Object> params) {
+        if(getUserId() != Constant.SUPER_ADMIN){
+            params.put("sysUserId",getUserId().toString());
+        }
         PageUtils page = userBalanceLogService.queryPage(params);
         return R.ok().put("page", page);
     }

@@ -31,7 +31,7 @@
 
 		// 服务器统一请求接口路径
 		, //serverUrl: URL + "jsp/controller.jsp"
-		serverUrl: getRootPath_web() + "/controller/sys/oss/uploadUEditor"
+		serverUrl: getRootPath_web() + "/sys/oss/uploadUEditor"
 		//工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
 		, toolbars: [[
 			'fullscreen', 'source', '|', 'undo', 'redo', '|',
@@ -494,7 +494,7 @@
 		getUEBasePath: getUEBasePath
 	};
 	function getRootPath_web() {
-		return "http://"+window.document.location.host;
+		return "https://"+window.document.location.host;
 	}
 
 })();

@@ -4,15 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.admin.modules.goods.entity.ShopGoods;
 import io.dubai.admin.modules.goods.service.ShopGoodsService;
+import io.dubai.admin.modules.sys.controller.AbstractController;
 import io.dubai.admin.modules.user.entity.UserBalanceLog;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import io.dubai.admin.modules.user.form.RechargeForm;
+import io.dubai.admin.modules.user.form.UserInfoForm;
 import io.dubai.admin.modules.user.service.UserBalanceLogService;
 import io.dubai.admin.modules.user.service.UserCreditsLogService;
 import io.dubai.admin.modules.user.service.UserInfoService;
 import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserBalanceLogStatusEnum;
 import io.dubai.common.enums.UserCreditsLogStatusEnum;
+import io.dubai.common.utils.Constant;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.validator.ValidatorUtils;
@@ -33,7 +36,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("user/userInfo")
-public class UserInfoController {
+public class UserInfoController extends AbstractController {
     @Resource
     private UserInfoService userInfoService;
 
@@ -51,6 +54,9 @@ public class UserInfoController {
     @GetMapping("/list")
     @RequiresPermissions("user:userInfo:list")
     public R list(@RequestParam Map<String, Object> params) {
+        if(getUserId() != Constant.SUPER_ADMIN){
+            params.put("sysUserId",getUserId().toString());
+        }
         PageUtils page = userInfoService.queryPage(params);
         return R.ok().put("page", page);
     }
@@ -115,7 +121,6 @@ public class UserInfoController {
     @PostMapping("/update")
     @RequiresPermissions("user:userInfo:update")
     public R update(@RequestBody UserInfo userInfo) {
-        ValidatorUtils.validateEntity(userInfo);
         if(userInfo.getIsMerchant() == 1){
             shopGoodsService.update(
                     new UpdateWrapper<ShopGoods>()
@@ -124,6 +129,13 @@ public class UserInfoController {
             );
         }
         userInfoService.update(userInfo);
+        return R.ok();
+    }
+
+    @PostMapping("/save")
+    @RequiresPermissions("user:userInfo:save")
+    public R save(@RequestBody UserInfoForm form) {
+        userInfoService.save(form);
         return R.ok();
     }
 

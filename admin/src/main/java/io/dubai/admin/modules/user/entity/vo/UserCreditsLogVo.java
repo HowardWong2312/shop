@@ -18,6 +18,10 @@ public class UserCreditsLogVo extends UserCreditsLog implements Serializable {
 
     private String userName;
 
+    private String sysUserName;
+
+    private String sysDeptName;
+
     private String statusValue;
 
     private String statusColor;

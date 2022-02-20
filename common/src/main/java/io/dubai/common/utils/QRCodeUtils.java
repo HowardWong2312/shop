@@ -3,23 +3,32 @@ package io.dubai.common.utils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageConfig;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 @Slf4j
 @UtilityClass
@@ -200,6 +209,60 @@ public class QRCodeUtils {
     public void getQRCode(String content, String logoUrl, OutputStream output) throws Exception {
         BufferedImage image = crateQRCode(content, WIDTH, HEIGHT, logoUrl, LOGO_WIDTH, LOGO_HEIGHT);
         ImageIO.write(image, IMAGE_FORMAT, output);
+    }
+
+    /**
+     * 获取二维码
+     * 输入URL
+     * @throws Exception
+     */
+    public static String getQRCode(String encode) throws WriterException, IOException {
+        int width = 200;
+        int height = 200;
+        // 生成图片格式
+        String format = "png";
+        Hashtable hints = new Hashtable();
+        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+        // 调整二维码精度
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+        BitMatrix bitMatrix = new MultiFormatWriter().encode(encode,
+                BarcodeFormat.QR_CODE, width, height, hints);
+
+        //oss
+        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig();
+        BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix, matrixToImageConfig);
+        String ss= new Date().getTime() +".png";
+        File file = new File(ss);
+        ImageIO.write(image, "jpeg", file);
+        MultipartFile multipartFile = fileToMultipartFile(file);
+        //MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
+        String url = OssUtils.uploadToOss(multipartFile);
+        return url;
+    }
+
+    public static MultipartFile fileToMultipartFile(File file) {
+        FileItem fileItem = createFileItem(file);
+        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+        return multipartFile;
+    }
+
+    private static FileItem createFileItem(File file) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        FileItem item = factory.createItem("textField", "text/plain", true, file.getName());
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            OutputStream os = item.getOutputStream();
+            while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return item;
     }
 
 }

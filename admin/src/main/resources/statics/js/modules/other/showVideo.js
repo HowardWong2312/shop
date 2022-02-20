@@ -72,7 +72,7 @@ let vm = new Vue({
                if(!lock) {
                     lock = true;
 		            $.ajax({
-                        type: "POST",
+                        type: "DELETE",
                         url: baseURL + "other/showVideo/delete",
                         contentType: "application/json",
                         data: JSON.stringify(ids),

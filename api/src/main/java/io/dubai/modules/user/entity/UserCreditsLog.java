@@ -1,6 +1,9 @@
 package io.dubai.modules.user.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -37,17 +40,20 @@ public class UserCreditsLog implements Serializable {
     private BigDecimal balance;
 
     @ApiModelProperty(value = "类型")
+    @TableField(value="`status`")
     private Integer status;
 
     @ApiModelProperty(value = "方向")
+    @TableField(value="`type`")
     private Integer type;
 
     @ApiModelProperty(value = "备注")
+    @TableField(value="`desc`")
     private String desc;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @TableField(value = "createTime",fill = FieldFill.INSERT)
+    @TableField(value = "createTime", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "最后修改时间")

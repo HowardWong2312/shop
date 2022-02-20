@@ -4,7 +4,9 @@ $(function () {
         datatype: "json",
         colModel: [
             { label: 'id', name: 'id', index: 'id', width: 50, key: true },
-            { label: '用户ID', name: 'userId', index: 'user_id', width: 50 },
+            { label: '部门', name: 'sysDeptName', width: 35 },
+            { label: '代理商', name: 'sysUserName', width: 35 },
+            { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
             { label: '用户昵称', name: 'userName', width: 50 },
             { label: '变动积分', name: 'amount', index: 'amount', width: 80, formatter:function(value){
                 if(value > 0){
@@ -58,10 +60,13 @@ var vm = new Vue({
 		showList: true,
 		title: null,
         statusList: [],
+        sysDeptList: [],
+        sysUserList: [],
 		q: {},
 		userCreditsLog: {}
 	},
     created:function () {
+        this.getSysDeptList();
         this.getStatusList();
     },
 	methods: {
@@ -72,6 +77,8 @@ var vm = new Vue({
                     "key":vm.q.key,
                     "status":vm.q.status,
                     "type":vm.q.type,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -153,6 +160,21 @@ var vm = new Vue({
                 vm.statusList = r.list;
             });
         },
+        getSysDeptList: function(){
+            $.get(baseURL + "sys/dept/listForSelect", function(r){
+                vm.sysDeptList = r.list;
+            });
+        },
+        getSysUserListByDeptId: function(){
+            vm.q.sysUserId = null;
+            if(vm.q.sysDeptId != null  && vm.q.sysDeptId != ''){
+                $.get(baseURL + "sys/user/listForSelectByDeptId/"+vm.q.sysDeptId, function(r){
+                    vm.sysUserList = r.list;
+                });
+            }else{
+                vm.sysUserList = null;
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
@@ -161,6 +183,8 @@ var vm = new Vue({
                     "key":vm.q.key,
                     "status":vm.q.status,
                     "type":vm.q.type,
+                    "sysDeptId":vm.q.sysDeptId,
+                    "sysUserId":vm.q.sysUserId,
                 },
                 page:page
             }).trigger("reloadGrid");

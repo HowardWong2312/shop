@@ -1,12 +1,13 @@
 package io.dubai.modules.goods.form;
 
+import io.dubai.modules.user.form.PaymentForm;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @ApiModel("参团")
-public class JoinGroupForm {
+public class JoinGroupForm extends PaymentForm {
 
     @ApiModelProperty("拼团记录ID")
     private Long goodsGroupRecordId;
@@ -17,10 +18,5 @@ public class JoinGroupForm {
     @ApiModelProperty("数量")
     private Integer quantity;
 
-    @ApiModelProperty("支付方式ID")
-    private Long paymentId;
-
-    @ApiModelProperty("支付密码")
-    private String password;
 
 }
