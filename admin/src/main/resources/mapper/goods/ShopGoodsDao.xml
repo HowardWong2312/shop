@@ -33,17 +33,14 @@
         shop_goods sg
         INNER JOIN shop_goods_lang sgl ON sg.id = sgl.goods_id
         where 1 = 1 and sg.is_del = 0
-        <if test="params.ids !=null">
-            and sg.category_id in
-            <foreach collection="params.ids" index="index" item="id" open="(" separator="," close=")">
-                #{id}
-            </foreach>
+        <if test="params.categoryId !=null and params.categoryId != -1 and params.categoryId != ''">
+            and sg.category_id = #{params.categoryId}
         </if>
-         <if test="params.languageId !=null and params.languageId != '' ">
-            and sgl.language_id  = #{params.languageId}
+        <if test="params.languageId !=null and params.languageId != '' ">
+            and sgl.language_id = #{params.languageId}
         </if>
         <if test="params.categoryId !=null and params.categoryId == -1">
-            and  (sg.is_group = 1 or sg.is_rush = 1 or sg.is_one_buy = 1)
+            and (sg.is_group = 1 or sg.is_rush = 1 or sg.is_one_buy = 1)
         </if>
         <if test="params.key != null and params.key != ''">
             and (
