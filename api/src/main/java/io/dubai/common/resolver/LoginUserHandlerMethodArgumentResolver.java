@@ -37,6 +37,10 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
         if (token == null) {
             return null;
         }
-        return redisUtils.get(RedisKeys.userInfoKey+token, UserInfo.class);
+        UserInfo userInfo = redisUtils.get(RedisKeys.userInfoKey+token, UserInfo.class);
+        if(userInfo != null && userInfo.getUserLevelId() == null){
+            userInfo.setUserLevelId(1L);
+        }
+        return userInfo;
     }
 }

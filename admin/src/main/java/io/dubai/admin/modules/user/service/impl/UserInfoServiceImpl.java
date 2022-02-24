@@ -85,6 +85,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         if (temp != null) {
             redisTemplate.opsForValue().set(RedisKeys.userInfoKey + userInfo.getUserId(), userInfo);
         }
+        //注册环信信息
+        io.swagger.client.model.User imUser = new io.swagger.client.model.User() ;
+        imUser.setUsername("u"+userInfo.getUserId());
+        imUser.setPassword(String.valueOf(userInfo.getUserId()));
+        RegisterUsers ru = new RegisterUsers() ;
+        ru.add(imUser) ;
+        imUserAPI.createNewIMUserSingle(ru) ;
         return userInfo;
     }
 
@@ -93,11 +100,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     public UserInfo save(UserInfoForm form) {
         UserInfo userInfo = new UserInfo();
         try{
+            if(form.getUserLevelId() == null){
+                form.setUserLevelId(1L);
+            }
+            if(form.getLotteryTimes() == null){
+                form.setLotteryTimes(0);
+            }
             AppUser appUser = new AppUser();
             appUser.setCountryCode(form.getCountryCode());
             appUser.setPhone(form.getPhone());
             appUser.setPassword(CryptAES.AES_Encrypt(form.getLoginPassword()));
             appUserDao.insert(appUser);
+            userInfo.setSex("女性");
             userInfo.setFatherId(form.getFatherId());
             userInfo.setSysUserId(form.getSysUserId());
             userInfo.setUserId(appUser.getId());
@@ -123,6 +137,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             if(temp != null){
                 credits = new BigDecimal(temp);
             }
+            userInfo.setAge(18);
+            userInfo.setBirthday(new Date());
             userInfo.setCredits(credits);
             userInfo.setIncomeCredits(credits);
             userInfo.setWealth(new BigDecimal(0));
@@ -198,7 +214,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         for (UserInfo userInfo : toDayNewUserFatherIds) {
             UserInfo fatherUserInfo = this.getBaseMapper().selectById(userInfo.getFatherId());
             if (fatherUserInfo != null) {
-                if (fatherUserInfo.getFatherId().equals(0)) {
+                if (fatherUserInfo.getFatherId() != null && fatherUserInfo.getFatherId().equals(0)) {
                     //父类的fatherId 是0 则为直属用户
                     firstUserCount++;
                 } else {

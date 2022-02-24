@@ -220,7 +220,7 @@ public class QRCodeUtils {
         int width = 200;
         int height = 200;
         // 生成图片格式
-        String format = "png";
+        String format = ".png";
         Hashtable hints = new Hashtable();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
         // 调整二维码精度
@@ -231,12 +231,13 @@ public class QRCodeUtils {
         //oss
         MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig();
         BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix, matrixToImageConfig);
-        String ss= new Date().getTime() +".png";
+        String ss= new Date().getTime() + format;
         File file = new File(ss);
         ImageIO.write(image, "jpeg", file);
         MultipartFile multipartFile = fileToMultipartFile(file);
         //MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
         String url = OssUtils.uploadToOss(multipartFile);
+        file.delete();
         return url;
     }
 

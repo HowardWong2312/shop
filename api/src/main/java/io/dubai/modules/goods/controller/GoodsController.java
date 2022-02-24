@@ -12,6 +12,7 @@ import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserCreditsLogStatusEnum;
 import io.dubai.common.exception.RRException;
 import io.dubai.common.sys.service.SysConfigService;
+import io.dubai.common.task.GoodsOrderAndGroupTask;
 import io.dubai.common.utils.OssUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.utils.StringUtils;
@@ -32,6 +33,8 @@ import io.dubai.modules.user.service.UserCreditsLogService;
 import io.dubai.modules.user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,11 +61,10 @@ import java.util.Random;
 @Api(tags = "商品")
 public class GoodsController {
 
-    @Resource
-    private GoodsService goodsService;
+    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @Resource
-    private LanguageService languageService;
+    private GoodsService goodsService;
 
     @Resource
     private GoodsImgService goodsImgService;
@@ -593,6 +595,7 @@ public class GoodsController {
     @PostMapping("/uploadImage")
     public R uploadImage(MultipartFile file) {
         String url = OssUtils.uploadToOss(file);
+        logger.warn("新图片上传:"+url);
         return R.ok().put("url",url);
     }
 

@@ -55,7 +55,7 @@ public class UserInfo implements Serializable {
 	 * 生日
 	 */
 	@TableField("birthday")
-	private LocalDate birthday;
+	private Date birthday;
 	/**
 	 * 年龄
 	 */
