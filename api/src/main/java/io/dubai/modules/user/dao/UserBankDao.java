@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.dubai.modules.user.entity.UserBank;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 用户提现
  *
@@ -13,6 +15,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserBankDao extends BaseMapper<UserBank> {
+
+    List<UserBank> queryByUserIdAndLanguageId(Long userId, String languageId);
 
 
 }

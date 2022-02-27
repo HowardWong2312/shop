@@ -149,11 +149,17 @@ public class ExchangeController {
     @PostMapping("/sell")
     @Transactional
     public R sell(@RequestBody SellCreditsForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
+        if (userInfo.getIsLockCredits().intValue() == 1 || userInfo.getIsMerchant() == 1 || userInfo.getFatherId() == 0) {
+            return R.error(ResponseStatusEnum.CANNOT_EXCHANGE);
+        }
         if(userInfo.getPassword() == null || "".equalsIgnoreCase(userInfo.getPassword())){
             return R.ok(ResponseStatusEnum.PAY_PASSWORD_NOT_EXIST);
         }
         if(!userInfo.getPassword().equalsIgnoreCase(form.getPassword())){
             return R.ok(ResponseStatusEnum.PAY_PASSWORD_ERROR);
+        }
+        if (null == form.getQuantity() || form.getQuantity().compareTo(BigDecimal.valueOf(20)) == -1) {
+            return R.error(ResponseStatusEnum.MUST_BE_MORE_THAN_TWENTY);
         }
         if(userInfo.getCredits().compareTo(form.getQuantity()) == -1){
             return R.ok(ResponseStatusEnum.CREDITS_INSUFFICIENT);

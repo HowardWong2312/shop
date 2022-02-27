@@ -8,8 +8,10 @@
         a.*,
         su.username as sys_user_name,
         sd.name as sys_dept_name,
+        p.title as payment_name,
         u.nickname as user_name
         FROM t_user_bank a
+        LEFT JOIN shop_payment p ON (a.payment_id=p.id)
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
         left join sys_user su on (su.user_id=u.sysUserId)
         left join sys_dept sd on(su.dept_id = sd.dept_id)
@@ -19,6 +21,9 @@
             u.nickname like '%${params.key}%'
             or a.user_id=#{params.key}
             )
+        </if>
+        <if test="params.paymentId !=null and params.paymentId !=''">
+            and a.payment_id=#{params.paymentId}
         </if>
         <if test="params.sysUserId !=null and params.sysUserId !=''">
             and u.sysUserId=#{params.sysUserId}

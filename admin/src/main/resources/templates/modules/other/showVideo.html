@@ -38,7 +38,7 @@
                 <h4 class="modal-title" id="myModalLabel">视频预览</h4>
             </div>
             <div class="modal-body">
-                <video id="video" muted controls="controls" autoplay="autoplay loop" style="width: 100%">
+                <video id='video' autoplay="autoplay loop" muted controls="controls">
                 </video>
             </div>
             <div class="modal-footer">
@@ -48,7 +48,7 @@
     </div><!-- /.modal -->
 </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/hls.js/latest/hls.min.js"></script>
 <script src="${request.contextPath}/statics/js/modules/other/showVideo.js?_${.now?long}"></script>
 </body>
 </html>

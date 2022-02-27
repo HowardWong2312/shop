@@ -10,6 +10,7 @@ public enum ResponseStatusEnum {
 
     SUCCESS(200, "SUCCESS"),
     SYSTEM_ERROR(500, "something went wrong"),
+    PAYMENT_UNAVAILABLE(701, "此支付方式不可用，请稍后再试"),
     PLZ_CHOOSE_IMAGE(801, "请选择一张图片"),
     NOT_LOGO_IMG(901, "请上传LOGO"),
     NOT_BANNER_IMG(902, "请上传至少一个banner图"),
@@ -49,9 +50,9 @@ public enum ResponseStatusEnum {
     LOTTERY_TIMES_RAN_OUT(3011, "抽奖次数已用完"),
     RUSH_EVENT_OVER(3012, "该商品抽奖活动已结束"),
     EXCHANGE_CLOSED(4001, "积分兑现暂时关闭中"),
-    MUST_BE_MORE_THAN_ONE(4002, "最少兑换1积分"),
+    MUST_BE_MORE_THAN_TWENTY(4002, "最少兑换20积分"),
     NEEDS_BIND_BANK(4003, "请先绑定至少一张银行卡"),
-    CANNOT_EXCHANGE(4004, "该用户拥有多个账号，不符合积分兑现的资格"),
+    CANNOT_EXCHANGE(4004, "该用户不符合积分兑现的资格"),
     CREDITS_SOLD(5001, "购买失败，该积分已卖出"),
     PARAMS_IS_ERROR(502, "params error");
 

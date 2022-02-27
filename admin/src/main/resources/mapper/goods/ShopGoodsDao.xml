@@ -48,6 +48,7 @@
             or sgl.title like '%${params.key}%'
             )
         </if>
+        order by sg.create_time desc
     </select>
 
 </mapper>

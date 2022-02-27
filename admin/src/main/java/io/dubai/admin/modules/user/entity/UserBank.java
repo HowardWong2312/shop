@@ -25,26 +25,16 @@ public class UserBank implements Serializable {
     //用户id
     private Long userId;
 
-    //
-    private String accountName;
+    //收款方式
+    private Long paymentId;
 
-    //银行名称
-    private String bankName;
+    private String accountName;
 
     //银行卡号
     private String accountNumber;
 
-    //支行名称
-    private String branchName;
-
-    //
-    private String iban;
-
-    //
-    private String ifsc;
-
-    //
-    private String upi;
+    //备用字段
+    private String temp;
 
     //
     @TableField(fill = FieldFill.INSERT)

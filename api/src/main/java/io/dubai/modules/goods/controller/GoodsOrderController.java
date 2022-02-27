@@ -70,9 +70,6 @@ public class GoodsOrderController {
     private GoodsGroupService goodsGroupService;
 
     @Resource
-    private LanguageService languageService;
-
-    @Resource
     private UserInfoService userInfoService;
 
     @Resource

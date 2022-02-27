@@ -29,8 +29,12 @@ public class UserWithdraw implements Serializable {
     @ApiModelProperty(value = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "银行名称")
-    private String bankName;
+    @ApiModelProperty(value = "收款方式ID")
+    private Long paymentId;
+
+    @ApiModelProperty(value = "收款方式名称")
+    @TableField(exist = false)
+    private String paymentName;
 
     @ApiModelProperty(value = "账户名称")
     private String accountName;
@@ -38,17 +42,8 @@ public class UserWithdraw implements Serializable {
     @ApiModelProperty(value = "账户号码")
     private String accountNumber;
 
-    @ApiModelProperty(value = "支行名称")
-    private String branchName;
-
-    @ApiModelProperty(value = "iban")
-    private String iban;
-
-    @ApiModelProperty(value = "ifsc")
-    private String ifsc;
-
-    @ApiModelProperty(value = "upi")
-    private String upi;
+    @ApiModelProperty(value = "备用字段")
+    private String temp;
 
     @ApiModelProperty(value = "提现金额")
     private BigDecimal amount;

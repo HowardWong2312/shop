@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.dubai.modules.user.dao.UserBankDao">
+
+    <select id="queryByUserIdAndLanguageId" resultType="io.dubai.modules.user.entity.UserBank">
+        select
+               a.*,
+               b.title as payment_name
+        from t_user_bank a
+        left join shop_payment_lang b on(a.payment_id=b.payment_id and b.language_id = #{languageId})
+        where a.user_id = #{userId} and a.is_del=0
+
+    </select>
+
+</mapper>

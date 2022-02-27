@@ -34,8 +34,8 @@ public class ApiController {
 
     @ApiOperation("接受支付回调")
     @GetMapping("/callBack")
-    public R callBack() {
-        return R.ok();
+    public String callBack() {
+        return "SUCCESS";
     }
 
     @ApiOperation("推送测试")

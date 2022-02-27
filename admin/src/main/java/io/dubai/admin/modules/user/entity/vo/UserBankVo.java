@@ -23,4 +23,6 @@ public class UserBankVo extends UserBank implements Serializable {
 
     private String userName;
 
+    private String paymentName;
+
 }

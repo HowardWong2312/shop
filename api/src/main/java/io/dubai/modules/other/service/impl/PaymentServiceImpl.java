@@ -7,9 +7,12 @@ import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
 import io.dubai.modules.other.dao.PaymentDao;
 import io.dubai.modules.other.entity.Payment;
+import io.dubai.modules.other.entity.vo.PaymentVo;
+import io.dubai.modules.other.query.PaymentQuery;
 import io.dubai.modules.other.service.PaymentService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,13 +20,7 @@ import java.util.Map;
 public class PaymentServiceImpl extends ServiceImpl<PaymentDao, Payment> implements PaymentService {
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        IPage<Payment> page = this.page(
-                new Query<Payment>().getPage(params),
-                new QueryWrapper<Payment>()
-        );
-
-        return new PageUtils(page);
+    public List<PaymentVo> queryList(PaymentQuery query) {
+        return baseMapper.queryList(query);
     }
-
 }

@@ -101,8 +101,15 @@ let vm = new Vue({
 		getInfo: function(id){
 			$.get(baseURL + "other/showVideo/info/"+id, function(r){
                 vm.showVideo = r.showVideo;
-                $("#video").attr("src",vm.showVideo.videoUrl);
-                $("#video").trigger('play');
+                if(Hls.isSupported()) {
+                    var video = document.getElementById('video'); // 获取 video 标签
+                    var hls = new Hls(); // 实例化 Hls 对象
+                    hls.loadSource(vm.showVideo.videoUrl); // 传入路径
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                        video.play(); // 调用播放 API
+                    });
+                }
             });
 		},
 		reload: function (event) {

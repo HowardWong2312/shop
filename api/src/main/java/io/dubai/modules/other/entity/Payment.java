@@ -31,26 +31,17 @@ public class Payment implements Serializable {
     @ApiModelProperty(value = "描述")
     private String description;
 
+    @ApiModelProperty(value = "图标")
+    private String iconUrl;
+
     @ApiModelProperty(value = "状态")
     private Integer status;
 
     @ApiModelProperty(value = "是否为充值方式")
     private Integer isDeposit;
 
-    @ApiModelProperty(value = "是否为充值方式")
-    private Integer isPayment;
-
-    @ApiModelProperty(value = "软删除")
-    @TableField(fill = FieldFill.INSERT)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @TableLogic
-    private Integer isDel;
-
-    @ApiModelProperty(value = "乐观锁")
-    @TableField(fill = FieldFill.INSERT)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Version
-    private Integer version;
+    @ApiModelProperty(value = "是否为提现方式")
+    private Integer isWithdraw;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

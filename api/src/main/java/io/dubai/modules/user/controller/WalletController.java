@@ -105,16 +105,16 @@ public class WalletController {
     @ApiOperation("银行卡列表")
     @GetMapping("/bankList")
     public R bankList(@ApiIgnore @LoginUser UserInfo userInfo) {
-        List<UserBank> list = userBankService.list(new QueryWrapper<UserBank>().eq("user_id", userInfo.getUserId()));
-        return R.ok().put("list", list);
+        return R.ok().put("list", userBankService.queryByUserIdAndLanguageId(userInfo.getUserId().longValue(),userInfo.getLanguage()));
     }
 
     @Login
     @ApiOperation("添加银行卡")
     @PostMapping("/addBank")
-    public R addAddress(@RequestBody UserBank bank, @ApiIgnore @LoginUser UserInfo userInfo) {
+    public R addBank(@RequestBody UserBank bank, @ApiIgnore @LoginUser UserInfo userInfo) {
         List<UserBank> temps = userBankService.list(
                 new QueryWrapper<UserBank>()
+                        .eq("payment_id", bank.getPaymentId())
                         .eq("account_name", bank.getAccountName())
                         .eq("account_number", bank.getAccountNumber())
         );
@@ -172,11 +172,8 @@ public class WalletController {
         userWithdraw.setAmount(form.getAmount());
         userWithdraw.setAccountName(userBank.getAccountName());
         userWithdraw.setAccountNumber(userBank.getAccountNumber());
-        userWithdraw.setBankName(userBank.getBankName());
-        userWithdraw.setBranchName(userBank.getBranchName());
-        userWithdraw.setIban(userBank.getIban());
-        userWithdraw.setIfsc(userBank.getIfsc());
-        userWithdraw.setUpi(userBank.getUpi());
+        userWithdraw.setPaymentId(userBank.getPaymentId());
+        userWithdraw.setTemp(userBank.getTemp());
         userWithdraw.setUserId(userInfo.getUserId().longValue());
         userWithdraw.setStatus(0);
         userWithdrawService.save(userWithdraw);
@@ -203,13 +200,13 @@ public class WalletController {
             deposit.setAmount(form.getAmount());
             deposit.setUserId(userInfo.getUserId().longValue());
             deposit.setStatus(0);
-            deposit.setPaymentId(2L);
+            deposit.setPaymentId(form.getPaymentId());
             Map<String, String> map = new HashMap<>();
             String key = "2cfdc6472022023421f60c63481f0f904c81b0854c4dfc31924b051ace679de6";
             map.put("memberId", "1000002");
             map.put("token", "877466ffd21fe26dd1b3366330b7b560");
             map.put("payType", "transfer_bank");//transfer_bank,alipay,wechat
-            map.put("desc", "bibimo余额充值");
+            map.put("desc", "ashop余额充值");
             map.put("amount", deposit.getAmount().toString());
             map.put("finishUrl", "http://www.baidu.com");
             map.put("notifyUrl", "http://localhost:8899/api/callBack");
@@ -219,22 +216,23 @@ public class WalletController {
             String paySign = Utils.getPayCustomSign(map, key);
             //将签好的名在put到json对象里
             map.put("paySign", paySign);
-            map.put("lang", "us-en");
+            map.put("lang", "ar");
             //将json对象转成字符串，然后调用调用支付接口
-            String result = HttpUtils.sendPostJson("http://localhost:9999/api/generateOrder", null, JSONObject.toJSONString(map));
+            String result = HttpUtils.sendPostJson("http://192.168.1.102:9999/api/generateOrder", null, JSONObject.toJSONString(map));
             if (!Utils.isJSONObject(result)) {
-                throw new RRException(ResponseStatusEnum.SYSTEM_ERROR);
+                throw new RRException(ResponseStatusEnum.PAYMENT_UNAVAILABLE);
             }
             JSONObject json = JSONObject.parseObject(result);
 
             if (json.getJSONObject("data").containsKey("payUrl")) {
                 payUrl = json.getJSONObject("data").getString("payUrl");
             } else {
-                throw new RRException(ResponseStatusEnum.SYSTEM_ERROR);
+                throw new RRException(ResponseStatusEnum.PAYMENT_UNAVAILABLE);
             }
             userDepositService.save(deposit);
         } catch (Exception e) {
-            throw new RRException(ResponseStatusEnum.SYSTEM_ERROR);
+            e.printStackTrace();
+            throw new RRException(ResponseStatusEnum.PAYMENT_UNAVAILABLE);
         }
         return R.ok().put("payUrl", payUrl);
     }
@@ -320,15 +318,15 @@ public class WalletController {
     @ApiOperation("积分兑现")
     @PostMapping("/exchange")
     public R exchange(@RequestBody ExchangeForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
+        if (userInfo.getIsLockCredits().intValue() == 1 || userInfo.getIsMerchant() == 1 || userInfo.getFatherId() == 0) {
+            return R.error(ResponseStatusEnum.CANNOT_EXCHANGE);
+        }
         List<UserBank> userBanks = userBankService.list(new QueryWrapper<UserBank>().eq("user_id", userInfo.getUserId()).eq("is_del", 0));
         if (userBanks.isEmpty()) {
             return R.error(ResponseStatusEnum.NEEDS_BIND_BANK);
         }
-        if (userInfo.getIsLockCredits().intValue() == 1) {
-            return R.error(ResponseStatusEnum.CANNOT_EXCHANGE);
-        }
-        if (null == form.getCredits() || form.getCredits().compareTo(BigDecimal.ONE) == -1) {
-            return R.error(ResponseStatusEnum.MUST_BE_MORE_THAN_ONE);
+        if (null == form.getCredits() || form.getCredits().compareTo(BigDecimal.valueOf(20)) == -1) {
+            return R.error(ResponseStatusEnum.MUST_BE_MORE_THAN_TWENTY);
         }
         if (userInfo.getCredits().compareTo(form.getCredits()) == -1) {
             return R.error(ResponseStatusEnum.CREDITS_INSUFFICIENT);

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("t_user_bank")
-@ApiModel(value = "用户银行卡")
+@ApiModel(value = "收款方式，改概念，不改表名")
 public class UserBank implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -28,26 +28,21 @@ public class UserBank implements Serializable {
     @ApiModelProperty(value = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "银行名称")
-    private String bankName;
+    @ApiModelProperty(value = "收款方式ID")
+    private Long paymentId;
 
-    @ApiModelProperty(value = "账户名称")
+    @ApiModelProperty(value = "收款方式名称")
+    @TableField(exist = false)
+    private String paymentName;
+
+    @ApiModelProperty(value = "银行名称或账户名称")
     private String accountName;
 
-    @ApiModelProperty(value = "账户号码")
+    @ApiModelProperty(value = "银行账号或手机号")
     private String accountNumber;
 
-    @ApiModelProperty(value = "支行名称")
-    private String branchName;
-
-    @ApiModelProperty(value = "iban")
-    private String iban;
-
-    @ApiModelProperty(value = "ifsc")
-    private String ifsc;
-
-    @ApiModelProperty(value = "upi")
-    private String upi;
+    @ApiModelProperty(value = "备用字段")
+    private String temp;
 
     @ApiModelProperty(value = "软删除")
     @TableField(fill = FieldFill.INSERT)

@@ -10,9 +10,11 @@
         dict.remark as status_color,
         su.username as sys_user_name,
         sd.name as sys_dept_name,
+        p.title as payment_name,
         u.nickname as user_name
         FROM t_user_withdraw a
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        LEFT JOIN shop_payment p ON (a.payment_id=p.id)
         left join `sys_dict` dict on(a.status=dict.code and dict.type='user_withdraw_status')
         left join sys_user su on (su.user_id=u.sysUserId)
         left join sys_dept sd on(su.dept_id = sd.dept_id)

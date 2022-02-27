@@ -26,8 +26,8 @@ public class UserWithdraw implements Serializable {
     //用户id
     private Long userId;
 
-    //银行卡名称
-    private String bankName;
+    //收款方式
+    private Long paymentId;
 
     //
     private String accountName;
@@ -36,16 +36,7 @@ public class UserWithdraw implements Serializable {
     private String accountNumber;
 
     //
-    private String branchName;
-
-    //
-    private String iban;
-
-    //
-    private String ifsc;
-
-    //
-    private String upi;
+    private String temp;
 
     //提现金额
     private BigDecimal amount;

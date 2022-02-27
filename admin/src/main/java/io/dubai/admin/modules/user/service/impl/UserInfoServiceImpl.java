@@ -150,7 +150,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfo.setIsGroupAddFriend(1);
             userInfo.setIsECodeAddFriend(1);
             userInfo.setIsApprove(0);
-            userInfo.setLanguage("1");
+            userInfo.setLanguage("5");
             userInfo.setIsCanCreateGroup(1);
             userInfo.setSearchPhone(appUser.getCountryCode()+appUser.getPhone());
             //注册环信信息
