@@ -68,7 +68,7 @@ public class ApiController {
                 sb.append(str);
             }
             log.warn("收到回调-->{}", sb);
-            JSONObject json = JSONObject.fromObject(sb);
+            JSONObject json = JSONObject.fromObject(sb.toString());
             String memberOrderCode = json.getString("memberOrderCode");
             UserDeposit deposit = userDepositService.getById(memberOrderCode);
             deposit.setStatus(1);
