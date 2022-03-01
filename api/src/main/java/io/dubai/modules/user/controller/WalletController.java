@@ -15,6 +15,8 @@ import io.dubai.common.utils.HttpUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.utils.StringUtils;
 import io.dubai.common.utils.Utils;
+import io.dubai.modules.other.entity.Payment;
+import io.dubai.modules.other.service.PaymentService;
 import io.dubai.modules.user.entity.*;
 import io.dubai.modules.user.entity.vo.CreditsTaskVo;
 import io.dubai.modules.user.form.*;
@@ -49,6 +51,9 @@ public class WalletController {
 
     @Resource
     private UserBalanceLogService userBalanceLogService;
+
+    @Resource
+    private PaymentService paymentService;
 
     @Resource
     private UserCreditsLogService userCreditsLogService;
@@ -195,6 +200,10 @@ public class WalletController {
     public R deposit(@RequestBody UserDepositForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
         String payUrl = null;
         try {
+            if(form.getPaymentId() == 1L){
+                throw new RRException(ResponseStatusEnum.PAYMENT_UNAVAILABLE);
+            }
+            Payment payment = paymentService.getById(form.getPaymentId());
             UserDeposit deposit = new UserDeposit();
             deposit.setOrderCode(StringUtils.createOrderNum());
             deposit.setAmount(form.getAmount());
@@ -206,10 +215,10 @@ public class WalletController {
             map.put("memberId", "1000002");
             map.put("token", "877466ffd21fe26dd1b3366330b7b560");
             map.put("payType", "transfer_bank");//transfer_bank,alipay,wechat
-            map.put("desc", "ashop余额充值");
+            map.put("desc", "deposit to ashop/充值");
             map.put("amount", deposit.getAmount().toString());
-            map.put("finishUrl", "http://www.baidu.com");
-            map.put("notifyUrl", "http://localhost:8899/api/callBack");
+            map.put("finishUrl", sysConfigService.getValue("PAYMENT_FINISH_URL"));
+            map.put("notifyUrl", sysConfigService.getValue("SHOP_DOMAIN")+"/api/callBack");
             map.put("memberOrderCode", deposit.getOrderCode());
             //签名规则，将一个json对象里的值按照a-z排序并遍历成url参数键值对的形式,然后尾部加上key，进行MD5的签名，md5字符串大写
             //像这样a=123&b=456&key=111111111
@@ -217,8 +226,9 @@ public class WalletController {
             //将签好的名在put到json对象里
             map.put("paySign", paySign);
             map.put("lang", "ar");
+            map.put("bankCode", payment.getDescription());
             //将json对象转成字符串，然后调用调用支付接口
-            String result = HttpUtils.sendPostJson("http://192.168.1.102:9999/api/generateOrder", null, JSONObject.toJSONString(map));
+            String result = HttpUtils.sendPostJson(sysConfigService.getValue("PAYMENT_API"), null, JSONObject.toJSONString(map));
             if (!Utils.isJSONObject(result)) {
                 throw new RRException(ResponseStatusEnum.PAYMENT_UNAVAILABLE);
             }

@@ -12,7 +12,7 @@ springfox:
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: prod
+    active: dev
   servlet:
     multipart:
       max-file-size: 100MB

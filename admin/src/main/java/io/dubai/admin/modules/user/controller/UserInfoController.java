@@ -135,6 +135,9 @@ public class UserInfoController extends AbstractController {
     @PostMapping("/save")
     @RequiresPermissions("user:userInfo:save")
     public R save(@RequestBody UserInfoForm form) {
+        if(getUserId() != Constant.SUPER_ADMIN){
+            form.setSysUserId(getUserId());
+        }
         userInfoService.save(form);
         return R.ok();
     }

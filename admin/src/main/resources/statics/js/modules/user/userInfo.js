@@ -20,8 +20,6 @@ $(function () {
             { label: '手机号', width: 80, formatter: function(value, options, row){
                 return '<span>'+row.countryCode+row.phone+'</span>';
             }},
-			{ label: '性别', name: 'sex', index: 'sex', width: 50 },
-			{ label: '年龄', name: 'age', index: 'age', width: 50 },
 			{ label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 70 },
 			{ label: '当前余额', name: 'balance', index: 'balance', width: 60 },
 			{ label: '当前积分', name: 'credits', index: 'credits', width: 60 },
@@ -86,6 +84,7 @@ var vm = new Vue({
                     "key":vm.q.key,
                     "fatherId":vm.q.fatherId,
                     "userLevelId":vm.q.userLevelId,
+                    "isMerchant":vm.q.isMerchant,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
                 },
@@ -219,6 +218,7 @@ var vm = new Vue({
                 postData:{
                     "key":vm.q.key,
                     "fatherId":vm.q.fatherId,
+                    "isMerchant":vm.q.isMerchant,
                     "userLevelId":vm.q.userLevelId,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,

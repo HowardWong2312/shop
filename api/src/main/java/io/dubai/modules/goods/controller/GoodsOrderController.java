@@ -187,7 +187,38 @@ public class GoodsOrderController {
     }
 
     @Login
-    @ApiOperation("取消订单")
+    @ApiOperation("商家取消订单")
+    @GetMapping("/cancelForMerchant/{orderCode}")
+    @Transactional
+    public R cancelForMerchant(@PathVariable String orderCode, @ApiIgnore @LoginUser UserInfo userInfo) {
+        GoodsOrder goodsOrder = goodsOrderService.getById(orderCode);
+        if(goodsOrder.getStatus() != 3){
+            return R.ok(ResponseStatusEnum.ORDER_HAS_BEEN_UPDATED);
+        }
+        goodsOrder.setStatus(6);
+        goodsOrderService.updateById(goodsOrder);
+        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(goodsOrder.getGoodsId(),userInfo.getLanguage());
+        //待分享订单取消，只返还金额
+        userInfo.setBalance(userInfo.getBalance().add(goodsOrder.getAmount()));
+        userInfoService.update(userInfo);
+        //增加账单记录
+        UserBalanceLog userBalanceLog = new UserBalanceLog();
+        userBalanceLog.setType(LogTypeEnum.INCOME.code);
+        userBalanceLog.setBalance(userInfo.getBalance());
+        userBalanceLog.setAmount(goodsOrder.getAmount());
+        userBalanceLog.setUserId(userInfo.getUserId().longValue());
+        userBalanceLog.setStatus(UserBalanceLogStatusEnum.SHOP_ORDER_CANCELED.code);
+        if(StringUtils.isEmpty(goodsVo.getLanguageTitle())){
+            userBalanceLog.setDesc(goodsVo.getLanguageTitle());
+        }else{
+            userBalanceLog.setDesc(goodsVo.getTitle());
+        }
+        userBalanceLogService.save(userBalanceLog);
+        return R.ok();
+    }
+
+    @Login
+    @ApiOperation("取消拼团订单")
     @GetMapping("/cancel/{orderCode}")
     @Transactional
     public R cancel(@PathVariable String orderCode, @ApiIgnore @LoginUser UserInfo userInfo) {
@@ -306,7 +337,7 @@ public class GoodsOrderController {
     }
 
     @Login
-    @ApiOperation("确认此订单需要发货")
+    @ApiOperation("确认拼团订单需要发货")
     @GetMapping("/confirm/{orderCode}")
     public R confirm(@PathVariable String orderCode, @ApiIgnore @LoginUser UserInfo userInfo) {
         GoodsOrder goodsOrder = goodsOrderService.getById(orderCode);
@@ -390,7 +421,7 @@ public class GoodsOrderController {
     }
 
     @Login
-    @ApiOperation("用户确认收货")
+    @ApiOperation("用户确认收货-拼团订单")
     @GetMapping("/confirmDelivery/{orderCode}")
     public R confirmDelivery(@PathVariable String orderCode) {
         GoodsOrder goodsOrder = goodsOrderService.getById(orderCode);
