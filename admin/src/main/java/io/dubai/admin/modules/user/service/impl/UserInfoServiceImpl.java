@@ -80,6 +80,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             appUser.setPassword(CryptAES.AES_Encrypt(userInfo.getLoginPassword()));
             appUserDao.updateById(appUser);
         }
+        try {
+            userInfo.setECode(createEwm(userInfo.getUserId(),userInfo.getNickName(),userInfo.getInviteCode()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         baseMapper.updateById(userInfo);
         Object temp = redisTemplate.opsForValue().get(RedisKeys.userInfoKey + userInfo.getUserId());
         if (temp != null) {
