@@ -76,7 +76,7 @@ public class ApiController {
             userDepositService.updateById(deposit);
             UserInfo userInfo = userInfoService.queryByUserId(deposit.getUserId());
             userInfo.setBalance(userInfo.getBalance().add(deposit.getAmount()));
-            userInfoService.updateById(userInfo);
+            userInfoService.update(userInfo);
             //增加账单记录
             UserBalanceLog userBalanceLog = new UserBalanceLog();
             userBalanceLog.setType(LogTypeEnum.INCOME.code);
