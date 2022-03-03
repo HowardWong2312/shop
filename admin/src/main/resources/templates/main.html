@@ -13,7 +13,7 @@
 <div class="panel panel-default" id="main"
      style="border:none;padding: 20px; background-color: #F2F2F2;height: 100vh;width: 100vw;font-size: 16px">
     <div class="layui-row layui-col-space15">
-        <div style="text-align: center">
+        <div style="text-align: center" v-if="statistical.show">
             <h1>当日活跃用户:{{statistical.userOnlineCount}}</h1>
         </div>
 
@@ -67,6 +67,9 @@
                     当日充值总金额:{{statistical.toDayDepositSum}}
                 </div>
                 <div class="layui-card-body">
+                    当月充值总金额:{{statistical.theMonthDepositSum}}
+                </div>
+                <div class="layui-card-body">
                     当日提现总金额:{{statistical.toDayWithdrawSum}}
                 </div>
             </div>
@@ -76,13 +79,13 @@
             <div class="layui-card">
                 <div class="layui-card-header">积分</div>
                 <div class="layui-card-body">
-                    用户获得积分总数:{{statistical.userGetCredits}}
+                    系统剩余积分:{{statistical.remainingCredits}}
                 </div>
                 <div class="layui-card-body">
-                    已经兑换总数:{{statistical.userExchangeCredits}}
+                    系统支出积分:{{statistical.sysOutlay}}
                 </div>
                 <div class="layui-card-body">
-                    未兑换总数:{{statistical.RedeemedCredits}}
+                    用户获取积分总数:{{statistical.userGetCredits}}
                 </div>
                 <div class="layui-card-body">
                     当日获取积分总数:{{statistical.todayCredits}}

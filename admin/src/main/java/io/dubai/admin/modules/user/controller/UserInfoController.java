@@ -5,6 +5,7 @@ import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.admin.modules.goods.entity.ShopGoods;
 import io.dubai.admin.modules.goods.service.ShopGoodsService;
 import io.dubai.admin.modules.sys.controller.AbstractController;
+import io.dubai.admin.modules.sys.shiro.ShiroUtils;
 import io.dubai.admin.modules.user.entity.UserBalanceLog;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import io.dubai.admin.modules.user.form.RechargeForm;
@@ -23,6 +24,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -53,8 +55,8 @@ public class UserInfoController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("user:userInfo:list")
     public R list(@RequestParam Map<String, Object> params) {
-        if(getUserId() != Constant.SUPER_ADMIN){
-            params.put("sysUserId",getUserId().toString());
+        if (getUserId() != Constant.SUPER_ADMIN) {
+            params.put("sysUserId", getUserId().toString());
         }
         PageUtils page = userInfoService.queryPage(params);
         return R.ok().put("page", page);
@@ -72,7 +74,7 @@ public class UserInfoController extends AbstractController {
     @PostMapping("/rechargeCredits")
     @RequiresPermissions("user:userInfo:rechargeCredits")
     public R rechargeCredits(@RequestBody RechargeForm form) {
-        form.getIds().forEach(s->{
+        form.getIds().forEach(s -> {
             UserInfo userInfo = userInfoService.getById(s);
             userInfo.setCredits(userInfo.getCredits().add(form.getAmount()));
             userInfoService.update(userInfo);
@@ -80,10 +82,10 @@ public class UserInfoController extends AbstractController {
             UserCreditsLog userCreditsLog = new UserCreditsLog();
             userCreditsLog.setUserId(userInfo.getUserId().longValue());
             userCreditsLog.setAmount(form.getAmount());
-            if(form.getAmount().compareTo(BigDecimal.ZERO) == -1){
+            if (form.getAmount().compareTo(BigDecimal.ZERO) == -1) {
                 userCreditsLog.setType(LogTypeEnum.OUTLAY.code);
                 userCreditsLog.setStatus(UserCreditsLogStatusEnum.MANUAL_DEDUCTION.code);
-            }else{
+            } else {
                 userCreditsLog.setType(LogTypeEnum.INCOME.code);
                 userCreditsLog.setStatus(UserCreditsLogStatusEnum.MANUAL_RECHARGE.code);
             }
@@ -96,7 +98,7 @@ public class UserInfoController extends AbstractController {
     @PostMapping("/rechargeBalance")
     @RequiresPermissions("user:userInfo:rechargeBalance")
     public R rechargeBalance(@RequestBody RechargeForm form) {
-        form.getIds().forEach(s->{
+        form.getIds().forEach(s -> {
             UserInfo userInfo = userInfoService.getById(s);
             userInfo.setBalance(userInfo.getBalance().add(form.getAmount()));
             userInfoService.update(userInfo);
@@ -104,10 +106,10 @@ public class UserInfoController extends AbstractController {
             UserBalanceLog userBalanceLog = new UserBalanceLog();
             userBalanceLog.setUserId(userInfo.getUserId().longValue());
             userBalanceLog.setAmount(form.getAmount());
-            if(form.getAmount().compareTo(BigDecimal.ZERO) == -1){
+            if (form.getAmount().compareTo(BigDecimal.ZERO) == -1) {
                 userBalanceLog.setType(LogTypeEnum.OUTLAY.code);
                 userBalanceLog.setStatus(UserBalanceLogStatusEnum.MANUAL_DEDUCTION.code);
-            }else{
+            } else {
                 userBalanceLog.setType(LogTypeEnum.INCOME.code);
                 userBalanceLog.setStatus(UserBalanceLogStatusEnum.MANUAL_RECHARGE.code);
             }
@@ -120,11 +122,11 @@ public class UserInfoController extends AbstractController {
     @PostMapping("/update")
     @RequiresPermissions("user:userInfo:update")
     public R update(@RequestBody UserInfo userInfo) {
-        if(userInfo.getIsMerchant() == 1){
+        if (userInfo.getIsMerchant() == 1) {
             shopGoodsService.update(
                     new UpdateWrapper<ShopGoods>()
-                    .set("link_url",null)
-                    .eq("user_id",userInfo.getUserId())
+                            .set("link_url", null)
+                            .eq("user_id", userInfo.getUserId())
             );
         }
         userInfoService.update(userInfo);
@@ -134,7 +136,7 @@ public class UserInfoController extends AbstractController {
     @PostMapping("/save")
     @RequiresPermissions("user:userInfo:save")
     public R save(@RequestBody UserInfoForm form) {
-        if(getUserId() != Constant.SUPER_ADMIN){
+        if (getUserId() != Constant.SUPER_ADMIN) {
             form.setSysUserId(getUserId());
         }
         userInfoService.save(form);
@@ -143,8 +145,8 @@ public class UserInfoController extends AbstractController {
 
     @GetMapping("/getTodayFundsAndUserData")
     @RequiresPermissions("user:userInfo:count")
-    public R getTodayFundsAndUserData(){
-        return userInfoService.getTodayFundsAndUserData();
+    public R getTodayFundsAndUserData() {
+        return userInfoService.getTodayFundsAndUserData(getUserId());
     }
 
 }

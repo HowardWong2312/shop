@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cz.czUser.system.entity.AppUser;
 import com.cz.czUser.system.entity.UserInfo;
+import io.dubai.admin.modules.sys.shiro.ShiroUtils;
 import io.dubai.admin.modules.user.dao.AppUserDao;
 import io.dubai.admin.modules.user.dao.UserInfoDao;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
@@ -95,13 +96,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
 
     @Override
     public UserInfo update(UserInfo userInfo) {
-        if(!StringUtils.isEmpty(userInfo.getLoginPassword())){
+        if (!StringUtils.isEmpty(userInfo.getLoginPassword())) {
             AppUser appUser = appUserDao.selectById(userInfo.getUserId());
             appUser.setPassword(CryptAES.AES_Encrypt(userInfo.getLoginPassword()));
             appUserDao.updateById(appUser);
         }
         try {
-            userInfo.setECode(createEwm(userInfo.getUserId(),userInfo.getNickName(),userInfo.getInviteCode()));
+            userInfo.setECode(createEwm(userInfo.getUserId(), userInfo.getNickName(), userInfo.getInviteCode()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,12 +112,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             redisTemplate.opsForValue().set(RedisKeys.userInfoKey + userInfo.getUserId(), userInfo);
         }
         //注册环信信息
-        io.swagger.client.model.User imUser = new io.swagger.client.model.User() ;
-        imUser.setUsername("u"+userInfo.getUserId());
+        io.swagger.client.model.User imUser = new io.swagger.client.model.User();
+        imUser.setUsername("u" + userInfo.getUserId());
         imUser.setPassword(String.valueOf(userInfo.getUserId()));
-        RegisterUsers ru = new RegisterUsers() ;
-        ru.add(imUser) ;
-        imUserAPI.createNewIMUserSingle(ru) ;
+        RegisterUsers ru = new RegisterUsers();
+        ru.add(imUser);
+        imUserAPI.createNewIMUserSingle(ru);
         return userInfo;
     }
 
@@ -124,11 +125,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     @Transactional
     public UserInfo save(UserInfoForm form) {
         UserInfo userInfo = new UserInfo();
-        try{
-            if(form.getUserLevelId() == null){
+        try {
+            if (form.getUserLevelId() == null) {
                 form.setUserLevelId(1L);
             }
-            if(form.getLotteryTimes() == null){
+            if (form.getLotteryTimes() == null) {
                 form.setLotteryTimes(0);
             }
             AppUser appUser = new AppUser();
@@ -150,7 +151,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfo.setIsMerchant(form.getIsMerchant());
             userInfo.setLotteryTimes(form.getLotteryTimes());
             userInfo.setIsLockCredits(0);
-            if(StringUtils.isEmpty(form.getBibiCode())){
+            if (StringUtils.isEmpty(form.getBibiCode())) {
                 form.setBibiCode(createBiBiCode());
             }
             userInfo.setBibiCode(form.getBibiCode());
@@ -159,7 +160,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfo.setInviteCode(createInviteCode());
             BigDecimal credits = BigDecimal.ZERO;
             String temp = sysConfigService.getValue("NEW_USER_CREDITS");
-            if(temp != null){
+            if (temp != null) {
                 credits = new BigDecimal(temp);
             }
             userInfo.setAge(18);
@@ -168,7 +169,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfo.setIncomeCredits(credits);
             userInfo.setWealth(new BigDecimal(0));
             userInfo.setWealthLevel(0);
-            userInfo.setECode(createEwm(appUser.getId(),userInfo.getNickName(),userInfo.getInviteCode()));
+            userInfo.setECode(createEwm(appUser.getId(), userInfo.getNickName(), userInfo.getInviteCode()));
             userInfo.setVerifyFriend(0);
             userInfo.setIsPhoneAddFriend(1);
             userInfo.setIsBiBiCodeAddFriend(1);
@@ -177,17 +178,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfo.setIsApprove(0);
             userInfo.setLanguage("5");
             userInfo.setIsCanCreateGroup(1);
-            userInfo.setSearchPhone(appUser.getCountryCode()+appUser.getPhone());
+            userInfo.setSearchPhone(appUser.getCountryCode() + appUser.getPhone());
             //注册环信信息
-            io.swagger.client.model.User imUser = new io.swagger.client.model.User() ;
-            imUser.setUsername("u"+appUser.getId());
+            io.swagger.client.model.User imUser = new io.swagger.client.model.User();
+            imUser.setUsername("u" + appUser.getId());
             imUser.setPassword(String.valueOf(appUser.getId()));
-            RegisterUsers ru = new RegisterUsers() ;
-            ru.add(imUser) ;
-            imUserAPI.createNewIMUserSingle(ru) ;
+            RegisterUsers ru = new RegisterUsers();
+            ru.add(imUser);
+            imUserAPI.createNewIMUserSingle(ru);
             userInfo.setEasemobId(imUser.getUsername());
             userInfo.setEasemobPwd(imUser.getPassword());
-            baseMapper.insert(userInfo) ;
+            baseMapper.insert(userInfo);
             UserCreditsLog userCreditsLog = new UserCreditsLog();
             userCreditsLog.setUserId(userInfo.getUserId().longValue());
             userCreditsLog.setStatus(UserCreditsLogStatusEnum.NEW_USER.code);
@@ -196,7 +197,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userCreditsLog.setBalance(userInfo.getCredits());
             userCreditsLog.setCreateTime(LocalDateTime.now());
             userCreditsLogService.save(userCreditsLog);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RRException("系统错误");
         }
@@ -204,13 +205,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     }
 
     @Override
-    public R getTodayFundsAndUserData() {
+    public R getTodayFundsAndUserData(Long sysUserId) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("userCount", this.getBaseMapper().selectCount(new QueryWrapper<UserInfo>())); //借用userId取出用户总数
-
-        getFatherIdByToDayAndNewUser(map);
-        getFundingData(map);
-        getCredits(map);
+        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
+        map.put("show", sysUserId == Constant.SUPER_ADMIN);
+        if (sysUserId != Constant.SUPER_ADMIN) {
+            userInfoQueryWrapper.eq("sysUserId", sysUserId);
+        }
+        List<UserInfo> userInfos = this.getBaseMapper().selectList(userInfoQueryWrapper);//借用userId取出用户总数
+        if (userInfos == null) {
+            userInfos = new ArrayList<>();
+        }
+        ArrayList<Integer> userIds = new ArrayList<>();
+        if (sysUserId != Constant.SUPER_ADMIN) {
+//            如果不是系统用户就根据查处的用户id为基础查询
+            for (UserInfo u : userInfos) {
+                userIds.add(u.getUserId());
+            }
+        }
+        map.put("userCount", userInfos.size());
+        getFatherIdByToDayAndNewUser(map, userInfoQueryWrapper);
+        getFundingData(map, userIds);
+        getCredits(map, userIds);
         HashSet userOnlineCount = redisUtils.get(RedisKeys.userOnlineKey, HashSet.class);
         if (userOnlineCount == null) {
             userOnlineCount = new HashSet();
@@ -224,8 +240,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
      *
      * @return
      */
-    private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap) {
-        List<UserInfo> toDayNewUserFatherIds = this.getBaseMapper().selectList(new QueryWrapper<UserInfo>().select("userId", "fatherId").apply("to_days(createTime) = TO_DAYS(now())"));
+    private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap, QueryWrapper<UserInfo> userInfoQueryWrapper) {
+        userInfoQueryWrapper.select("userId", "fatherId").apply("to_days(createTime) = TO_DAYS(now())");
+        List<UserInfo> toDayNewUserFatherIds = this.getBaseMapper().selectList(userInfoQueryWrapper);
         if (toDayNewUserFatherIds.isEmpty()) {
             hashMap.put("todayUserRegCount", 0);
             hashMap.put("firstUserCount", 0);
@@ -261,21 +278,41 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
      * @param hashMap
      * @return
      */
-    private HashMap<String, Long> getFundingData(HashMap hashMap) {
-        UserDeposit userDeposit = userDepositService.getBaseMapper().selectOne(new QueryWrapper<UserDeposit>().select("IFNULL(sum(amount),0) amount").eq(" `status`", 1));
-        UserWithdraw userWithdraw = userWithdrawService.getBaseMapper().selectOne(new QueryWrapper<UserWithdraw>().select("IFNULL(sum(amount),0) amount").eq("`status`", 1));
+    private HashMap<String, Long> getFundingData(HashMap hashMap, ArrayList<Integer> userIds) {
+        QueryWrapper<UserDeposit> depositSumQuery = new QueryWrapper<UserDeposit>().select("IFNULL(sum(amount),0) amount").eq(" `status`", 1);
+        QueryWrapper<UserDeposit> depositSumQueryForMonth = new QueryWrapper<UserDeposit>().select("IFNULL(sum(amount),0) amount").eq(" `status`", 1);
+        QueryWrapper<UserWithdraw> withdrawSumQuery = new QueryWrapper<UserWithdraw>().select("IFNULL(sum(amount),0) amount").eq("`status`", 1);
+        QueryWrapper<UserDeposit> userDepositQueryWrapper = new QueryWrapper<UserDeposit>().select("user_id").eq("`status`", 1);
+        QueryWrapper<UserWithdraw> userWithdrawQueryWrapper = new QueryWrapper<UserWithdraw>().select("user_id").eq("`status`", 1).eq("to_days(create_time)", "TO_DAYS(now())");
+        if (!userIds.isEmpty()) {
+            depositSumQuery.in("user_id", userIds);
+            withdrawSumQuery.in("user_id", userIds);
+            depositSumQueryForMonth.in("user_id", userIds);
+            userDepositQueryWrapper.in("user_id", userIds).groupBy("user_id");
+            userWithdrawQueryWrapper.in("user_id", userIds).groupBy("user_id");
+        }
+        UserDeposit userDeposit = userDepositService.getBaseMapper().selectOne(depositSumQuery);
+        UserWithdraw userWithdraw = userWithdrawService.getBaseMapper().selectOne(withdrawSumQuery);
         hashMap.put("depositSum", userDeposit.getAmount());
         hashMap.put("withdrawSum", userWithdraw.getAmount());
         BigDecimal fundsBalance = userDeposit.getAmount().subtract(userWithdraw.getAmount()); //资金池金额
         hashMap.put("fundsBalance", fundsBalance);
+        depositSumQuery.apply("to_days(create_time) = TO_DAYS(now())");
+        withdrawSumQuery.apply("to_days(create_time) = TO_DAYS(now())");
+        depositSumQueryForMonth.apply(" DATE_FORMAT(NOW(), '%Y%m') = DATE_FORMAT(create_time, '%Y%m')");
 
-        List<Object> toDayDepositSum = userDepositService.getBaseMapper().selectObjs(new QueryWrapper<UserDeposit>().select("IFNULL(sum(amount),0) amount").eq("`status`", 1).apply("to_days(create_time) = TO_DAYS(now())"));
-        List<Object> toDayWithdrawSum = userWithdrawService.getBaseMapper().selectObjs(new QueryWrapper<UserWithdraw>().select("IFNULL(sum(amount),0) amount").eq("`status`", 1).apply("to_days(create_time) = TO_DAYS(now())"));
+        List<Object> toDayDepositSum = userDepositService.getBaseMapper().selectObjs(depositSumQuery);
+        List<Object> theMonthDepositSum = userDepositService.getBaseMapper().selectObjs(depositSumQueryForMonth);
+        List<Object> toDayWithdrawSum = userWithdrawService.getBaseMapper().selectObjs(withdrawSumQuery);
         hashMap.put("toDayDepositSum", toDayDepositSum.get(0)); //今日充值金额
+        hashMap.put("theMonthDepositSum", theMonthDepositSum.get(0)); //当月充值金额
         hashMap.put("toDayWithdrawSum", toDayWithdrawSum.get(0)); //今日提现金额
-        List<Object> depositUserItem = userDepositService.getBaseMapper().selectObjs(new QueryWrapper<UserDeposit>().select("user_id").eq("`status`", 1).groupBy("user_id"));
+        List<Object> depositUserItem = userDepositService.getBaseMapper().selectObjs(userDepositQueryWrapper);
         hashMap.put("depositCount", depositUserItem.size());//总充值用户
-        List<Object> todayDepositUserItem = userDepositService.getBaseMapper().selectObjs(new QueryWrapper<UserDeposit>().select("user_id").eq("`status`", 1).eq("to_days(create_time)", "TO_DAYS(now())").groupBy("user_id"));
+
+
+        userDepositQueryWrapper.eq("to_days(create_time)", "TO_DAYS(now())");
+        List<Object> todayDepositUserItem = userDepositService.getBaseMapper().selectObjs(userDepositQueryWrapper);
         hashMap.put("todayDepositUserCount", todayDepositUserItem.size());//今日新增充值用户
 
         int todayUserDepositFirstUserCount = 0; //今日新增直属用户数量
@@ -295,19 +332,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         }
         hashMap.put("todayUserDepositFirstUserCount", todayUserDepositFirstUserCount);
         hashMap.put("todayUserDepositSplitUserCount", todayUserDepositSplitUserCount);
-        List<Object> todayUserWithdrawItem = userWithdrawService.getBaseMapper().selectObjs(new QueryWrapper<UserWithdraw>().select("user_id").eq("`status`", 1).eq("to_days(create_time)", "TO_DAYS(now())").groupBy("user_id"));
+        List<Object> todayUserWithdrawItem = userWithdrawService.getBaseMapper().selectObjs(userWithdrawQueryWrapper);
         hashMap.put("todayUserWithdrawCount", todayUserWithdrawItem.size());
         return hashMap;
     }
 
-    private HashMap<String, Long> getCredits(HashMap map) {
-        BigDecimal userGetCredits = userCreditsLogService.getBaseMapper().selectOne(new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 1)).getAmount();
-        BigDecimal userExchangeCredits = userCreditsLogService.getBaseMapper().selectOne(new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 2).eq("status",11)).getAmount();
-        BigDecimal RedeemedCredits = userGetCredits.subtract(userExchangeCredits);
-        BigDecimal todayCredits = userCreditsLogService.getBaseMapper().selectOne(new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 1).eq("to_days(createTime)", "TO_DAYS(now())")).getAmount();
-        map.put("userGetCredits", userGetCredits); //用户获取的积分数
-        map.put("userExchangeCredits", userExchangeCredits);//已经兑换总数
-        map.put("RedeemedCredits", RedeemedCredits); //未兑换总数
+    private HashMap<String, Long> getCredits(HashMap map, ArrayList<Integer> userIds) {
+
+        QueryWrapper<UserCreditsLog> userCreditsLogQueryWrapper = new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount").eq("type", 1).in("status", 1, 2, 3, 4, 7, 8, 9, 10, 14);
+        QueryWrapper<UserCreditsLog> userCreditsLogQueryWrapper2 = new QueryWrapper<UserCreditsLog>().select("IFNULL(sum(amount),0) amount");
+        if (!userIds.isEmpty()) {
+            userCreditsLogQueryWrapper.in("userId", userIds);
+            userCreditsLogQueryWrapper2.in("userId", userIds);
+        }
+        BigDecimal userGetCredits = userCreditsLogService.getBaseMapper().selectOne(userCreditsLogQueryWrapper).getAmount();
+        BigDecimal sysOutlay = userCreditsLogService.getBaseMapper().selectOne(userCreditsLogQueryWrapper2).getAmount();
+        BigDecimal remainingCredits = BigDecimal.valueOf(Long.valueOf(sysConfigService.getValue("CREDITS_TOTAL"))).subtract(sysOutlay);//不在系统内的积分，就是还未兑换的积分总数
+
+        userCreditsLogQueryWrapper.eq("to_days(createTime)", "TO_DAYS(now())");
+        BigDecimal todayCredits = userCreditsLogService.getBaseMapper().selectOne(userCreditsLogQueryWrapper).getAmount();
+        map.put("userGetCredits", userGetCredits); //用户自行获得的积分数
+        map.put("sysOutlay", sysOutlay); //系统流出积分总数
+        map.put("remainingCredits", remainingCredits); //未兑换总数
         map.put("todayCredits", todayCredits); //当日获取积分总数
         return map;
     }
@@ -315,7 +361,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     /**
      * 生成8位BB号
      */
-    public static String createBiBiCode(){
+    public static String createBiBiCode() {
         String randomcode = "";
         // 用字符数组的方式随机
         String model = "0123456789";
@@ -325,7 +371,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             randomcode = randomcode + c;
         }
         Integer code = Integer.valueOf(randomcode);
-        if (code<=10000){
+        if (code <= 10000) {
             createBiBiCode();
         }
         return randomcode;
@@ -335,7 +381,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     /**
      * 生成邀请码
      */
-    public static String createInviteCode(){
+    public static String createInviteCode() {
         String randomcode = "";
         // 用字符数组的方式随机
         String model = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -355,9 +401,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     /**
      * 生成邀请码
      */
-    public String createEwm(Integer userId,String userName,String inviteCode) throws Exception {
-        String url = sysConfigService.getValue("BIBIMO_DOMAIN")+"/share/#/pages/tabbar/regist?inviteCode="+inviteCode+"&inviteUserName="+userName+"&userId="+userId;
-        String QRCode =  QRCodeUtils.getQRCode(url);
-        return  QRCode;
+    public String createEwm(Integer userId, String userName, String inviteCode) throws Exception {
+        String url = sysConfigService.getValue("BIBIMO_DOMAIN") + "/share/#/pages/tabbar/regist?inviteCode=" + inviteCode + "&inviteUserName=" + userName + "&userId=" + userId;
+        String QRCode = QRCodeUtils.getQRCode(url);
+        return QRCode;
     }
 }
