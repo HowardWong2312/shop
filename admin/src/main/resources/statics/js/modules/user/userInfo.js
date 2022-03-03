@@ -20,9 +20,9 @@ $(function () {
             { label: '手机号', name: 'searchPhone', index: 'searchPhone', width: 70 },
 
             { label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 50 },
-			{ label: '当前余额', name: 'balance', index: 'balance', width: 40 },
-            { label: '当前积分', name: 'credits', index: 'credits', width: 40 },
-            { label: '用户类型', name: 'isMerchant', index: 'isMerchant', width: 50 ,formatter:function(value){
+			{ label: '余额', name: 'balance', index: 'balance', width: 40 },
+            { label: '积分', name: 'credits', index: 'credits', width: 40 },
+            { label: '类型', name: 'isMerchant', index: 'isMerchant', width: 50 ,formatter:function(value){
                 if(value === 1){
                     return '<span class="label label-primary">认证商家</span>';
                 }else{
@@ -31,7 +31,10 @@ $(function () {
             }},
             { label: '用户等级', name: 'userLevelId', index: 'userLevelId', width: 40 },
             { label: '直属下级', name: 'directCount',  width: 40 },
-            { label: '裂变人数', name: 'fissionCount', width: 40 }
+            { label: '裂变人数', name: 'fissionCount', width: 40 },
+            { label: '商家收入', name: 'merchantIncomeTotal', width: 40 },
+            { label: '累计充值用户', name: 'depositUserNumTotal', width: 40 },
+            { label: '当月充值用户', name: 'depositUserNumCurMonth', width: 40 }
         ],
 		viewrecords: true,
         height: 600,

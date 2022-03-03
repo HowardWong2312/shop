@@ -52,7 +52,8 @@ public enum ResponseStatusEnum {
     EXCHANGE_CLOSED(4001, "积分兑现暂时关闭中"),
     MUST_BE_MORE_THAN_TWENTY(4002, "最少兑换20积分"),
     NEEDS_BIND_BANK(4003, "请先绑定至少一张银行卡"),
-    CANNOT_EXCHANGE(4004, "该用户不符合积分兑现的资格"),
+    CANNOT_EXCHANGE(4004, "您不符合积分兑现的资格"),
+    CANNOT_SELL_CREDITS(4005, "您无法出售积分"),
     CREDITS_SOLD(5001, "购买失败，该积分已卖出"),
     PARAMS_IS_ERROR(502, "params error");
 

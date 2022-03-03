@@ -35,7 +35,7 @@ public class UserDepositController extends AbstractController {
             params.put("sysUserId",getUserId().toString());
         }
         PageUtils page = userDepositService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("totalAmount",userDepositService.queryAmountSumTotal(params));
     }
 
 

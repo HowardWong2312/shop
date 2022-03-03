@@ -34,6 +34,9 @@ $(function () {
             rows:"limit", 
             order: "order"
         },
+        loadComplete: function (data) {
+            vm.totalAmount = data.totalAmount;
+        },
         gridComplete:function(){
         	//隐藏grid底部滚动条
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
@@ -46,6 +49,7 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
+        totalAmount: 0.00,
         statusList: [],
         sysDeptList: [],
         sysUserList: [],

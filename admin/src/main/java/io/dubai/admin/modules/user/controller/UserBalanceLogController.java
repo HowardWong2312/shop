@@ -33,7 +33,7 @@ public class UserBalanceLogController extends AbstractController {
             params.put("sysUserId",getUserId().toString());
         }
         PageUtils page = userBalanceLogService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("totalAmount",userBalanceLogService.queryAmountSumTotal(params));
     }
 
 

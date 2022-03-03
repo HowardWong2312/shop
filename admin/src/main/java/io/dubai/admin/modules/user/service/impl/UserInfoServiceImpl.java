@@ -50,6 +50,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     private UserCreditsLogService userCreditsLogService;
 
     @Resource
+    private UserBalanceLogService userBalanceLogService;
+
+    @Resource
     private SysConfigService sysConfigService;
 
     @Resource
@@ -81,6 +84,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
                 }
             }
             //查电商收入
+            Map<String,Object> map = new HashMap<>();
+            map.put("type",1);
+            map.put("status",5);
+            map.put("userId",s.getUserId());
+            BigDecimal amount = userBalanceLogService.queryAmountSum(map);
+            Integer depositUserNumTotal = userBalanceLogService.queryDepositUserNumByKey(s.getUserId(),false);
+            Integer depositUserNumCurMonth = userBalanceLogService.queryDepositUserNumByKey(s.getUserId(),true);
+            if(amount == null){
+                amount = BigDecimal.ZERO;
+            }
+            s.setDepositUserNumTotal(depositUserNumTotal);
+            s.setDepositUserNumCurMonth(depositUserNumCurMonth);
+            s.setMerchantIncomeTotal(amount);
             s.setDirectCount(directList.size());
             s.setFissionCount(fissionCount);
         });

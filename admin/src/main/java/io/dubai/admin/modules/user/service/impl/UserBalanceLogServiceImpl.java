@@ -10,6 +10,7 @@ import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 
@@ -21,6 +22,21 @@ public class UserBalanceLogServiceImpl extends ServiceImpl<UserBalanceLogDao, Us
         IPage<UserBalanceLogVo> page = new Query<UserBalanceLogVo>().getPage(params);
         page.setRecords(baseMapper.queryPage(page,params));
         return new PageUtils(page);
+    }
+
+    @Override
+    public BigDecimal queryAmountSumTotal(Map<String, Object> params) {
+        return baseMapper.queryAmountSumTotal(params);
+    }
+
+    @Override
+    public BigDecimal queryAmountSum(Map<String, Object> params) {
+        return baseMapper.queryAmountSum(params);
+    }
+
+    @Override
+    public Integer queryDepositUserNumByKey(Integer userId,Boolean isCurMonth) {
+        return baseMapper.queryDepositUserNumByKey(userId,isCurMonth);
     }
 
 }

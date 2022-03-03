@@ -10,6 +10,7 @@ import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.Query;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 
@@ -21,6 +22,11 @@ public class UserDepositServiceImpl extends ServiceImpl<UserDepositDao, UserDepo
         IPage<UserDepositVo> page = new Query<UserDepositVo>().getPage(params);
         page.setRecords(baseMapper.queryPage(page,params));
         return new PageUtils(page);
+    }
+
+    @Override
+    public BigDecimal queryAmountSumTotal(Map<String, Object> params) {
+        return baseMapper.queryAmountSumTotal(params);
     }
 
 }

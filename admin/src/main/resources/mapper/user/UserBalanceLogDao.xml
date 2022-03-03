@@ -39,4 +39,54 @@
         order by a.create_time desc
     </select>
 
+    <select id="queryAmountSumTotal" resultType="java.math.BigDecimal">
+        SELECT
+        sum(a.amount)
+        FROM t_user_balance_log a
+        LEFT JOIN t_user_info u ON (a.user_id=u.userId)
+        left join sys_user su on (su.user_id=u.sysUserId)
+        WHERE 1 = 1
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nickname like '%${params.key}%'
+            or a.user_id=#{params.key}
+            or u.`searchPhone` like '%${params.key}%'
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+        <if test="params.type !=null and params.type !=''">
+            and a.type = #{params.type}
+        </if>
+        <if test="params.sysUserId !=null and params.sysUserId !=''">
+            and u.sysUserId=#{obj.sysUserId}
+        </if>
+        <if test="params.sysDeptId !=null and params.sysDeptId !=''">
+            and su.dept_id=#{params.sysDeptId}
+        </if>
+    </select>
+
+
+    <select id="queryAmountSum" resultType="java.math.BigDecimal">
+        select sum(amount) from t_user_balance_log
+        where user_id=#{params.userId}
+          and `type`=#{params.type}
+          and `status`=#{params.status}
+    </select>
+
+    <select id="queryDepositUserNumByKey" resultType="java.lang.Integer">
+        select count(0) from
+        (
+        select count(0) from t_user_balance_log a
+        left join t_user_info u on(a.user_id = u.userId)
+        where fatherId = #{userId}
+        and a.status = 1
+        <if test="isCurMonth == true">
+            and DATE_FORMAT(a.create_time,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')
+        </if>
+        group by a.user_id
+        ) c
+    </select>
+
 </mapper>

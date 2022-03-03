@@ -39,4 +39,32 @@
         order by a.createTime desc
     </select>
 
+    <select id="queryAmountSumTotal" resultType="java.math.BigDecimal">
+        SELECT
+        sum(a.amount)
+        FROM t_user_credits_log a
+        LEFT JOIN t_user_info u ON (a.userId=u.userId)
+        left join sys_user su on (su.user_id=u.sysUserId)
+        WHERE 1 = 1
+        <if test="params.key !=null and params.key !=''">
+            and (
+            u.nickname like '%${params.key}%'
+            or a.userId=#{params.key}
+            or u.`searchPhone` like '%${params.key}%'
+            )
+        </if>
+        <if test="params.status !=null and params.status !=''">
+            and a.status = #{params.status}
+        </if>
+        <if test="params.type !=null and params.type !=''">
+            and a.type = #{params.type}
+        </if>
+        <if test="params.sysUserId !=null and params.sysUserId !=''">
+            and u.sysUserId=#{params.sysUserId}
+        </if>
+        <if test="params.sysDeptId !=null and params.sysDeptId !=''">
+            and su.dept_id=#{params.sysDeptId}
+        </if>
+    </select>
+
 </mapper>
