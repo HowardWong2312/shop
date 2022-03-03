@@ -266,6 +266,12 @@ public class UserInfo implements Serializable {
 	private String sysDeptName;//部门名称
 
 	@TableField(exist = false)
+	private Integer fissionCount;//裂变人数
+
+	@TableField(exist = false)
+	private Integer directCount;//直属下级
+
+	@TableField(exist = false)
 	private String loginPassword;//登录密码
 
 	@TableField("isMerchant")

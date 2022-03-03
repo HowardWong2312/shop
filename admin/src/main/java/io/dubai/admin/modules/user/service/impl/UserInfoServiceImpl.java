@@ -64,18 +64,26 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<UserInfo> page = new Query<UserInfo>().getPage(params);
-        page.setRecords(baseMapper.queryPage(page, params));
-//        List<UserInfo> directList = userInfoService.list(new QueryWrapper<UserInfo>().eq("fatherId", userInfo.getUserId()));
-//        if (!directList.isEmpty()) {
-//            List<Integer> idList = directList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
-//            List<UserInfo> secondList = userInfoService.list(new QueryWrapper<UserInfo>().in("fatherId", idList));
-//            fissionCount += secondList.size();
-//            if (!secondList.isEmpty()) {
-//                idList = secondList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
-//                List<UserInfo> thirdList = userInfoService.list(new QueryWrapper<UserInfo>().in("fatherId", idList));
-//                fissionCount += thirdList.size();
-//            }
-//        }
+        List<UserInfo> list = baseMapper.queryPage(page, params);
+        list.forEach(s->{
+            //查直属和裂变用户人数
+            int fissionCount = 0;
+            List<UserInfo> directList = baseMapper.selectList(new QueryWrapper<UserInfo>().eq("fatherId", s.getUserId()));
+            if (!directList.isEmpty()) {
+                List<Integer> idList = directList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
+                List<UserInfo> secondList = baseMapper.selectList(new QueryWrapper<UserInfo>().in("fatherId", idList));
+                fissionCount += secondList.size();
+                if (!secondList.isEmpty()) {
+                    idList = secondList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
+                    List<UserInfo> thirdList = baseMapper.selectList(new QueryWrapper<UserInfo>().in("fatherId", idList));
+                    fissionCount += thirdList.size();
+                }
+            }
+            //查电商收入
+            s.setDirectCount(directList.size());
+            s.setFissionCount(fissionCount);
+        });
+        page.setRecords(list);
         return new PageUtils(page);
     }
 

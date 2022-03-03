@@ -11,7 +11,7 @@
             <div class="form-inline">
             <#if shiro.hasPermission("user:userBalanceLog:list")>
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户ID,昵称">
+                    <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户ID,手机号，昵称">
                 </div>
                 <div v-if="sysDeptList!=null && sysDeptList.length > 0" class="form-group">
                     <label class="control-label">部门:</label>

@@ -17,19 +17,21 @@ $(function () {
             { label: '头像', name: 'header', index: 'header', width: 30, formatter: function(value, options, row){
                 return '<img src="'+value+'" style="width:100%" />';
             }},
-            { label: '手机号', name: 'searchPhone', index: 'searchPhone', width: 80 },
+            { label: '手机号', name: 'searchPhone', index: 'searchPhone', width: 70 },
 
-            { label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 70 },
-			{ label: '当前余额', name: 'balance', index: 'balance', width: 60 },
-			{ label: '当前积分', name: 'credits', index: 'credits', width: 60 },
-            { label: '用户类型', name: 'isMerchant', index: 'isMerchant', width: 60 ,formatter:function(value){
+            { label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 50 },
+			{ label: '当前余额', name: 'balance', index: 'balance', width: 40 },
+            { label: '当前积分', name: 'credits', index: 'credits', width: 40 },
+            { label: '用户类型', name: 'isMerchant', index: 'isMerchant', width: 50 ,formatter:function(value){
                 if(value === 1){
                     return '<span class="label label-primary">认证商家</span>';
                 }else{
                     return '<span class="label label-default">未认证</span>';
                 }
             }},
-			{ label: '用户等级', name: 'userLevelId', index: 'userLevelId', width: 50 }
+            { label: '用户等级', name: 'userLevelId', index: 'userLevelId', width: 40 },
+            { label: '直属下级', name: 'directCount',  width: 40 },
+            { label: '裂变人数', name: 'fissionCount', width: 40 }
         ],
 		viewrecords: true,
         height: 600,

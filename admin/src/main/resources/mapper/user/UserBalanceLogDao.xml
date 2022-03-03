@@ -21,6 +21,7 @@
             and (
             u.nickname like '%${params.key}%'
             or a.user_id=#{params.key}
+            or u.`searchPhone` like '%${params.key}%'
             )
         </if>
         <if test="params.status !=null and params.status !=''">

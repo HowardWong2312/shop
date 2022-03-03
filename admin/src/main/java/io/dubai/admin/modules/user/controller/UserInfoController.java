@@ -50,7 +50,6 @@ public class UserInfoController extends AbstractController {
     private UserBalanceLogService userBalanceLogService;
 
 
-
     @GetMapping("/list")
     @RequiresPermissions("user:userInfo:list")
     public R list(@RequestParam Map<String, Object> params) {

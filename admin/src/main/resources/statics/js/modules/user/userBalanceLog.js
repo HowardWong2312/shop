@@ -4,20 +4,20 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-            { label: '部门', name: 'sysDeptName', width: 35 },
-            { label: '代理商', name: 'sysUserName', width: 35 },
-            { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
-            { label: '用户昵称', name: 'userName', width: 50 },
-			{ label: '变动金额', name: 'amount', index: 'amount', width: 80, formatter:function(value){
+            { label: '部门', name: 'sysDeptName', width: 40 },
+            { label: '代理商', name: 'sysUserName', width: 40 },
+            { label: '用户ID', name: 'userId', index: 'user_id', width: 40 },
+            { label: '用户昵称', name: 'userName', width: 60 },
+			{ label: '变动金额', name: 'amount', index: 'amount', width: 50, formatter:function(value){
                 if(value > 0){
                     return '<span class="label label-success">+'+value+'</span>';
                 }else{
                     return '<span class="label label-danger">'+value+'</span>';
                 }
             }},
-			{ label: '变后余额', name: 'balance', index: 'balance', width: 80 },
-            { label: '类型', name: 'statusValue', width: 35},
-            { label: '方向', name: 'type', index: 'type', width: 60 ,formatter:function(value){
+			{ label: '变后余额', name: 'balance', index: 'balance', width: 50 },
+            { label: '类型', name: 'statusValue', width: 50},
+            { label: '方向', name: 'type', index: 'type', width: 50 ,formatter:function(value){
                 if(value === 1){
                     return '<span class="label label-success">收入</span>';
                 }
@@ -26,7 +26,7 @@ $(function () {
                 }
             }},
 			{ label: '记录时间', name: 'createTime', index: 'create_time', width: 80 },
-			{ label: '描述', name: 'desc', index: 'desc', width: 80 },
+			{ label: '描述', name: 'desc', index: 'desc', width: 60 },
         ],
 		viewrecords: true,
         height: 600,
