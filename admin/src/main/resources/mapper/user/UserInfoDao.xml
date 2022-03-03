@@ -19,6 +19,7 @@
             u.userId=#{obj.key}
             or u.bibiCode=#{obj.key}
             or u.`nickName` like '%${obj.key}%'
+            or u.`searchPhone` like '%${obj.searchPhone}%'
             )
         </if>
         <if test="obj.fatherId !=null and obj.fatherId !=''">

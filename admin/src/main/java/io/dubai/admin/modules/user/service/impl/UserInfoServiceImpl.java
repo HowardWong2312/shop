@@ -30,6 +30,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service("userInfoService")
@@ -64,6 +65,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<UserInfo> page = new Query<UserInfo>().getPage(params);
         page.setRecords(baseMapper.queryPage(page, params));
+//        List<UserInfo> directList = userInfoService.list(new QueryWrapper<UserInfo>().eq("fatherId", userInfo.getUserId()));
+//        if (!directList.isEmpty()) {
+//            List<Integer> idList = directList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
+//            List<UserInfo> secondList = userInfoService.list(new QueryWrapper<UserInfo>().in("fatherId", idList));
+//            fissionCount += secondList.size();
+//            if (!secondList.isEmpty()) {
+//                idList = secondList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
+//                List<UserInfo> thirdList = userInfoService.list(new QueryWrapper<UserInfo>().in("fatherId", idList));
+//                fissionCount += thirdList.size();
+//            }
+//        }
         return new PageUtils(page);
     }
 

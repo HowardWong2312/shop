@@ -42,8 +42,10 @@
         a.*,
         sd.value as status_value,
         sd.remark as status_color,
+        p.title as payment_name,
         u.nickname as user_name
         FROM t_user_withdraw a
+        LEFT JOIN shop_payment p ON (a.payment_id=p.id)
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
         left join `sys_dict` sd on(a.status=sd.code and sd.type='user_withdraw_status')
         WHERE a.id=#{id}

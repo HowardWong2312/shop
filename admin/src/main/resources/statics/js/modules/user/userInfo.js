@@ -17,10 +17,9 @@ $(function () {
             { label: '头像', name: 'header', index: 'header', width: 30, formatter: function(value, options, row){
                 return '<img src="'+value+'" style="width:100%" />';
             }},
-            { label: '手机号', width: 80, formatter: function(value, options, row){
-                return '<span>'+row.countryCode+row.phone+'</span>';
-            }},
-			{ label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 70 },
+            { label: '手机号', name: 'searchPhone', index: 'searchPhone', width: 80 },
+
+            { label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 70 },
 			{ label: '当前余额', name: 'balance', index: 'balance', width: 60 },
 			{ label: '当前积分', name: 'credits', index: 'credits', width: 60 },
             { label: '用户类型', name: 'isMerchant', index: 'isMerchant', width: 60 ,formatter:function(value){
@@ -30,8 +29,7 @@ $(function () {
                     return '<span class="label label-default">未认证</span>';
                 }
             }},
-			{ label: '用户等级', name: 'userLevelId', index: 'userLevelId', width: 50 },
-			{ label: '剩余抽奖次数', name: 'lotteryTimes', index: 'lotteryTimes', width: 50 }
+			{ label: '用户等级', name: 'userLevelId', index: 'userLevelId', width: 50 }
         ],
 		viewrecords: true,
         height: 600,
