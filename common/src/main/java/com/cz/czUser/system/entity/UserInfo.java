@@ -269,6 +269,15 @@ public class UserInfo implements Serializable {
 	private Integer fissionCount;//裂变人数
 
 	@TableField(exist = false)
+	private BigDecimal merchantIncomeTotal;//商家累计
+
+	@TableField(exist = false)
+	private Integer depositUserNumCurMonth;//商家累计
+
+	@TableField(exist = false)
+	private Integer depositUserNumTotal;//商家累计
+
+	@TableField(exist = false)
 	private Integer directCount;//直属下级
 
 	@TableField(exist = false)

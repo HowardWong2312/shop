@@ -44,7 +44,7 @@ public class UserWithdrawController extends AbstractController {
         if(getUserId() != Constant.SUPER_ADMIN){
             params.put("sysUserId",getUserId().toString());
         }
-        return R.ok().put("page", userWithdrawService.queryPage(params));
+        return R.ok().put("page", userWithdrawService.queryPage(params)).put("totalAmount",userWithdrawService.queryAmountSumTotal(params));
     }
 
 

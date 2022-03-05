@@ -35,7 +35,7 @@ public class UserCreditsLogController extends AbstractController {
             params.put("sysUserId",getUserId().toString());
         }
         PageUtils page = userCreditsLogService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("totalAmount",userCreditsLogService.queryAmountSumTotal(params));
     }
 
 

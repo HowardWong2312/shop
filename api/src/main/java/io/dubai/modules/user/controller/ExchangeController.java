@@ -150,7 +150,7 @@ public class ExchangeController {
     @Transactional
     public R sell(@RequestBody SellCreditsForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
         if (userInfo.getIsLockCredits().intValue() == 1 || userInfo.getIsMerchant() == 1 || userInfo.getFatherId() == 0) {
-            return R.error(ResponseStatusEnum.CANNOT_EXCHANGE);
+            return R.error(ResponseStatusEnum.CANNOT_SELL_CREDITS);
         }
         if(userInfo.getPassword() == null || "".equalsIgnoreCase(userInfo.getPassword())){
             return R.ok(ResponseStatusEnum.PAY_PASSWORD_NOT_EXIST);

@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.dubai.admin.modules.user.entity.UserCreditsLog;
 import io.dubai.admin.modules.user.entity.vo.UserCreditsLogVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -20,5 +22,7 @@ import java.util.Map;
 public interface UserCreditsLogDao extends BaseMapper<UserCreditsLog> {
 
     List<UserCreditsLogVo> queryPage(IPage page, Map<String, Object> params);
+
+    BigDecimal queryAmountSumTotal(@Param("params") Map<String, Object> params);
 
 }
