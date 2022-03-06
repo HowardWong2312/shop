@@ -37,7 +37,7 @@ function fetchCategory() {
             timeout: 5000,
             data: {
                 "languageId": vm.languages[vm.languageSelected].id,
-                "parentId": 0,
+                // "parentId": 0,
                 "page": 1,
                 "limit": 1000
             },
