@@ -48,7 +48,7 @@
             or m.nickName like '%${query.key}%'
             )
         </if>
-        order by a.order_num desc
+        order by a.order_num desc,m.isMerchant desc
     </select>
 
     <select id="queryInfoByIdAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsVo">
