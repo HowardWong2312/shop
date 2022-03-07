@@ -21,6 +21,8 @@ public enum UserBalanceLogStatusEnum {
     MANUAL_RECHARGE(11, "人工充值"),
     MANUAL_DEDUCTION(12, "人工扣除"),
     CREDITS_SOLD(13, "积分卖出"),
+    WITHDRAW_WAITING(14, "提现审核中"),
+    DEPOSIT_WAITING(15, "充值确认中"),
     OTHER(0, "其它");
 
 
