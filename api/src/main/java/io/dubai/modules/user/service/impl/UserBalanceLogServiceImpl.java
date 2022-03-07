@@ -1,5 +1,6 @@
 package io.dubai.modules.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.dubai.common.enums.LogTypeEnum;
@@ -35,7 +36,7 @@ public class UserBalanceLogServiceImpl extends ServiceImpl<UserBalanceLogDao, Us
         IPage<UserBalanceLog> page = query.getPage();
         List<UserBalanceLog> list = new ArrayList<>();
         List<UserWithdraw> userWithdrawList = userWithdrawService.list(
-                userWithdrawService.query()
+                new QueryWrapper<UserWithdraw>()
                         .eq("user_id",query.getUserId())
                         .eq("status",0)
         );
@@ -49,7 +50,7 @@ public class UserBalanceLogServiceImpl extends ServiceImpl<UserBalanceLogDao, Us
             list.add(log);
         }
         List<UserDeposit> userDepositList = userDepositService.list(
-                userDepositService.query()
+                new QueryWrapper<UserDeposit>()
                         .eq("user_id",query.getUserId())
                         .eq("status",0)
         );
