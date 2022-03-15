@@ -267,6 +267,38 @@ public class HttpUtils extends Thread{
         return null;
     }
 
+    public static String sendPostXml(String sendUrl, String data) throws IOException {
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost post = new HttpPost(sendUrl);
+        StringEntity myEntity = new StringEntity(data, ContentType.APPLICATION_XML);// 构造请求数据
+        post.setEntity(myEntity);// 设置请求体
+        CloseableHttpResponse response = null;
+        try {
+            response = client.execute(post);
+            if (response.getEntity() != null) {
+                HttpEntity entity = response.getEntity();
+                return EntityUtils.toString(entity, "UTF-8");
+            }
+        } finally {
+            try {
+                if (response != null) {
+                    response.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (client != null)
+                        client.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+
     public static String sendPostData(String url, String authorization, Map<String, String> data) {
         try {
             // 创建HttpClientBuilder

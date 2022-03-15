@@ -55,19 +55,21 @@ public class Utils {
      * 转为XML格式
      */
     public static String ArrayToXml(Map<String, String> arr) {
-        String xml = "<xml>";
+        StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        xml.append("<SubmitSMSRequest xmlns=\"http://www.edafa.com/web2sms/sms/model/\">");
         Iterator<Map.Entry<String, String>> iter = arr.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, String> entry = iter.next();
             String key = entry.getKey();
             String val = entry.getValue();
             if (IsNumeric(val)) {
-                xml += "<" + key + "><![CDATA[" + val + "]]></" + key + ">";
+                xml.append( "<" + key + "><![CDATA[" + val + "]]></" + key + ">");
             } else
-                xml += "<" + key + "><![CDATA[" + val + "]]></" + key + ">";
+                xml.append("<" + key + "><![CDATA[" + val + "]]></" + key + ">");
         }
-        xml += "</xml>";
-        return xml;
+        xml.append("</xml>");
+        return xml.toString();
     }
 
 
