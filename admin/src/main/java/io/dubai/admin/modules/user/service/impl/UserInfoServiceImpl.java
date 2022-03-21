@@ -327,7 +327,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         hashMap.put("depositCount", depositUserItem.size());//总充值用户
 
 
-        userDepositQueryWrapper.eq("to_days(create_time)", "TO_DAYS(now())");
+        userDepositQueryWrapper.apply("to_days(create_time) = TO_DAYS(now())");
         List<Object> todayDepositUserItem = userDepositService.getBaseMapper().selectObjs(userDepositQueryWrapper);
         hashMap.put("todayDepositUserCount", todayDepositUserItem.size());//今日新增充值用户
 
