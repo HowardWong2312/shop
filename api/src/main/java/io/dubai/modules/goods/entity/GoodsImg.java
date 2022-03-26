@@ -41,12 +41,12 @@ public class GoodsImg implements Serializable {
     private Long languageId;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "最后修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.UPDATE)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDateTime updateTime;

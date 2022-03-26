@@ -38,6 +38,7 @@
         <if test="params.status !=null and params.status !=''">
             and a.status = #{params.status}
         </if>
+        order by a.create_time desc
     </select>
 
     <select id="queryById" resultType="io.dubai.admin.modules.goods.entity.vo.ShopGoodsOrderVo">

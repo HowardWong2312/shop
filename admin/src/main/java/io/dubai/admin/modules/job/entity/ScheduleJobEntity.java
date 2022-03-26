@@ -60,7 +60,7 @@ public class ScheduleJobEntity implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     private Date createTime;
 
     public static long getSerialVersionUID() {

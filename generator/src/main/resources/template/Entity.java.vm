@@ -37,10 +37,10 @@ public class ${className} implements Serializable {
 	@TableId
 	#end
 	#if($column.attrType == 'Timestamp' || $column.attrType == 'LocalDateTime')
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
 	#end
 	#if($column.attrType == 'LocalDate')
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+2")
 	#end
 	#if($column.attrname == 'createTime' || $column.attrname == 'isDel' || $column.attrname == 'version')
 	@TableField(fill = FieldFill.INSERT)

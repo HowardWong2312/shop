@@ -32,7 +32,7 @@ public class ShopGoodsRush implements Serializable {
     private Integer quantity;
 
     //到期时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     private LocalDateTime expireTime;
 
     //状态(0,待审核,1:审核成功,2:审核失败)
@@ -44,12 +44,12 @@ public class ShopGoodsRush implements Serializable {
     private Integer version;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 

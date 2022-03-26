@@ -15,6 +15,8 @@ import io.dubai.common.utils.HttpUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.utils.StringUtils;
 import io.dubai.common.utils.Utils;
+import io.dubai.modules.goods.entity.GoodsOrder;
+import io.dubai.modules.goods.service.GoodsOrderService;
 import io.dubai.modules.other.entity.Payment;
 import io.dubai.modules.other.service.PaymentService;
 import io.dubai.modules.user.entity.*;
@@ -71,6 +73,9 @@ public class WalletController {
     private UserBankService userBankService;
 
     @Resource
+    private GoodsOrderService goodsOrderService;
+
+    @Resource
     private SysConfigService sysConfigService;
 
 
@@ -82,7 +87,8 @@ public class WalletController {
         if (income == null) {
             income = BigDecimal.ZERO;
         }
-        return R.ok().put("income", income);
+        BigDecimal pendingAmount = goodsOrderService.querySumPendingAmountByMerchantId(userInfo.getUserId());
+        return R.ok().put("income", income).put("pendingIncome",pendingAmount);
     }
 
     @Login

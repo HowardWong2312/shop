@@ -10,6 +10,9 @@ public enum ResponseStatusEnum {
 
     SUCCESS(200, "SUCCESS"),
     SYSTEM_ERROR(500, "something went wrong"),
+    FAILED_SEND_SMS_CODE(601, "短信发送失败"),
+    PLZ_ENTER_SMS_CODE(602, "请填写短信验证码"),
+    WRONG_SMS_CODE(603, "验证码错误"),
     PAYMENT_UNAVAILABLE(701, "此支付方式不可用，请稍后再试"),
     PLZ_CHOOSE_IMAGE(801, "请选择一张图片"),
     NOT_LOGO_IMG(901, "请上传LOGO"),

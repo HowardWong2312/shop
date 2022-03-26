@@ -37,20 +37,23 @@ public class UserCreditsLog implements Serializable {
     private BigDecimal balance;
 
     //
+    @TableField("`status`")
     private Integer status;
 
     //1收入，2支出
+    @TableField("`type`")
     private Integer type;
 
     //
+    @TableField("`desc`")
     private String desc;
 
     @TableField(value = "createTime",fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     private LocalDateTime createTime;
 
     @TableField(value = "updateTime",fill = FieldFill.UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     private LocalDateTime updateTime;
 
 

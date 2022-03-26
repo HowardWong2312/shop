@@ -76,6 +76,8 @@ var vm = new Vue({
 	methods: {
         query: function () {
             vm.showList = true;
+            vm.q.beginTime = $("#beginTime").val();
+            vm.q.endTime = $("#endTime").val();
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
@@ -83,6 +85,8 @@ var vm = new Vue({
                     "type":vm.q.type,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
+                    "beginTime":vm.q.beginTime,
+                    "endTime":vm.q.endTime
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -181,6 +185,8 @@ var vm = new Vue({
         },
 		reload: function (event) {
 			vm.showList = true;
+            vm.q.beginTime = $("#beginTime").val();
+            vm.q.endTime = $("#endTime").val();
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
@@ -189,6 +195,8 @@ var vm = new Vue({
                     "type":vm.q.type,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
+                    "beginTime":vm.q.beginTime,
+                    "endTime":vm.q.endTime
                 },
                 page:page
             }).trigger("reloadGrid");

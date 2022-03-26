@@ -67,12 +67,16 @@ var vm = new Vue({
 	methods: {
         query: function () {
             vm.showList = true;
+            vm.q.beginTime = $("#beginTime").val();
+            vm.q.endTime = $("#endTime").val();
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
                     "status":vm.q.status,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
+                    "beginTime":vm.q.beginTime,
+                    "endTime":vm.q.endTime
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -95,7 +99,7 @@ var vm = new Vue({
         },
         subCheck: function (title) {
             let lock = false;
-            layer.confirm('确定要对该活动申请执行 '+title+' 操作？', {
+            layer.confirm('确定要 '+title+' 该提现申请吗？', {
                 btn: ['确定','取消'] //按钮
             }, function(){
                 if(!lock) {
@@ -176,12 +180,16 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
+            vm.q.beginTime = $("#beginTime").val();
+            vm.q.endTime = $("#endTime").val();
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                     "key":vm.q.key,
                     "status":vm.q.status,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
+                    "beginTime":vm.q.beginTime,
+                    "endTime":vm.q.endTime
                 },
                 page:page
             }).trigger("reloadGrid");

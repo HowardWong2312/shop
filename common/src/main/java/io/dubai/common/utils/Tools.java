@@ -2,6 +2,7 @@ package io.dubai.common.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,10 @@ import org.slf4j.LoggerFactory;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -196,5 +200,27 @@ public class Tools {
         return sb.toString().toUpperCase();
 
     }
+
+    /***
+     * 利用Apache的工具类实现SHA-256加密
+     * @param str 加密后的报文
+     * @return
+     */
+    public static String getSHA256Str(String str){
+        MessageDigest messageDigest;
+        String encdeStr = "";
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = messageDigest.digest(str.getBytes("UTF-8"));
+            encdeStr = Hex.encodeHexString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encdeStr;
+    }
+
+
 
 }

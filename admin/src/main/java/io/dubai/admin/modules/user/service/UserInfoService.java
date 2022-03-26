@@ -19,8 +19,6 @@ public interface UserInfoService extends IService<UserInfo> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    UserInfo insert(UserInfo userInfo);
-
     UserInfo update(UserInfo userInfo);
 
     UserInfo save(UserInfoForm form);

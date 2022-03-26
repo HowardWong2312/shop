@@ -41,10 +41,23 @@ public class UserWithdraw implements Serializable {
     //提现金额
     private BigDecimal amount;
 
+    //实际打款金额
+    private BigDecimal realAmount;
+
+    //手续费
+    private BigDecimal fee;
+
+    //税
+    private BigDecimal tax;
+
+    //佣金扣除
+    private BigDecimal rebate;
+
     //拒绝原因
     private String remark;
 
     //0:等待审核,1:审核成功,2:审核失败
+    @TableField("`status`")
     private Integer status;
 
     //
@@ -58,12 +71,12 @@ public class UserWithdraw implements Serializable {
     private Integer version;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 

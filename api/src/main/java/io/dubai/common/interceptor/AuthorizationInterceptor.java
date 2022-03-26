@@ -31,6 +31,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Resource
     private RedisUtils redisUtils;
 
+    @Resource
+    private UserInfoService userInfoService;
+
     public static final String TOKEN_KEY = "Authorization";
     public static final String LANG = "lang";
 
@@ -85,6 +88,10 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         UserInfo userInfo = redisUtils.get(RedisKeys.userInfoKey + token, UserInfo.class);
         if (null == userInfo) {
             return;
+        }
+        if(userInfo.getIsLogged() == null || userInfo.getIsLogged() == 0){
+            userInfo.setIsLogged(1);
+            userInfoService.update(userInfo);
         }
         Calendar c = Calendar.getInstance();
         long now = c.getTimeInMillis();

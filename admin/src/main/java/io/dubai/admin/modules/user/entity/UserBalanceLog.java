@@ -36,21 +36,24 @@ public class UserBalanceLog implements Serializable {
     private BigDecimal balance;
 
     //
+    @TableField("`status`")
     private Integer status;
 
     //1收入，2支出
+    @TableField("`type`")
     private Integer type;
 
     //
+    @TableField("`desc`")
     private String desc;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 

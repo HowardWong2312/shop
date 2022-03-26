@@ -236,6 +236,9 @@ public class GoodsController {
         }
         BigDecimal amount = goods.getPrice().multiply(BigDecimal.valueOf(form.getQuantity()));
         UserAddress userAddress = userAddressService.getById(form.getUserAddressId());
+        if(userAddress == null){
+            return R.ok(ResponseStatusEnum.PARAMS_IS_ERROR);
+        }
         //创建订单
         GoodsOrder goodsOrder = new GoodsOrder();
         goodsOrder.setReceiverName(userAddress.getName());
@@ -313,9 +316,6 @@ public class GoodsController {
         if(tempOrder != null){
             return R.ok(ResponseStatusEnum.ONLY_CAN_BUY_ONE);
         }
-        if(goods.getStock() < 1){
-            throw new RRException(ResponseStatusEnum.GOODS_STOCK_NOT_ENOUGH);
-        }
         if(userInfo.getPassword() == null || "".equalsIgnoreCase(userInfo.getPassword())){
             return R.ok(ResponseStatusEnum.PAY_PASSWORD_NOT_EXIST);
         }
@@ -342,7 +342,6 @@ public class GoodsController {
             goods.setIsOneBuy(0);
         }
         goodsOneBuyService.updateById(goodsOneBuy);
-        goods.setStock(goods.getStock()-1);
         goodsService.updateById(goods);
         UserAddress userAddress = userAddressService.getById(form.getUserAddressId());
         //创建订单
@@ -451,6 +450,7 @@ public class GoodsController {
         goods.setStock(form.getStock());
         goods.setPhone(form.getPhone());
         goods.setAddress(form.getAddress());
+        goods.setDescription(form.getDescription());
         if(userInfo.getIsMerchant() != 1){
             goods.setLinkUrl(form.getLinkUrl());
         }else{
@@ -679,11 +679,16 @@ public class GoodsController {
     public R cancelOneBuy(@PathVariable("goodsId") Long goodsId) {
         Goods goods = goodsService.getById(goodsId);
         goods.setIsOneBuy(0);
-        goodsService.updateById(goods);
-        goodsOneBuyService.update(new UpdateWrapper<GoodsOneBuy>()
-                .eq("goods_id",goodsId)
-                .set("status",3)
+        GoodsOneBuy goodsOneBuy = goodsOneBuyService.getOne(
+                new QueryWrapper<GoodsOneBuy>()
+                        .eq("goods_id",goodsId)
+                        .ne("status",3)
+                        .last("limit 1")
         );
+        goodsOneBuy.setStatus(3);
+        goodsOneBuyService.updateById(goodsOneBuy);
+        goods.setStock(goods.getStock()+goodsOneBuy.getQuantity());
+        goodsService.updateById(goods);
         return R.ok();
     }
 

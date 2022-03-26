@@ -18,9 +18,16 @@ public class RedisKeys {
 
     public static final String citiesKey = "cities";
 
+    public static final String smsCodeKey = "sms:";
+
+    public static final String sysConfigKey = "sys:config:";
+
+    public static String getSmsCodeKey(String key) {
+        return smsCodeKey + key;
+    }
 
     public static String getSysConfigKey(String key) {
-        return "sys:config:" + key;
+        return sysConfigKey + key;
     }
 
 }

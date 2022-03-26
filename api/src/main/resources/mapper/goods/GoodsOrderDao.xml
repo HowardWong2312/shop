@@ -43,6 +43,19 @@
         left join shop_payment p on(a.payment_id=p.id)
         left join shop_payment_lang pl on(p.id=pl.payment_id)
         where a.order_code = #{orderCode}
+        limit 1
+    </select>
+
+    <select id="querySumPendingAmountByMerchantId" resultType="java.math.BigDecimal">
+        select sum(a.amount) from shop_goods_order a
+        left join shop_goods b on(a.goods_id=b.id)
+        where b.user_id=#{merchantId} and a.`status`=4
+    </select>
+
+    <select id="queryPendingOrderListByMerchantId" resultType="io.dubai.modules.goods.entity.GoodsOrder">
+        select a.* from shop_goods_order a
+        left join shop_goods b on(a.goods_id=b.id)
+        where b.user_id=#{merchantId} and a.`status`=4
     </select>
 
     <select id="queryByOrderCodeAndLanguageId" resultType="io.dubai.modules.goods.entity.vo.GoodsOrderVo">

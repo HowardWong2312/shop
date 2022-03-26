@@ -54,11 +54,11 @@ public class UserLevel implements Serializable {
     private Integer totalVideoNum;
 
     @TableField("createTime")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     private LocalDateTime createTime;
 
     //
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 

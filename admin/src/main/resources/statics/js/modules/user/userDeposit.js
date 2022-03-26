@@ -9,7 +9,7 @@ $(function () {
             { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
 			{ label: '用户名称', name: 'userName', width: 80 },
 			{ label: '支付方式', name: 'paymentName', index: 'payment_id', width: 80 },
-			{ label: '提现金额', name: 'amount', index: 'amount', width: 80 }, 
+			{ label: '充值金额', name: 'amount', index: 'amount', width: 80 },
             { label: '状态', name: 'status', index: 'status', width: 80, formatter:function(value, options, row){
                     return '<span class="label ' + row.statusColor + '">' + row.statusValue + '</span>';
             }},
@@ -63,12 +63,17 @@ var vm = new Vue({
 	methods: {
         query: function () {
             vm.showList = true;
+            vm.q.beginTime = $("#beginTime").val();
+            vm.q.endTime = $("#endTime").val();
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{
+                    "orderCode":vm.q.orderCode,
                     "key":vm.q.key,
                     "status":vm.q.status,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
+                    "beginTime":vm.q.beginTime,
+                    "endTime":vm.q.endTime
                 },
                 page:1
             }).trigger("reloadGrid");
@@ -168,12 +173,17 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
+            vm.q.beginTime = $("#beginTime").val();
+            vm.q.endTime = $("#endTime").val();
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
+                    "orderCode":vm.q.orderCode,
                     "key":vm.q.key,
                     "status":vm.q.status,
                     "sysDeptId":vm.q.sysDeptId,
                     "sysUserId":vm.q.sysUserId,
+                    "beginTime":vm.q.beginTime,
+                    "endTime":vm.q.endTime
                 },
                 page:page
             }).trigger("reloadGrid");

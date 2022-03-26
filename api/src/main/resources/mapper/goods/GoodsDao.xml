@@ -27,7 +27,7 @@
             </foreach>
         </if>
         <if test="query.categoryIds == null and query.key == null">
-            and (a.is_group = 1 or a.is_rush = 1 or a.is_one_buy = 1)
+            and a.is_group = 1
         </if>
         <if test="query.isGroup != null">
             and a.is_group=#{query.isGroup}

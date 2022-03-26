@@ -12,7 +12,10 @@ springfox:
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: dev
+    active: prod
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+2
   servlet:
     multipart:
       max-file-size: 100MB

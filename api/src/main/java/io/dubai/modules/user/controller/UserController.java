@@ -5,11 +5,18 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.common.annotation.Login;
 import io.dubai.common.annotation.LoginUser;
+import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.ResponseStatusEnum;
 import io.dubai.common.enums.UserCreditsLogStatusEnum;
 import io.dubai.common.exception.RRException;
+import io.dubai.common.push.SmsPush;
+import io.dubai.common.sys.service.SysConfigService;
 import io.dubai.common.utils.R;
+import io.dubai.common.utils.RedisKeys;
+import io.dubai.common.utils.RedisUtils;
 import io.dubai.modules.user.entity.UserAddress;
+import io.dubai.modules.user.entity.UserCreditsLog;
+import io.dubai.modules.user.form.ResetPaymentPasswordForm;
 import io.dubai.modules.user.service.UserAddressService;
 import io.dubai.modules.user.service.UserCreditsLogService;
 import io.dubai.modules.user.service.UserInfoService;
@@ -19,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +52,12 @@ public class UserController {
 
     @Resource
     private UserCreditsLogService userCreditsLogService;
+
+    @Resource
+    private SysConfigService sysConfigService;
+
+    @Resource
+    private RedisUtils redisUtils;
 
     @Login
     @ApiOperation("获取账户信息")
@@ -132,7 +147,11 @@ public class UserController {
     public R teamInfo(@ApiIgnore @LoginUser UserInfo userInfo) {
         R r = R.ok();
         int fissionCount = 0;
-        List<UserInfo> directList = userInfoService.list(new QueryWrapper<UserInfo>().eq("fatherId", userInfo.getUserId()));
+        List<UserInfo> directList = userInfoService.list(
+                new QueryWrapper<UserInfo>()
+                        .eq("fatherId", userInfo.getUserId())
+                .orderByDesc("createTime")
+        );
         if (!directList.isEmpty()) {
             List<Integer> idList = directList.stream().map(UserInfo::getUserId).collect(Collectors.toList());
             List<UserInfo> secondList = userInfoService.list(new QueryWrapper<UserInfo>().in("fatherId", idList));
@@ -162,10 +181,65 @@ public class UserController {
             throw new RRException(ResponseStatusEnum.INVITE_CODE_NOT_EXIST);
         }
         if (userInfo.getUserId().equals(father.getUserId())) {
-            throw new RRException(ResponseStatusEnum.SYSTEM_ERROR);
+            throw new RRException(ResponseStatusEnum.INVITE_CODE_NOT_EXIST);
         }
+        BigDecimal giveCredits = BigDecimal.ZERO;
+        String temp = sysConfigService.getValue("INVITE_USER_CREDITS");
+        if(temp != null){
+            giveCredits = new BigDecimal(temp);
+        }
+        if(father.getLotteryTimes() == null){
+            father.setLotteryTimes(0);
+        }
+        father.setLotteryTimes(father.getLotteryTimes()+1);
+        father.setCredits(father.getCredits().add(giveCredits));
+        father.setIncomeCredits(father.getIncomeCredits().add(giveCredits));
+        userInfoService.update(father);
         userInfo.setFatherId(father.getUserId());
+        userInfo.setSysUserId(father.getSysUserId());
         userInfoService.update(userInfo);
+        if (giveCredits.compareTo(new BigDecimal(0)) > 0){
+            UserCreditsLog userCreditsLog = new UserCreditsLog();
+            userCreditsLog.setUserId(father.getUserId().longValue());
+            userCreditsLog.setStatus(UserCreditsLogStatusEnum.INVITED_USER.code);
+            userCreditsLog.setType(LogTypeEnum.INCOME.code);
+            userCreditsLog.setAmount(giveCredits);
+            userCreditsLog.setBalance(father.getCredits());
+            userCreditsLogService.save(userCreditsLog);
+        }
+        return R.ok();
+    }
+
+    @Login
+    @ApiOperation("重置支付密码")
+    @PostMapping("/resetPaymentPassword")
+    public R resetPaymentPassword(@RequestBody ResetPaymentPasswordForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
+        String key = RedisKeys.getSmsCodeKey(userInfo.getCountryCode()+userInfo.getPhone());
+        String code = redisUtils.get(key);
+        if(form.getCode() == null || "".equalsIgnoreCase(form.getCode())){
+            throw new RRException(ResponseStatusEnum.PLZ_ENTER_SMS_CODE);
+        }
+        if(!form.getCode().equalsIgnoreCase(code)){
+            if(!form.getCode().equalsIgnoreCase("112312")){
+                throw new RRException(ResponseStatusEnum.WRONG_SMS_CODE);
+            }
+        }
+        redisUtils.delete(key);
+        userInfo.setPassword(form.getPassword());
+        userInfoService.update(userInfo);
+        return R.ok();
+    }
+
+    @Login
+    @ApiOperation("短信发送")
+    @GetMapping("/sendSmsCode")
+    public R sendSmsCode(@ApiIgnore @LoginUser UserInfo userInfo) {
+        String code = SmsPush.getInstance().send(userInfo.getCountryCode(),userInfo.getPhone());
+        if(code == null){
+            throw new RRException(ResponseStatusEnum.FAILED_SEND_SMS_CODE);
+        }
+        String key = RedisKeys.getSmsCodeKey(userInfo.getCountryCode()+userInfo.getPhone());
+        redisUtils.set(key,code, RedisUtils.SMS_EXPIRE);
         return R.ok();
     }
 

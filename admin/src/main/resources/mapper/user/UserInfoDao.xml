@@ -18,12 +18,17 @@
             and (
             u.userId=#{obj.key}
             or u.bibiCode=#{obj.key}
-            or u.`nickName` like '%${obj.key}%'
-            or u.`searchPhone` like '%${obj.key}%'
+            or u.phone=#{obj.key}
+            or u.searchPhone=#{obj.key}
             )
         </if>
-        <if test="obj.fatherId !=null and obj.fatherId !=''">
-            and u.fatherId = #{obj.fatherId}
+        <if test="obj.fatherKey !=null and obj.fatherKey !=''">
+            and (
+            f.userId=#{obj.fatherKey}
+            or f.bibiCode=#{obj.fatherKey}
+            or f.phone=#{obj.fatherKey}
+            or f.searchPhone=#{obj.fatherKey}
+            )
         </if>
         <if test="obj.isMerchant !=null and obj.isMerchant !=''">
             and u.`isMerchant`=#{obj.isMerchant}
@@ -31,11 +36,20 @@
         <if test="obj.userLevelId !=null and obj.userLevelId !=''">
             and u.userLevelId=#{obj.userLevelId}
         </if>
+        <if test="obj.isLogged !=null and obj.isLogged !=''">
+            and u.isLogged=#{obj.isLogged}
+        </if>
         <if test="obj.sysUserId !=null and obj.sysUserId !=''">
             and u.sysUserId=#{obj.sysUserId}
         </if>
         <if test="obj.sysDeptId !=null and obj.sysDeptId !=''">
             and su.dept_id=#{obj.sysDeptId}
+        </if>
+        <if test="obj.beginTime !=null and obj.beginTime !=''">
+            <![CDATA[ and u.createTime >= timestamp(#{obj.beginTime})]]>
+        </if>
+        <if test="obj.endTime !=null and obj.endTime !=''">
+            <![CDATA[ and u.createTime <= timestamp(#{obj.endTime})]]>
         </if>
         order by u.createTime desc
     </select>

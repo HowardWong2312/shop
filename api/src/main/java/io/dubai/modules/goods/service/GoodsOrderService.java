@@ -6,6 +6,7 @@ import io.dubai.modules.goods.entity.GoodsOrder;
 import io.dubai.modules.goods.entity.vo.GoodsOrderVo;
 import io.dubai.modules.goods.query.GoodsOrderQuery;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,10 @@ public interface GoodsOrderService extends IService<GoodsOrder> {
     PageUtils queryPage(GoodsOrderQuery query);
 
     PageUtils queryPageForMerchant(GoodsOrderQuery query);
+
+    BigDecimal querySumPendingAmountByMerchantId(Integer merchantId);
+
+    List<GoodsOrder> queryPendingOrderListByMerchantId(Integer merchantId);
 
     GoodsOrderVo queryByOrderCodeAndLanguageId(String orderCode, String languageId);
 

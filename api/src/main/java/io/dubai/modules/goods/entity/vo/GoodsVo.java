@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -52,6 +53,9 @@ public class GoodsVo extends Goods implements Serializable {
 
     @ApiModelProperty(value = "拼团详情")
     private GoodsGroup goodsGroup;
+
+    @ApiModelProperty(value = "拼团价格")
+    private BigDecimal goodsGroupPrice;
 
     @ApiModelProperty(value = "一元购详情")
     private GoodsOneBuy goodsOneBuy;

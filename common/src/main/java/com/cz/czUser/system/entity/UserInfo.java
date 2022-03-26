@@ -293,6 +293,9 @@ public class UserInfo implements Serializable {
 	@TableField("userLevelId")
 	private Long userLevelId;//用户等级
 
+	@TableField("isLogged")
+	private Integer isLogged;//是否登录过
+
 	@TableField("lotteryTimes")
 	private Integer lotteryTimes;//免费抽奖次数
 

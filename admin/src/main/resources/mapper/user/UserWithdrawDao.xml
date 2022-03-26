@@ -21,9 +21,10 @@
         WHERE 1 = 1 and a.is_del=0
         <if test="params.key !=null and params.key !=''">
             and (
-            u.nickname like '%${params.key}%'
-            or a.user_id=#{params.key}
-            or u.`searchPhone` like '%${params.key}%'
+            u.userId=#{params.key}
+            or u.bibiCode=#{params.key}
+            or u.phone=#{params.key}
+            or u.searchPhone=#{params.key}
             )
         </if>
         <if test="params.status !=null and params.status !=''">
@@ -34,6 +35,12 @@
         </if>
         <if test="params.sysDeptId !=null and params.sysDeptId !=''">
             and su.dept_id=#{params.sysDeptId}
+        </if>
+        <if test="params.beginTime !=null and params.beginTime !=''">
+            <![CDATA[ and a.create_time >= timestamp(#{params.beginTime})]]>
+        </if>
+        <if test="params.endTime !=null and params.endTime !=''">
+            <![CDATA[ and a.create_time <= timestamp(#{params.endTime})]]>
         </if>
         order by a.create_time desc
     </select>
@@ -47,9 +54,10 @@
         WHERE 1 = 1 and a.is_del=0
         <if test="params.key !=null and params.key !=''">
             and (
-            u.nickname like '%${params.key}%'
-            or a.user_id=#{params.key}
-            or u.`searchPhone` like '%${params.key}%'
+            u.userId=#{params.key}
+            or u.bibiCode=#{params.key}
+            or u.phone=#{params.key}
+            or u.searchPhone=#{params.key}
             )
         </if>
         <if test="params.status !=null and params.status !=''">
@@ -63,6 +71,12 @@
         </if>
         <if test="params.sysDeptId !=null and params.sysDeptId !=''">
             and su.dept_id=#{params.sysDeptId}
+        </if>
+        <if test="params.beginTime !=null and params.beginTime !=''">
+            <![CDATA[ and a.create_time >= timestamp(#{params.beginTime})]]>
+        </if>
+        <if test="params.endTime !=null and params.endTime !=''">
+            <![CDATA[ and a.create_time <= timestamp(#{params.endTime})]]>
         </if>
     </select>
 

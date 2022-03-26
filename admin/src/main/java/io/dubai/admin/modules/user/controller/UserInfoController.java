@@ -129,6 +129,7 @@ public class UserInfoController extends AbstractController {
                             .eq("user_id", userInfo.getUserId())
             );
         }
+        userInfo.setSearchPhone(userInfo.getCountryCode()+userInfo.getPhone());
         userInfoService.update(userInfo);
         return R.ok();
     }

@@ -4,8 +4,10 @@ import com.cz.czUser.system.entity.UserInfo;
 import io.dubai.common.easemob.api.IMessageService;
 import io.dubai.common.enums.LogTypeEnum;
 import io.dubai.common.enums.UserBalanceLogStatusEnum;
+import io.dubai.common.utils.HttpUtils;
 import io.dubai.common.utils.R;
 import io.dubai.common.utils.StringUtils;
+import io.dubai.common.utils.Tools;
 import io.dubai.modules.other.entity.Msg;
 import io.dubai.modules.user.entity.UserBalanceLog;
 import io.dubai.modules.user.entity.UserDeposit;
@@ -15,6 +17,7 @@ import io.dubai.modules.user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,7 +87,31 @@ public class ApiController {
             userBalanceLog.setAmount(deposit.getAmount());
             userBalanceLog.setUserId(userInfo.getUserId().longValue());
             userBalanceLog.setStatus(UserBalanceLogStatusEnum.BALANCE_RECHARGE.code);
+            userBalanceLog.setDesc(memberOrderCode);
             userBalanceLogService.save(userBalanceLog);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return "SUCCESS";
+    }
+
+    @ApiOperation("接受支付回调")
+    @PostMapping("/fawryBack")
+    public String fawryBack() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
+            String str;
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            log.warn("收到回调-->{}", sb);
+            JSONObject json = JSONObject.fromObject(sb.toString());
+            log.warn("---------");
+            log.warn("---------");
+            log.warn("---------");
+            log.warn("json->{}",json.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
@@ -108,6 +135,47 @@ public class ApiController {
             }
         }
         return R.ok();
+    }
+
+    public static void main(String[] args) throws Exception {
+        String url = "https://atfawry.fawrystaging.com/ECommerceWeb/Fawry/payments/charge";
+        String key = "8523a706-70f9-45eb-b3d2-7444bdb37038";
+        String merchantCode = "siYxylRjSPx/VJDH8ZTDCQ==";
+        String merchantRefNum = "20220323001";
+        String customerProfileId = "1111";
+        String paymentMethod = "CARD";
+        String amount = "10";
+        String cardNumber = "4242424242424242";
+        String cardExpiryMonth = "05";
+        String cardExpiryYear = "25";
+        String cvv = "123";
+        JSONObject chargeItems = new JSONObject();
+        chargeItems.put("itemId","apple1");
+        chargeItems.put("description","an apple");
+        chargeItems.put("price","10");
+        chargeItems.put("quantity","1");
+        JSONObject data = new JSONObject();
+        data.put("merchantCode",merchantCode);
+        data.put("merchantRefNum",merchantRefNum);
+        data.put("customerName","jin chao");
+        data.put("customerMobile","01229373763");
+        data.put("customerEmail","zhaoyunjava2@gmail.com");
+        data.put("customerProfileId",customerProfileId);
+        data.put("cardNumber",cardNumber);
+        data.put("cardExpiryYear",cardExpiryYear);
+        data.put("cardExpiryMonth",cardExpiryMonth);
+        data.put("cvv",cvv);
+        data.put("amount",amount);
+        data.put("currencyCode","EGP");
+        data.put("language","en-gb");
+        data.put("chargeItems",chargeItems);
+        data.put("paymentMethod",paymentMethod);
+        data.put("description","test pay");
+        String str = merchantCode+merchantRefNum+customerProfileId+paymentMethod+cardNumber+cardExpiryYear+cardExpiryMonth+cvv+key;
+        data.put("signature", Tools.getSHA256Str(str));
+        System.out.println(data.getString("signature"));
+        String result = HttpUtils.sendPostJson(url,null,data.toString());
+        System.out.println(result);
     }
 
 

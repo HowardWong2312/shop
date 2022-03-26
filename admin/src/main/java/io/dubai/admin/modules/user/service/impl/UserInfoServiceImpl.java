@@ -105,18 +105,40 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     }
 
     @Override
-    public UserInfo insert(UserInfo userInfo) {
-        baseMapper.insert(userInfo);
-        return userInfo;
-    }
-
-    @Override
     public UserInfo update(UserInfo userInfo) {
-        if (!StringUtils.isEmpty(userInfo.getLoginPassword())) {
-            AppUser appUser = appUserDao.selectById(userInfo.getUserId());
-            appUser.setPassword(CryptAES.AES_Encrypt(userInfo.getLoginPassword()));
-            appUserDao.updateById(appUser);
+        AppUser appUser = appUserDao.selectById(userInfo.getUserId());
+        List<AppUser> tempAppUserList = appUserDao.selectList(
+                new QueryWrapper<AppUser>()
+                        .eq("countryCode",userInfo.getCountryCode())
+                        .eq("phone",userInfo.getPhone())
+                        .ne("id",userInfo.getUserId())
+        );
+        if(!tempAppUserList.isEmpty()){
+            throw new RRException("手机号重复");
         }
+        List<UserInfo> tempUserInfoList = baseMapper.selectList(
+                new QueryWrapper<UserInfo>()
+                        .eq("countryCode",userInfo.getCountryCode())
+                        .eq("phone",userInfo.getPhone())
+                        .ne("userId",userInfo.getUserId())
+        );
+        if(!tempUserInfoList.isEmpty()){
+            throw new RRException("手机号重复");
+        }
+        tempUserInfoList = baseMapper.selectList(
+                new QueryWrapper<UserInfo>()
+                        .eq("bibiCode",userInfo.getBibiCode())
+                        .ne("userId",userInfo.getUserId())
+        );
+        if(!tempUserInfoList.isEmpty()){
+            throw new RRException("bibi号重复");
+        }
+        appUser.setCountryCode(userInfo.getCountryCode());
+        appUser.setPhone(userInfo.getPhone());
+        if (!StringUtils.isEmpty(userInfo.getLoginPassword())) {
+            appUser.setPassword(CryptAES.AES_Encrypt(userInfo.getLoginPassword()));
+        }
+        appUserDao.updateById(appUser);
         try {
             userInfo.setECode(createEwm(userInfo.getUserId(), userInfo.getNickName(), userInfo.getInviteCode()));
         } catch (Exception e) {
@@ -127,13 +149,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         if (temp != null) {
             redisTemplate.opsForValue().set(RedisKeys.userInfoKey + userInfo.getUserId(), userInfo);
         }
-        //注册环信信息
-        io.swagger.client.model.User imUser = new io.swagger.client.model.User();
-        imUser.setUsername("u" + userInfo.getUserId());
-        imUser.setPassword(String.valueOf(userInfo.getUserId()));
-        RegisterUsers ru = new RegisterUsers();
-        ru.add(imUser);
-        imUserAPI.createNewIMUserSingle(ru);
         return userInfo;
     }
 
@@ -142,6 +157,32 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     public UserInfo save(UserInfoForm form) {
         UserInfo userInfo = new UserInfo();
         try {
+            List<AppUser> tempAppUserList = appUserDao.selectList(
+                    new QueryWrapper<AppUser>()
+                            .eq("countryCode",form.getCountryCode())
+                            .eq("phone",form.getPhone())
+            );
+            if(!tempAppUserList.isEmpty()){
+                throw new RRException("手机号重复");
+            }
+            List<UserInfo> tempUserInfoList = baseMapper.selectList(
+                    new QueryWrapper<UserInfo>()
+                            .eq("countryCode",form.getCountryCode())
+                            .eq("phone",form.getPhone())
+            );
+            if(!tempUserInfoList.isEmpty()){
+                throw new RRException("手机号重复");
+            }
+            if (StringUtils.isEmpty(form.getBibiCode())) {
+                form.setBibiCode(createBiBiCode());
+            }
+            tempUserInfoList = baseMapper.selectList(
+                    new QueryWrapper<UserInfo>()
+                            .eq("bibiCode",form.getBibiCode())
+            );
+            if(!tempUserInfoList.isEmpty()){
+                throw new RRException("bibi号重复");
+            }
             if (form.getUserLevelId() == null) {
                 form.setUserLevelId(1L);
             }
@@ -167,9 +208,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfo.setIsMerchant(form.getIsMerchant());
             userInfo.setLotteryTimes(form.getLotteryTimes());
             userInfo.setIsLockCredits(0);
-            if (StringUtils.isEmpty(form.getBibiCode())) {
-                form.setBibiCode(createBiBiCode());
-            }
             userInfo.setBibiCode(form.getBibiCode());
             userInfo.setNickName(form.getNickName());
             userInfo.setHeader(form.getHeader());
@@ -281,9 +319,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
                 }
             }
         }
+        List<UserCreditsLog> userCreditsLog = userCreditsLogService.list(
+                new QueryWrapper<UserCreditsLog>()
+                .eq("status",UserCreditsLogStatusEnum.SIGNED.code)
+                .apply("to_days(createTime) = TO_DAYS(now())")
+                .groupBy("userId")
+        );
         hashMap.put("todayUserRegCount", todayUserRegCount);
         hashMap.put("firstUserCount", firstUserCount);
         hashMap.put("SplitUserCount", SplitUserCount);
+        hashMap.put("signedUserCountToday", userCreditsLog.size());
 
         return hashMap;
     }
@@ -337,7 +382,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         for (Object userId : todayDepositUserItem) {
             UserInfo fatherUserInfo = this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().eq("userId", userId));
             if (fatherUserInfo != null) {
-                if (fatherUserInfo.getFatherId().equals(0)) {
+                if (fatherUserInfo.getFatherId() != null && fatherUserInfo.getFatherId().equals(0)) {
                     //父类的fatherId 是0 则为直属用户
                     todayUserDepositFirstUserCount++;
                 } else {

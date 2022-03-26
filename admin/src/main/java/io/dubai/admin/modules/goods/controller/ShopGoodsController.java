@@ -1,6 +1,9 @@
 package io.dubai.admin.modules.goods.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.dubai.admin.modules.goods.entity.ShopGoods;
+import io.dubai.admin.modules.goods.entity.ShopGoodsOnebuy;
+import io.dubai.admin.modules.goods.service.ShopGoodsOnebuyService;
 import io.dubai.admin.modules.goods.service.ShopGoodsService;
 import io.dubai.common.utils.PageUtils;
 import io.dubai.common.utils.R;
@@ -25,6 +28,9 @@ import java.util.Map;
 public class ShopGoodsController {
     @Resource
     private ShopGoodsService shopGoodsService;
+
+    @Resource
+    private ShopGoodsOnebuyService shopGoodsOnebuyService;
 
     @GetMapping("/list")
     @RequiresPermissions("goods:shopGoods:list")
@@ -55,8 +61,18 @@ public class ShopGoodsController {
     @RequiresPermissions("goods:shopGoods:update")
     public R update(@RequestBody ShopGoods shopGoods) {
         ValidatorUtils.validateEntity(shopGoods);
+        if(shopGoods.getIsOneBuy() == 0){
+            ShopGoodsOnebuy goodsOnebuy = shopGoodsOnebuyService.getOne(
+                    new QueryWrapper<ShopGoodsOnebuy>()
+                    .eq("goods_id",shopGoods.getId())
+                    .eq("status",1)
+                    .last("limit 1")
+            );
+            if(goodsOnebuy != null && goodsOnebuy.getQuantity() > 0){
+                shopGoods.setStock(shopGoods.getStock()+goodsOnebuy.getQuantity());
+            }
+        }
         shopGoodsService.updateById(shopGoods);
-
         return R.ok();
     }
 

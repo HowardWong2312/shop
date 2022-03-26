@@ -28,7 +28,7 @@ spring:
   #    username: postgres
   #    password: 123456
   jackson:
-    time-zone: GMT+8
+    time-zone: GMT+2
     date-format: yyyy-MM-dd HH:mm:ss
   resources:
     static-locations: classpath:/static/,classpath:/views/

@@ -23,6 +23,7 @@ public enum UserBalanceLogStatusEnum {
     CREDITS_SOLD(13, "积分卖出"),
     WITHDRAW_WAITING(14, "提现审核中"),
     DEPOSIT_WAITING(15, "充值确认中"),
+    SHOP_ORDER_PENDING_INCOME(16, "电商待收款"),
     OTHER(0, "其它");
 
 

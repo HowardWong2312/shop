@@ -4,8 +4,8 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: '订单号', name: 'orderCode', index: 'a.order_code', width: 80, key: true },
-			{ label: '商家', name: 'merchantName', index: 'm.nickname', width: 80 },
 			{ label: '商品', name: 'goodsName', index: 'a.goods_id', width: 80 },
+			{ label: '商家', name: 'merchantName', index: 'm.nickname', width: 80 },
 			{ label: '买家', name: 'userName', index: 'u.nickname', width: 80 },
 			{ label: '数量', name: 'quantity', index: 'a.quantity', width: 50 },
 			{ label: '订单金额', name: 'amount', index: 'a.amount', width: 50 },

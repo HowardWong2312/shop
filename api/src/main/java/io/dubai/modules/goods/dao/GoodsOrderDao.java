@@ -8,6 +8,7 @@ import io.dubai.modules.goods.query.GoodsOrderQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,6 +28,10 @@ public interface GoodsOrderDao extends BaseMapper<GoodsOrder> {
     GoodsOrderVo queryByOrderCodeAndLanguageIdForMerchant(@Param("orderCode") String orderCode, @Param("languageId") String languageId);
 
     List<GoodsOrderVo> queryPageForMerchant(IPage page, @Param("query") GoodsOrderQuery query);
+
+    BigDecimal querySumPendingAmountByMerchantId(@Param("merchantId") Integer merchantId);
+
+    List<GoodsOrder> queryPendingOrderListByMerchantId(@Param("merchantId") Integer merchantId);
 
 
 }

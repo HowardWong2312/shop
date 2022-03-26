@@ -66,12 +66,12 @@ public class NewsEntity implements Serializable {
 	/**
 	 *
 	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
 	private Timestamp createTime;
 	/**
 	 *
 	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
 	private Timestamp updateTime;
 
 }

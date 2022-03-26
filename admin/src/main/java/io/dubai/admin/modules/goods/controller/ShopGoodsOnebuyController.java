@@ -63,6 +63,11 @@ public class ShopGoodsOnebuyController {
         if (shopGoodsOnebuyVo.getStatus() == 1) {
             goodsOnebuy.setStatus(1);
             goods.setIsOneBuy(1);
+            if(goods.getStock()>goodsOnebuy.getQuantity()){
+                goods.setStock(goods.getStock()-goodsOnebuy.getQuantity());
+            }else{
+                goods.setStock(0);
+            }
         }
         if (shopGoodsOnebuyVo.getStatus() == 2) {
             goodsOnebuy.setStatus(2);
