@@ -69,7 +69,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<UserInfo> page = new Query<UserInfo>().getPage(params);
         List<UserInfo> list = baseMapper.queryPage(page, params);
-        list.forEach(s->{
+        list.forEach(s -> {
             //查直属和裂变用户人数
             int fissionCount = 0;
             List<UserInfo> directList = baseMapper.selectList(new QueryWrapper<UserInfo>().eq("fatherId", s.getUserId()));
@@ -84,14 +84,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
                 }
             }
             //查电商收入
-            Map<String,Object> map = new HashMap<>();
-            map.put("type",1);
-            map.put("status",5);
-            map.put("userId",s.getUserId());
+            Map<String, Object> map = new HashMap<>();
+            map.put("type", 1);
+            map.put("status", 5);
+            map.put("userId", s.getUserId());
             BigDecimal amount = userBalanceLogService.queryAmountSum(map);
-            Integer depositUserNumTotal = userBalanceLogService.queryDepositUserNumByKey(s.getUserId(),false);
-            Integer depositUserNumCurMonth = userBalanceLogService.queryDepositUserNumByKey(s.getUserId(),true);
-            if(amount == null){
+            Integer depositUserNumTotal = userBalanceLogService.queryDepositUserNumByKey(s.getUserId(), false);
+            Integer depositUserNumCurMonth = userBalanceLogService.queryDepositUserNumByKey(s.getUserId(), true);
+            if (amount == null) {
                 amount = BigDecimal.ZERO;
             }
             s.setDepositUserNumTotal(depositUserNumTotal);
@@ -109,28 +109,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         AppUser appUser = appUserDao.selectById(userInfo.getUserId());
         List<AppUser> tempAppUserList = appUserDao.selectList(
                 new QueryWrapper<AppUser>()
-                        .eq("countryCode",userInfo.getCountryCode())
-                        .eq("phone",userInfo.getPhone())
-                        .ne("id",userInfo.getUserId())
+                        .eq("countryCode", userInfo.getCountryCode())
+                        .eq("phone", userInfo.getPhone())
+                        .ne("id", userInfo.getUserId())
         );
-        if(!tempAppUserList.isEmpty()){
+        if (!tempAppUserList.isEmpty()) {
             throw new RRException("手机号重复");
         }
         List<UserInfo> tempUserInfoList = baseMapper.selectList(
                 new QueryWrapper<UserInfo>()
-                        .eq("countryCode",userInfo.getCountryCode())
-                        .eq("phone",userInfo.getPhone())
-                        .ne("userId",userInfo.getUserId())
+                        .eq("countryCode", userInfo.getCountryCode())
+                        .eq("phone", userInfo.getPhone())
+                        .ne("userId", userInfo.getUserId())
         );
-        if(!tempUserInfoList.isEmpty()){
+        if (!tempUserInfoList.isEmpty()) {
             throw new RRException("手机号重复");
         }
         tempUserInfoList = baseMapper.selectList(
                 new QueryWrapper<UserInfo>()
-                        .eq("bibiCode",userInfo.getBibiCode())
-                        .ne("userId",userInfo.getUserId())
+                        .eq("bibiCode", userInfo.getBibiCode())
+                        .ne("userId", userInfo.getUserId())
         );
-        if(!tempUserInfoList.isEmpty()){
+        if (!tempUserInfoList.isEmpty()) {
             throw new RRException("bibi号重复");
         }
         appUser.setCountryCode(userInfo.getCountryCode());
@@ -159,18 +159,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         try {
             List<AppUser> tempAppUserList = appUserDao.selectList(
                     new QueryWrapper<AppUser>()
-                            .eq("countryCode",form.getCountryCode())
-                            .eq("phone",form.getPhone())
+                            .eq("countryCode", form.getCountryCode())
+                            .eq("phone", form.getPhone())
             );
-            if(!tempAppUserList.isEmpty()){
+            if (!tempAppUserList.isEmpty()) {
                 throw new RRException("手机号重复");
             }
             List<UserInfo> tempUserInfoList = baseMapper.selectList(
                     new QueryWrapper<UserInfo>()
-                            .eq("countryCode",form.getCountryCode())
-                            .eq("phone",form.getPhone())
+                            .eq("countryCode", form.getCountryCode())
+                            .eq("phone", form.getPhone())
             );
-            if(!tempUserInfoList.isEmpty()){
+            if (!tempUserInfoList.isEmpty()) {
                 throw new RRException("手机号重复");
             }
             if (StringUtils.isEmpty(form.getBibiCode())) {
@@ -178,9 +178,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             }
             tempUserInfoList = baseMapper.selectList(
                     new QueryWrapper<UserInfo>()
-                            .eq("bibiCode",form.getBibiCode())
+                            .eq("bibiCode", form.getBibiCode())
             );
-            if(!tempUserInfoList.isEmpty()){
+            if (!tempUserInfoList.isEmpty()) {
                 throw new RRException("bibi号重复");
             }
             if (form.getUserLevelId() == null) {
@@ -321,9 +321,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         }
         List<UserCreditsLog> userCreditsLog = userCreditsLogService.list(
                 new QueryWrapper<UserCreditsLog>()
-                .eq("status",UserCreditsLogStatusEnum.SIGNED.code)
-                .apply("to_days(createTime) = TO_DAYS(now())")
-                .groupBy("userId")
+                        .eq("status", UserCreditsLogStatusEnum.SIGNED.code)
+                        .apply("to_days(createTime) = TO_DAYS(now())")
+                        .groupBy("userId")
         );
         hashMap.put("todayUserRegCount", todayUserRegCount);
         hashMap.put("firstUserCount", firstUserCount);
@@ -380,14 +380,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         int todayUserDepositSplitUserCount = 0; //今日新增分裂用户数量
 
         for (Object userId : todayDepositUserItem) {
-            UserInfo fatherUserInfo = this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().eq("userId", userId));
-            if (fatherUserInfo != null) {
-                if (fatherUserInfo.getFatherId() != null && fatherUserInfo.getFatherId().equals(0)) {
-                    //父类的fatherId 是0 则为直属用户
-                    todayUserDepositFirstUserCount++;
-                } else {
-                    //父类id不是0 则为分裂用户
-                    todayUserDepositSplitUserCount++;
+            UserInfo userItemInfo = this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().eq("userId", userId));
+            if (userItemInfo != null) {
+                //排除==0的业务员充值
+                if (userItemInfo.getFatherId() != null && !userItemInfo.getFatherId().equals(0)) {
+                    UserInfo fatherUserInfo = this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().eq("userId", userItemInfo.getFatherId()));
+                   //如果上级fatherId == 0
+                    if (fatherUserInfo.getFatherId() != null && fatherUserInfo.getFatherId().equals(0)) {
+                        //父类的fatherId 是0 则为直属用户
+                        todayUserDepositFirstUserCount++;
+                    } else {
+                        //父类id不是0 则为分裂用户
+                        todayUserDepositSplitUserCount++;
+                    }
                 }
             }
         }
