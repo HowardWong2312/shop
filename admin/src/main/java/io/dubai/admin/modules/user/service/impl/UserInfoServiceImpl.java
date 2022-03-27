@@ -304,21 +304,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             return hashMap;
         }
         int todayUserRegCount = toDayNewUserFatherIds.size(); //今日注册数量
-        int firstUserCount = 0; //今日新增直属用户数量
-        int SplitUserCount = 0; //今日新增分裂用户数量
-        //通过父类id
-        for (UserInfo userInfo : toDayNewUserFatherIds) {
-            UserInfo fatherUserInfo = this.getBaseMapper().selectById(userInfo.getFatherId());
-            if (fatherUserInfo != null) {
-                if (fatherUserInfo.getFatherId() != null && fatherUserInfo.getFatherId().equals(0)) {
-                    //父类的fatherId 是0 则为直属用户
-                    firstUserCount++;
-                } else {
-                    //父类id不是0 则为分裂用户
-                    SplitUserCount++;
-                }
-            }
+        int toDaySalesRegCount = 0; //今日新增直属用户数量
+
+        //直属业务员
+        List<Object> salesUserIds = this.getBaseMapper().selectObjs(new QueryWrapper<UserInfo>().select("userId").eq("fatherId", 0));
+
+        //查询归属业务员底下的今日新增直属用户的总数
+        if (!salesUserIds.isEmpty()) {
+            toDaySalesRegCount += this.getBaseMapper().selectCount(new QueryWrapper<UserInfo>().in("fatherId", salesUserIds).apply("to_days(createTime) = TO_DAYS(now())"));
         }
+
         List<UserCreditsLog> userCreditsLog = userCreditsLogService.list(
                 new QueryWrapper<UserCreditsLog>()
                         .eq("status", UserCreditsLogStatusEnum.SIGNED.code)
@@ -326,8 +321,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
                         .groupBy("userId")
         );
         hashMap.put("todayUserRegCount", todayUserRegCount);
-        hashMap.put("firstUserCount", firstUserCount);
-        hashMap.put("SplitUserCount", SplitUserCount);
+        hashMap.put("firstUserCount", toDaySalesRegCount);
+        hashMap.put("SplitUserCount", todayUserRegCount - toDaySalesRegCount); //今日总注册 - 今日直属 = 今日分裂用户
         hashMap.put("signedUserCountToday", userCreditsLog.size());
 
         return hashMap;
@@ -385,7 +380,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
                 //排除==0的业务员充值
                 if (userItemInfo.getFatherId() != null && !userItemInfo.getFatherId().equals(0)) {
                     UserInfo fatherUserInfo = this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().eq("userId", userItemInfo.getFatherId()));
-                   //如果上级fatherId == 0
+                    //如果上级fatherId == 0
                     if (fatherUserInfo.getFatherId() != null && fatherUserInfo.getFatherId().equals(0)) {
                         //父类的fatherId 是0 则为直属用户
                         todayUserDepositFirstUserCount++;
