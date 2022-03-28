@@ -21,6 +21,6 @@ public class UserAddressVo extends UserAddress implements Serializable {
 
     private String sysDeptName;
 
-    private String userName;
+    private String userPhone;
 
 }

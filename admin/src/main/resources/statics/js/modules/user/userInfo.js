@@ -6,19 +6,15 @@ $(function () {
 			{ label: '用户ID', name: 'userId', index: 'userId', width: 40, key: true },
             { label: '部门', name: 'sysDeptName', width: 35 },
             { label: '代理商', name: 'sysUserName', width: 35 },
-            { label: '上级用户', name: 'fatherName', index: 'fatherId', width: 50, formatter: function(value, options, row){
+            { label: '上级手机号', name: 'fatherName', index: 'fatherId', width: 60, formatter: function(value, options, row){
                 if(row.fatherId == 0){
                     return '<span class="label label-primary">业务员</span>';
                 }else{
                     return row.fatherName == null ? '' : row.fatherName;
                 }
             }},
-			{ label: '昵称', name: 'nickName', index: 'nickName', width: 50 },
-            { label: '头像', name: 'header', index: 'header', width: 30, formatter: function(value, options, row){
-                return '<img src="'+value+'" style="width:100%" />';
-            }},
-            { label: '手机号', name: 'searchPhone', index: 'searchPhone', width: 70 },
-
+            { label: '昵称', name: 'nickName', index: 'nickName', width: 50 },
+            { label: '手机号', name: 'searchPhone', index: 'searchPhone', width: 60 },
             { label: 'bibi号', name: 'bibiCode', index: 'bibiCode', width: 50 },
 			{ label: '余额', name: 'balance', index: 'balance', width: 40 },
             { label: '积分', name: 'credits', index: 'credits', width: 40 },

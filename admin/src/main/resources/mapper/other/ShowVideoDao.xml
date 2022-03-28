@@ -6,13 +6,13 @@
     <select id="queryPage" resultType="io.dubai.admin.modules.other.entity.ShowVideo">
         SELECT
         a.*,
-        u.nickname as user_name
+        u.searchPhone as user_phone
         FROM t_show_video a
         LEFT JOIN t_user_info u ON (a.userId=u.userId)
         WHERE 1 = 1
         <if test="params.key !=null and params.key !=''">
             and (
-            u.nickname like '%${params.key}%'
+            u.nickName like '%${params.key}%'
             or u.userId=#{params.key}
             )
         </if>

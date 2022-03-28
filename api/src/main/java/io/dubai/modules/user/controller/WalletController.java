@@ -171,16 +171,27 @@ public class WalletController {
         if (userInfo.getPassword() == null || "".equalsIgnoreCase(userInfo.getPassword())) {
             return R.ok(ResponseStatusEnum.PAY_PASSWORD_NOT_EXIST);
         }
+        if(form.getAmount().compareTo(BigDecimal.valueOf(20)) == -1){
+            return R.ok(ResponseStatusEnum.LESS_THAN_MINIMUM_WITHDRAW);
+        }
         if (!userInfo.getPassword().equalsIgnoreCase(form.getPassword())) {
             return R.ok(ResponseStatusEnum.PAY_PASSWORD_ERROR);
         }
         if (userInfo.getBalance().compareTo(form.getAmount()) == -1) {
             return R.ok(ResponseStatusEnum.BALANCE_INSUFFICIENT);
         }
+        String feeRate = sysConfigService.getValue("WITHDRAW_FEE_RATE");
+        BigDecimal fee = BigDecimal.ZERO;
+        if(feeRate != null && !"".equalsIgnoreCase(feeRate)){
+            fee = new BigDecimal(feeRate.replace("%",""));
+        }
+        fee = form.getAmount().multiply(fee);
         UserBank userBank = userBankService.getById(form.getUserBankId());
         UserWithdraw userWithdraw = new UserWithdraw();
         userWithdraw.setUserId(userInfo.getUserId().longValue());
+        userWithdraw.setFee(fee);
         userWithdraw.setAmount(form.getAmount());
+        userWithdraw.setRealAmount(form.getAmount().subtract(fee));
         userWithdraw.setAccountName(userBank.getAccountName());
         userWithdraw.setAccountNumber(userBank.getAccountNumber());
         userWithdraw.setPaymentId(userBank.getPaymentId());

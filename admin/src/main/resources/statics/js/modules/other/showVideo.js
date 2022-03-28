@@ -5,7 +5,7 @@ $(function () {
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '用户ID', name: 'userId', index: 'userId', width: 80 },
-			{ label: '用户昵称', name: 'userName', index: 'userId', width: 80 },
+			{ label: '用户手机号', name: 'userPhone', index: 'userId', width: 80 },
             { label: '缩略图', name: 'firstImage', index: 'firstImage', width: 30, formatter: function(value, options, row){
                 return '<img src="'+value+'" style="width:100%" />';
             }},

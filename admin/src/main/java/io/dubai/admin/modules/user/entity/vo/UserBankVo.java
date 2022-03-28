@@ -21,7 +21,7 @@ public class UserBankVo extends UserBank implements Serializable {
 
     private String sysDeptName;
 
-    private String userName;
+    private String userPhone;
 
     private String paymentName;
 

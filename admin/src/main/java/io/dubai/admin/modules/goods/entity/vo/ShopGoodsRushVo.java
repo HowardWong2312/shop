@@ -8,7 +8,7 @@ public class ShopGoodsRushVo extends ShopGoodsRush {
 
     private String goodsName;
 
-    private String merchantName;
+    private String merchantPhone;
 
     private String statusValue;
 

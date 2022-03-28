@@ -7,7 +7,7 @@ $(function () {
             { label: '部门', name: 'sysDeptName', width: 35 },
             { label: '代理商', name: 'sysUserName', width: 35 },
             { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
-            { label: '用户昵称', name: 'userName', width: 50 },
+            { label: '用户手机号', name: 'userPhone', width: 50 },
             { label: '变动积分', name: 'amount', index: 'amount', width: 80, formatter:function(value){
                 if(value > 0){
                     return '<span class="label label-success">+'+value+'</span>';

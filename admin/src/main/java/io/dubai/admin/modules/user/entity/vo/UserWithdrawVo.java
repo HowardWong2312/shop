@@ -16,7 +16,7 @@ public class UserWithdrawVo extends UserWithdraw implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String userName;
+    private String userPhone;
 
     private String paymentName;
 
@@ -27,5 +27,9 @@ public class UserWithdrawVo extends UserWithdraw implements Serializable {
     private String statusValue;
 
     private String statusColor;
+
+    private String fatherId;
+
+    private String isMerchant;
 
 }

@@ -11,7 +11,7 @@
         su.username as sys_user_name,
         sd.name as sys_dept_name,
         p.title as payment_name,
-        u.nickname as user_name
+        u.searchPhone as user_phone
         FROM t_user_withdraw a
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
         LEFT JOIN shop_payment p ON (a.payment_id=p.id)
@@ -86,7 +86,9 @@
         sd.value as status_value,
         sd.remark as status_color,
         p.title as payment_name,
-        u.nickname as user_name
+        u.fatherId,
+        u.isMerchant,
+        u.searchPhone as user_phone
         FROM t_user_withdraw a
         LEFT JOIN shop_payment p ON (a.payment_id=p.id)
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)

@@ -9,7 +9,7 @@
         sd.value as status_value,
         sd.remark as status_color,
         b.title as goods_name,
-        u.nickname as merchant_name
+        u.searchPhone as merchant_phone
         FROM shop_goods_rush a
         LEFT JOIN shop_goods b ON (a.goods_id = b.id)
         LEFT JOIN t_user_info u ON (b.user_id=u.userId)
@@ -17,7 +17,7 @@
         WHERE 1 = 1
         <if test="params.key !=null and params.key !=''">
             and (
-            u.nickname like '%${params.key}%'
+            u.nickName like '%${params.key}%'
             or b.title like '%${params.key}%'
             or a.goods_id=#{params.key}
             or b.user_id=#{params.key}
@@ -35,7 +35,7 @@
         sd.value as status_value,
         sd.remark as status_color,
         b.title as goods_name,
-        u.nickname as merchant_name
+        u.searchPhone as merchant_phone
         FROM shop_goods_rush a
         LEFT JOIN shop_goods b ON (a.goods_id = b.id)
         LEFT JOIN t_user_info u ON (b.user_id=u.userId)

@@ -74,7 +74,7 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>用户昵称</th>
+                        <th>用户手机号</th>
                         <th>商品昵称</th>
                         <th>参与份数</th>
                         <th>参与时间</th>
@@ -82,7 +82,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="item in goodsOnebuyDetailsList">
-                        <td>{{item.userName}}</td>
+                        <td>{{item.userPhone}}</td>
                         <td>{{item.goodsName}}</td>
                         <td>{{item.quantity}}</td>
                         <td>{{item.createTime}}</td>
@@ -106,7 +106,7 @@
             </div>
             <div class="modal-body">
                 <p>
-                    <label>商家：</label><span>{{shopGoodsOnebuy.merchantName}}</span>
+                    <label>商家：</label><span>{{shopGoodsOnebuy.merchantPhone}}</span>
                 </p>
                 <p>
                     <label>商品：</label><span>{{shopGoodsOnebuy.goodsName}}</span>

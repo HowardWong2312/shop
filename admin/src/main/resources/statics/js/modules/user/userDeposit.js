@@ -7,7 +7,7 @@ $(function () {
             { label: '部门', name: 'sysDeptName', width: 35 },
             { label: '代理商', name: 'sysUserName', width: 35 },
             { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
-			{ label: '用户名称', name: 'userName', width: 80 },
+			{ label: '用户手机号', name: 'userPhone', width: 80 },
 			{ label: '支付方式', name: 'paymentName', index: 'payment_id', width: 80 },
 			{ label: '充值金额', name: 'amount', index: 'amount', width: 80 },
             { label: '状态', name: 'status', index: 'status', width: 80, formatter:function(value, options, row){

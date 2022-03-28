@@ -8,8 +8,8 @@
         a.*,
         sd.value as status_value,
         b.title as goods_name,
-        m.nickname as merchant_name,
-        u.nickname as user_name
+        m.searchPhone as merchant_phone,
+        u.searchPhone as user_phone
         FROM shop_goods_order a
         LEFT JOIN shop_goods b ON (a.goods_id = b.id)
         LEFT JOIN t_user_info m ON (b.user_id=m.userId)
@@ -26,13 +26,13 @@
         <if test="params.merchantKey !=null and params.merchantKey !=''">
             and (
             m.userId=#{params.merchantKey}
-            or m.nickname like '%${params.merchantKey}%'
+            or m.nickName like '%${params.merchantKey}%'
             )
         </if>
         <if test="params.userKey !=null and params.userKey !=''">
             and (
             u.userId=#{params.userKey}
-            or u.nickname like '%${params.userKey}%'
+            or u.nickName like '%${params.userKey}%'
             )
         </if>
         <if test="params.status !=null and params.status !=''">
@@ -46,8 +46,8 @@
         a.*,
         sd.value as status_value,
         b.title as goods_name,
-        m.nickname as merchant_name,
-        u.nickname as user_name
+        m.searchPhone as merchant_phone,
+        u.searchPhone as user_phone
         FROM shop_goods_order a
         LEFT JOIN shop_goods b ON (a.goods_id = b.id)
         LEFT JOIN t_user_info m ON (b.user_id=m.userId)

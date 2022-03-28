@@ -8,7 +8,7 @@
                u.*,
                su.username as sys_user_name,
                sd.name as sys_dept_name,
-               f.nickName as father_name
+               f.searchPhone as father_name
         from `t_user_info` u
         left join sys_user su on (su.user_id=u.sysUserId)
         left join sys_dept sd on(su.dept_id = sd.dept_id)
