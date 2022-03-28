@@ -278,7 +278,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             }
         }
         map.put("userCount", userInfos.size());
-        getFatherIdByToDayAndNewUser(map, userInfoQueryWrapper);
+        getFatherIdByToDayAndNewUser(map, userInfoQueryWrapper, sysUserId);
         getFundingData(map, userIds);
         getCredits(map, userIds);
         HashSet userOnlineCount = redisUtils.get(RedisKeys.userOnlineKey, HashSet.class);
@@ -294,8 +294,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
      *
      * @return
      */
-    private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap, QueryWrapper<UserInfo> userInfoQueryWrapper) {
+    private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap, QueryWrapper<UserInfo> userInfoQueryWrapper, Long sysUserId) {
         userInfoQueryWrapper.select("userId", "fatherId").apply("to_days(createTime) = TO_DAYS(now())");
+        QueryWrapper<UserInfo> salesUserQuery = new QueryWrapper<UserInfo>().select("userId");
+        if (sysUserId == Constant.SUPER_ADMIN) {
+            salesUserQuery.eq("fatherId", 0);
+        } else {
+            salesUserQuery.eq("userId", sysUserId);
+        }
         List<UserInfo> toDayNewUserFatherIds = this.getBaseMapper().selectList(userInfoQueryWrapper);
         if (toDayNewUserFatherIds.isEmpty()) {
             hashMap.put("todayUserRegCount", 0);
@@ -307,7 +313,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
         int toDaySalesRegCount = 0; //今日新增直属用户数量
 
         //直属业务员
-        List<Object> salesUserIds = this.getBaseMapper().selectObjs(new QueryWrapper<UserInfo>().select("userId").eq("fatherId", 0));
+        List<Object> salesUserIds = this.getBaseMapper().selectObjs(salesUserQuery);
 
         //查询归属业务员底下的今日新增直属用户的总数
         if (!salesUserIds.isEmpty()) {
@@ -373,6 +379,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
 
         int todayUserDepositFirstUserCount = 0; //今日新增直属用户数量
         int todayUserDepositSplitUserCount = 0; //今日新增分裂用户数量
+        int todayUserDepositOtherUserCount = 0; //其他用户
 
         for (Object userId : todayDepositUserItem) {
             UserInfo userItemInfo = this.getBaseMapper().selectOne(new QueryWrapper<UserInfo>().eq("userId", userId));
@@ -388,11 +395,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
                         //父类id不是0 则为分裂用户
                         todayUserDepositSplitUserCount++;
                     }
+                } else {
+                    //没有上级的用户或者业务员充值
+                    todayUserDepositOtherUserCount++;
                 }
             }
         }
         hashMap.put("todayUserDepositFirstUserCount", todayUserDepositFirstUserCount);
         hashMap.put("todayUserDepositSplitUserCount", todayUserDepositSplitUserCount);
+        hashMap.put("todayUserDepositOtherUserCount", todayUserDepositOtherUserCount);
         List<Object> todayUserWithdrawItem = userWithdrawService.getBaseMapper().selectObjs(userWithdrawQueryWrapper);
         hashMap.put("todayUserWithdrawCount", todayUserWithdrawItem.size());
         return hashMap;
