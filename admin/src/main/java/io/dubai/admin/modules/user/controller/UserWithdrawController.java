@@ -16,6 +16,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Map;
 
 
@@ -56,20 +57,28 @@ public class UserWithdrawController extends AbstractController {
 
     @PostMapping("/check")
     @RequiresPermissions("user:userWithdraw:check")
-    public R save(@RequestBody UserWithdraw userWithdraw) {
-        UserWithdraw bean = userWithdrawService.getById(userWithdraw.getId());
-        bean.setStatus(userWithdraw.getStatus());
-        if(StringUtils.isNotBlank(userWithdraw.getRemark())){
-            bean.setRemark(userWithdraw.getRemark());
+    public R save(@RequestBody UserWithdraw form) {
+        UserWithdraw bean = userWithdrawService.getById(form.getId());
+        bean.setStatus(form.getStatus());
+        if(form.getRebate() != null){
+            bean.setRebate(form.getRebate());
+            bean.setRealAmount(bean.getRealAmount().subtract(form.getRebate().divide(BigDecimal.valueOf(100)).multiply(bean.getAmount())));
+        }
+        if(form.getTax() != null){
+            bean.setTax(form.getTax());
+            bean.setRealAmount(bean.getRealAmount().subtract(form.getTax().divide(BigDecimal.valueOf(100)).multiply(bean.getAmount())));
+        }
+        if(StringUtils.isNotBlank(form.getRemark())){
+            bean.setRemark(form.getRemark());
         }
         if(bean.getStatus() == 2){
-            UserInfo userInfo = userInfoService.getById(userWithdraw.getUserId());
-            userInfo.setBalance(userInfo.getBalance().add(userWithdraw.getAmount()));
+            UserInfo userInfo = userInfoService.getById(form.getUserId());
+            userInfo.setBalance(userInfo.getBalance().add(form.getAmount()));
             userInfoService.update(userInfo);
             UserBalanceLog userBalanceLog = new UserBalanceLog();
             userBalanceLog.setType(LogTypeEnum.INCOME.code);
             userBalanceLog.setBalance(userInfo.getBalance());
-            userBalanceLog.setAmount(userWithdraw.getAmount());
+            userBalanceLog.setAmount(form.getAmount());
             userBalanceLog.setUserId(userInfo.getUserId().longValue());
             userBalanceLog.setStatus(UserBalanceLogStatusEnum.FAIL_WITHDRAW.code);
             userBalanceLogService.save(userBalanceLog);

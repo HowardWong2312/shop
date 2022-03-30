@@ -16,7 +16,7 @@ public class UserDepositVo extends UserDeposit implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String userName;
+    private String userPhone;
 
     private String paymentName;
 

@@ -18,9 +18,9 @@ public class ShopGoodsOrderVo extends ShopGoodsOrder implements Serializable {
 
     private String goodsName;
 
-    private String merchantName;
+    private String merchantPhone;
 
-    private String userName;
+    private String userPhone;
 
     private String statusValue;
 

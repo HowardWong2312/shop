@@ -180,8 +180,11 @@ public class UserController {
         if (father == null) {
             throw new RRException(ResponseStatusEnum.INVITE_CODE_NOT_EXIST);
         }
+        if (father.getFatherId() == null) {
+            throw new RRException(ResponseStatusEnum.THIS_NOT_REAL_TEAM);
+        }
         if (userInfo.getUserId().equals(father.getUserId())) {
-            throw new RRException(ResponseStatusEnum.INVITE_CODE_NOT_EXIST);
+            throw new RRException(ResponseStatusEnum.CANNOT_JOIN_YOURSELF);
         }
         BigDecimal giveCredits = BigDecimal.ZERO;
         String temp = sysConfigService.getValue("INVITE_USER_CREDITS");

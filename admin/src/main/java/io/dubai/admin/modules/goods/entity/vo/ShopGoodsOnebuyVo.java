@@ -8,7 +8,7 @@ public class ShopGoodsOnebuyVo extends ShopGoodsOnebuy {
 
     private String goodsName;
 
-    private String merchantName;
+    private String merchantPhone;
 
     private String statusValue;
 

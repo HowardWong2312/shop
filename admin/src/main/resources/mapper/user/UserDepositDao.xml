@@ -11,7 +11,7 @@
         su.username as sys_user_name,
         sd.name as sys_dept_name,
         p.title as payment_name,
-        u.nickname as user_name
+        u.searchPhone as user_phone
         FROM t_user_deposit a
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
         LEFT JOIN shop_payment p ON (a.payment_id=p.id)

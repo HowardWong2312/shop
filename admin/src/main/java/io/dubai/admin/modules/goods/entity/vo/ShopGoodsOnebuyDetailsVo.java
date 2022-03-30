@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class ShopGoodsOnebuyDetailsVo extends ShopGoodsOnebuyDetails implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String userName;
+    private String userPhone;
     private String goodsName;
 
 

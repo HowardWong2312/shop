@@ -7,12 +7,12 @@ $(function () {
             { label: '部门', name: 'sysDeptName', width: 35 },
             { label: '代理商', name: 'sysUserName', width: 35 },
             { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
-            { label: '用户名称', name: 'userName', width: 35 },
+            { label: '用户手机号', name: 'userPhone', width: 35 },
             { label: '收款方式', name: 'paymentName', index: 'payment_name', width: 80 },
 			{ label: '账户名称', name: 'accountName', index: 'account_name', width: 50 },
 			{ label: '账户号码', name: 'accountNumber', index: 'account_number', width: 50 },
 			{ label: '提现金额', name: 'amount', index: 'amount', width: 40 },
-			{ label: '拒绝原因', name: 'remark', index: 'remark', width: 50 },
+			{ label: '实际打款', name: 'realAmount', index: 'realAmount', width: 40 },
             { label: '状态', name: 'status', index: 'status', width: 40, formatter:function(value, options, row){
                 return '<span class="label ' + row.statusColor + '">' + row.statusValue + '</span>';
             }},

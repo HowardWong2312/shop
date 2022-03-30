@@ -27,7 +27,7 @@ public class ShowVideo implements Serializable {
 
     //用户昵称
     @TableField(exist = false)
-    private String userName;
+    private String userPhone;
 
     //视频URL
     @TableField("videoUrl")

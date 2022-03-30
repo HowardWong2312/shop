@@ -50,7 +50,7 @@
             </#if>
         </div>
         <h3 style="text-align: center">
-            <span>订单总金额:</span>
+            <span>订单总金额(提现金额):</span>
             <span style="color: #ff6d33">{{totalAmount}}</span>
         </h3>
         <table id="jqGrid"></table>
@@ -67,7 +67,14 @@
             <div class="modal-body">
                 <p>
                     <label>用户ID：</label><span>{{userWithdraw.id}}</span>
-                    <label>用户昵称：</label><span>{{userWithdraw.userName}}</span>
+                </p>
+                <p>
+                    <label>用户手机号：</label><span>{{userWithdraw.userPhone}}</span>
+                </p>
+                <p>
+                    <label v-if="userWithdraw.fatherId == 0 || userWithdraw.isMerchant == 1">用户类型：</label>
+                    <span v-if="userWithdraw.fatherId == 0" class="label label-primary">业务员</span>
+                    <span v-if="userWithdraw.isMerchant == 1" class="label label-primary">商家</span>
                 </p>
                 <p>
                     <label>收款方式：</label><span>{{userWithdraw.paymentName}}</span>
@@ -82,12 +89,34 @@
                     <label>提现金额：</label><span style="color:#ff6d33;font-weight: bold">{{userWithdraw.amount}}</span>
                 </p>
                 <p>
+                    <label>手续费：</label><span>{{userWithdraw.fee}}</span>
+                </p>
+                <p>
+                    <label>打款金额：</label><span style="color:#ff6d33;font-weight: bold">{{userWithdraw.amount-userWithdraw.fee-(userWithdraw.tax/100*userWithdraw.amount)-(userWithdraw.rebate/100*userWithdraw.amount)}}</span>
+                </p>
+                <p>
                     <label>订单状态：</label><span :class="'label '+userWithdraw.statusColor">{{userWithdraw.statusValue}}</span>
                 </p>
-                <p v-if="userWithdraw.remark != null && userWithdraw.remark != ''">
-                    <label>拒绝原因：</label>
-                    <span>{{userWithdraw.remark}}</span>
-                </p>
+                <form method="get" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">税费(%)</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" :disabled="userWithdraw.status != 0" v-model="userWithdraw.tax" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="form-group" v-if="userWithdraw.isMerchant == 1">
+                        <label class="col-sm-2 control-label">佣金(%)</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" :disabled="userWithdraw.status != 0" v-model="userWithdraw.rebate" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" :disabled="userWithdraw.status != 0" v-model="userWithdraw.remark" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button v-if="userWithdraw.status == 0" type="button" class="btn btn-success" @click="success"><i class="fa fa-check"></i> 通过</button>

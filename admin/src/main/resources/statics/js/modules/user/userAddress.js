@@ -7,7 +7,7 @@ $(function () {
             { label: '部门', name: 'sysDeptName', width: 35 },
             { label: '代理商', name: 'sysUserName', width: 35 },
             { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
-            { label: '用户昵称', name: 'userName', index: 'user_id', width: 80 },
+            { label: '用户手机号', name: 'userPhone', index: 'user_id', width: 80 },
 			{ label: '收货人姓名', name: 'name', index: 'name', width: 80 }, 
 			{ label: '国家代码', name: 'countryCode', index: 'country_code', width: 80 }, 
 			{ label: '电话', name: 'phone', index: 'phone', width: 80 }, 

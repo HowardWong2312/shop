@@ -7,7 +7,7 @@ $(function () {
             { label: '部门', name: 'sysDeptName', width: 35 },
             { label: '代理商', name: 'sysUserName', width: 35 },
             { label: '用户ID', name: 'userId', index: 'user_id', width: 35 },
-			{ label: '用户昵称', name: 'userName', index: 'user_id', width: 80 },
+			{ label: '用户手机号', name: 'userPhone', index: 'user_id', width: 80 },
             { label: '收款方式', name: 'paymentName', index: 'payment_name', width: 80 },
             { label: '账户名称', name: 'accountName', index: 'account_name', width: 80 },
 			{ label: '账户号码', name: 'accountNumber', index: 'account_number', width: 80 },

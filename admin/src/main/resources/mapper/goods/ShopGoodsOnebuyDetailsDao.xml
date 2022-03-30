@@ -8,7 +8,7 @@
         SELECT
         a.*,
         b.title as goods_name,
-        u.nickname as user_name
+        u.searchPhone as user_phone
         FROM shop_goods_onebuy_details a
         LEFT JOIN shop_goods b ON (a.goods_id = b.id)
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)

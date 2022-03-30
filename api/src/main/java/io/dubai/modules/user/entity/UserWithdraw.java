@@ -48,6 +48,18 @@ public class UserWithdraw implements Serializable {
     @ApiModelProperty(value = "提现金额")
     private BigDecimal amount;
 
+    //实际打款金额
+    private BigDecimal realAmount;
+
+    //手续费
+    private BigDecimal fee;
+
+    //税
+    private BigDecimal tax;
+
+    //佣金扣除
+    private BigDecimal rebate;
+
     @ApiModelProperty(value = "备注")
     private String remark;
 

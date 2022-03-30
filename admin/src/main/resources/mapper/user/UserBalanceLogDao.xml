@@ -10,7 +10,7 @@
         dict.remark as status_color,
         su.username as sys_user_name,
         sd.name as sys_dept_name,
-        u.nickname as user_name
+        u.searchPhone as user_phone
         FROM t_user_balance_log a
         LEFT JOIN t_user_info u ON (a.user_id=u.userId)
         left join `sys_dict` dict on(a.status=dict.code and dict.type='user_balance_log_status')
@@ -19,7 +19,7 @@
         WHERE 1 = 1
         <if test="params.key !=null and params.key !=''">
             and (
-            u.nickname like '%${params.key}%'
+            u.nickName like '%${params.key}%'
             or a.user_id=#{params.key}
             or u.`searchPhone` like '%${params.key}%'
             )
