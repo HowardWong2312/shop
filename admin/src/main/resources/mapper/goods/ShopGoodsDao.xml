@@ -39,6 +39,9 @@
         <if test="params.languageId !=null and params.languageId != '' ">
             and sgl.language_id = #{params.languageId}
         </if>
+        <if test="params.userId !=null">
+            and sg.user_id = #{params.userId}
+        </if>
         <if test="params.categoryId !=null and params.categoryId == -1">
             and (sg.is_group = 1 or sg.is_rush = 1 or sg.is_one_buy = 1)
         </if>

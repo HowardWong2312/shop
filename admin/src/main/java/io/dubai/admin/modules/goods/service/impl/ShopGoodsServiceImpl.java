@@ -31,6 +31,11 @@ public class ShopGoodsServiceImpl extends ServiceImpl<ShopGoodsDao, ShopGoods> i
 //            List<Object> categoryIds = shopGoodsCategoryService.getBaseMapper().selectObjs(new QueryWrapper<ShopGoodsCategory>().select("id").eq("parent_id", params.get("categoryId")));
 //            params.put("ids", categoryIds);
 //        }
+        if (params.get("key") != null && StringUtils.isNumeric(params.get("key").toString())) {
+            Integer userId = Integer.valueOf(params.get("key").toString());
+            params.remove("key");
+            params.put("userId", userId);
+        }
         IPage page = new Query().getPage(params);
         page.setRecords(baseMapper.shopGoodsList(page, params));
 
