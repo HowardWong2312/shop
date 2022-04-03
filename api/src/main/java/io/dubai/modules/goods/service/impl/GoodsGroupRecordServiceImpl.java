@@ -27,7 +27,7 @@ public class GoodsGroupRecordServiceImpl extends ServiceImpl<GoodsGroupRecordDao
         List<GoodsGroupRecordVo> temp = baseMapper.queryListByGoodsId(goodsId,limit);
         List<GoodsGroupRecordVo> list = new ArrayList<>();
         for (int i = 0; i < temp.size(); i++) {
-            long expiredTime = temp.get(i).getCreateTime().plusHours(temp.get(i).getPeriod()).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+            long expiredTime = temp.get(i).getCreateTime().plusHours(temp.get(i).getPeriod()).toInstant(ZoneOffset.of("+2")).toEpochMilli();
             long err = expiredTime-System.currentTimeMillis();
             temp.get(i).setPeriodTime(err);
             if(err > 0){

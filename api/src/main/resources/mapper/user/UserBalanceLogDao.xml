@@ -14,14 +14,10 @@
         </if>
     </select>
 
-    <select id="querySumAmountByUserIdType" resultType="java.math.BigDecimal">
-        select sum(amount) from t_user_balance_log where user_id=#{userId} and `type`=#{type}
+    <select id="querySumAmountByUserIdAndStatus" resultType="java.math.BigDecimal">
+        select sum(amount) from t_user_balance_log where user_id=#{userId} and `status`=#{status}
     </select>
 
-
-    <select id="queryCountByUserIdType" resultType="java.lang.Integer">
-        select count(0) from t_user_balance_log where user_id=#{userId} and `type`=#{type}
-    </select>
 
 
 </mapper>

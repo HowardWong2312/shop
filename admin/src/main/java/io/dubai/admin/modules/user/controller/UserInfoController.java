@@ -55,7 +55,7 @@ public class UserInfoController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("user:userInfo:list")
     public R list(@RequestParam Map<String, Object> params) {
-        if (getUserId() != Constant.SUPER_ADMIN) {
+        if (getDeptId() != Constant.SUPER_DEPT) {
             params.put("sysUserId", getUserId().toString());
         }
         PageUtils page = userInfoService.queryPage(params);
@@ -137,7 +137,7 @@ public class UserInfoController extends AbstractController {
     @PostMapping("/save")
     @RequiresPermissions("user:userInfo:save")
     public R save(@RequestBody UserInfoForm form) {
-        if (getUserId() != Constant.SUPER_ADMIN) {
+        if (getDeptId() != Constant.SUPER_DEPT) {
             form.setSysUserId(getUserId());
         }
         userInfoService.save(form);
@@ -147,7 +147,7 @@ public class UserInfoController extends AbstractController {
     @GetMapping("/getTodayFundsAndUserData")
     @RequiresPermissions("user:userInfo:count")
     public R getTodayFundsAndUserData() {
-        return userInfoService.getTodayFundsAndUserData(getUserId());
+        return userInfoService.getTodayFundsAndUserData(getUserId(),getDeptId());
     }
 
 }

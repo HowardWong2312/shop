@@ -259,11 +259,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
     }
 
     @Override
-    public R getTodayFundsAndUserData(Long sysUserId) {
+    public R getTodayFundsAndUserData(Long sysUserId,Long deptId) {
         HashMap<String, Object> map = new HashMap<>();
         QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
-        map.put("show", sysUserId == Constant.SUPER_ADMIN);
-        if (sysUserId != Constant.SUPER_ADMIN) {
+        map.put("show", deptId == Constant.SUPER_DEPT);
+        if (deptId != Constant.SUPER_DEPT) {
             userInfoQueryWrapper.eq("sysUserId", sysUserId);
         }
         List<UserInfo> userInfos = this.getBaseMapper().selectList(userInfoQueryWrapper);//借用userId取出用户总数
@@ -271,14 +271,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
             userInfos = new ArrayList<>();
         }
         ArrayList<Integer> userIds = new ArrayList<>();
-        if (sysUserId != Constant.SUPER_ADMIN) {
+        if (deptId != Constant.SUPER_DEPT) {
 //            如果不是系统用户就根据查处的用户id为基础查询
             for (UserInfo u : userInfos) {
                 userIds.add(u.getUserId());
             }
         }
         map.put("userCount", userInfos.size());
-        getFatherIdByToDayAndNewUser(map, userInfoQueryWrapper, sysUserId);
+        getFatherIdByToDayAndNewUser(map, userInfoQueryWrapper, sysUserId,deptId);
         getFundingData(map, userIds);
         getCredits(map, userIds);
         HashSet userOnlineCount = redisUtils.get(RedisKeys.userOnlineKey, HashSet.class);
@@ -294,10 +294,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoDao, UserInfo> impl
      *
      * @return
      */
-    private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap, QueryWrapper<UserInfo> userInfoQueryWrapper, Long sysUserId) {
+    private HashMap<String, Long> getFatherIdByToDayAndNewUser(HashMap hashMap, QueryWrapper<UserInfo> userInfoQueryWrapper, Long sysUserId,Long deptId) {
         userInfoQueryWrapper.select("userId", "fatherId").apply("to_days(createTime) = TO_DAYS(now())");
         QueryWrapper<UserInfo> salesUserQuery = new QueryWrapper<UserInfo>().select("userId");
-        if (sysUserId == Constant.SUPER_ADMIN) {
+        if (deptId == Constant.SUPER_DEPT) {
             salesUserQuery.eq("fatherId", 0);
         } else {
             salesUserQuery.eq("userId", sysUserId);

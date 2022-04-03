@@ -128,11 +128,11 @@ public class GoodsOrderController {
             List<GoodsGroupRecordDetailsVo> goodsGroupRecordDetailsList = goodsGroupRecordDetailsService.queryListByGoodsGroupRecordId(goodsGroupRecordDetails.getGoodsGroupRecordId());
             goodsOrderVo.setGoodsGroupRecordDetailsList(goodsGroupRecordDetailsList);
             GoodsGroupRecordVo goodsGroupRecordVo = goodsGroupRecordService.queryById(goodsGroupRecordDetails.getGoodsGroupRecordId());
-            long expiredTime = goodsGroupRecordVo.getCreateTime().plusHours(goodsGroupRecordVo.getPeriod()).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+            long expiredTime = goodsGroupRecordVo.getCreateTime().plusHours(goodsGroupRecordVo.getPeriod()).toInstant(ZoneOffset.of("+2")).toEpochMilli();
             goodsGroupRecordVo.setPeriodTime(expiredTime-System.currentTimeMillis());
             goodsOrderVo.setGoodsGroupRecord(goodsGroupRecordVo);
         }
-        long payPeriodTime = goodsOrderVo.getCreateTime().plusHours(1).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        long payPeriodTime = goodsOrderVo.getCreateTime().plusHours(1).toInstant(ZoneOffset.of("+2")).toEpochMilli();
         goodsOrderVo.setPayPeriodTime(payPeriodTime-System.currentTimeMillis());
         return R.ok().put("order", goodsOrderVo);
     }
@@ -197,22 +197,13 @@ public class GoodsOrderController {
         }
         goodsOrder.setStatus(6);
         goodsOrderService.updateById(goodsOrder);
-        GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(goodsOrder.getGoodsId(),userInfo.getLanguage());
-        //待分享订单取消，只返还金额
-        userInfo.setBalance(userInfo.getBalance().add(goodsOrder.getAmount()));
-        userInfoService.update(userInfo);
         //增加账单记录
         UserBalanceLog userBalanceLog = new UserBalanceLog();
         userBalanceLog.setType(LogTypeEnum.INCOME.code);
-        userBalanceLog.setBalance(userInfo.getBalance());
         userBalanceLog.setAmount(goodsOrder.getAmount());
         userBalanceLog.setUserId(userInfo.getUserId().longValue());
-        userBalanceLog.setStatus(UserBalanceLogStatusEnum.SHOP_ORDER_CANCELED.code);
-        if(StringUtils.isEmpty(goodsVo.getLanguageTitle())){
-            userBalanceLog.setDesc(goodsVo.getLanguageTitle());
-        }else{
-            userBalanceLog.setDesc(goodsVo.getTitle());
-        }
+        userBalanceLog.setStatus(UserBalanceLogStatusEnum.PENDING_REFUND.code);
+        userBalanceLog.setDesc(goodsOrder.getOrderCode());
         userBalanceLogService.save(userBalanceLog);
         return R.ok();
     }
@@ -230,29 +221,20 @@ public class GoodsOrderController {
         if(goodsOrder.getStatus() == 0){
             //待付款订单取消
             goodsGroupRecordDetails.setStatus(2);
-        }
-        if(goodsOrder.getStatus() == 1){
-            GoodsVo goodsVo = goodsService.queryInfoByIdAndLanguageId(goodsOrder.getGoodsId(),userInfo.getLanguage());
-            //待分享订单取消，只返还金额
-            userInfo.setBalance(userInfo.getBalance().add(goodsOrder.getAmount()));
-            userInfoService.update(userInfo);
-            //增加账单记录
+        }else{
+            //增加待退款账单记录
             UserBalanceLog userBalanceLog = new UserBalanceLog();
             userBalanceLog.setType(LogTypeEnum.INCOME.code);
-            userBalanceLog.setBalance(userInfo.getBalance());
             userBalanceLog.setAmount(goodsOrder.getAmount());
             userBalanceLog.setUserId(userInfo.getUserId().longValue());
-            userBalanceLog.setStatus(UserBalanceLogStatusEnum.SHOP_ORDER_CANCELED.code);
-            if(StringUtils.isEmpty(goodsVo.getLanguageTitle())){
-                userBalanceLog.setDesc(goodsVo.getLanguageTitle());
-            }else{
-                userBalanceLog.setDesc(goodsVo.getTitle());
-            }
+            userBalanceLog.setStatus(UserBalanceLogStatusEnum.PENDING_REFUND.code);
             userBalanceLogService.save(userBalanceLog);
+        }
+        if(goodsOrder.getStatus() == 1){
             goodsGroupRecordDetails.setStatus(2);
         }
         if(goodsOrder.getStatus() == 2){
-            //待确认订单取消，返还余额并奖励积分
+            //待确认订单取消，奖励积分
             GoodsGroupRecord goodsGroupRecord = goodsGroupRecordService.getById(goodsGroupRecordDetails.getGoodsGroupRecordId());
             GoodsGroup goodsGroup = goodsGroupService.getById(goodsGroupRecord.getGoodsGroupId());
             if(goodsGroup.getAwardNum() > 1 && userInfo.getFatherId() != null){
@@ -266,29 +248,33 @@ public class GoodsOrderController {
                         goodsGroupRecordDetails.setStatus(3);
                         goodsGroup.setAwardNum(goodsGroup.getAwardNum()-1);
                         userInfo.setCredits(userInfo.getCredits().add(credits));
-                        for (int i = 0; i < goodsOrder.getQuantity(); i++) {
-                            //增加积分记录
-                            UserCreditsLog userCreditsLog = new UserCreditsLog();
-                            userCreditsLog.setUserId(userInfo.getUserId().longValue());
-                            userCreditsLog.setAmount(credits);
-                            userCreditsLog.setType(LogTypeEnum.INCOME.code);
-                            userCreditsLog.setStatus(UserCreditsLogStatusEnum.GROUP_AWARD.code);
-                            userCreditsLog.setBalance(userInfo.getCredits());
-                            userCreditsLogService.save(userCreditsLog);
+                        userInfoService.update(userInfo);
+                        UserCreditsLog userCreditsLog = new UserCreditsLog();
+                        userCreditsLog.setUserId(userInfo.getUserId().longValue());
+                        userCreditsLog.setAmount(credits);
+                        userCreditsLog.setType(LogTypeEnum.INCOME.code);
+                        userCreditsLog.setStatus(UserCreditsLogStatusEnum.GROUP_AWARD.code);
+                        userCreditsLog.setBalance(userInfo.getCredits());
+                        userCreditsLogService.save(userCreditsLog);
+                        UserInfo direct = null;
+                        if(userInfo.getFatherId() != null && userInfo.getFatherId() != 0){
+                            direct = userInfoService.queryByUserId(userInfo.getFatherId().longValue());
                         }
-                        UserInfo direct = userInfoService.queryByUserId(userInfo.getFatherId().longValue());
                         if(direct != null){
                             credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("DIRECT_INCOME_RATE")));
                             direct.setCredits(direct.getCredits().add(credits));
                             userInfoService.update(direct);
-                            UserCreditsLog userCreditsLog = new UserCreditsLog();
+                            userCreditsLog = new UserCreditsLog();
                             userCreditsLog.setUserId(direct.getUserId().longValue());
                             userCreditsLog.setAmount(credits);
                             userCreditsLog.setType(LogTypeEnum.INCOME.code);
                             userCreditsLog.setStatus(UserCreditsLogStatusEnum.COMMISSION.code);
                             userCreditsLog.setBalance(direct.getCredits());
                             userCreditsLogService.save(userCreditsLog);
-                            UserInfo second = userInfoService.queryByUserId(direct.getFatherId().longValue());
+                            UserInfo second = null;
+                            if(direct.getFatherId() != null && direct.getFatherId() != 0){
+                                second = userInfoService.queryByUserId(direct.getFatherId().longValue());
+                            }
                             if(second != null){
                                 credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("SECOND_INCOME_RATE")));
                                 second.setCredits(second.getCredits().add(credits));
@@ -300,7 +286,10 @@ public class GoodsOrderController {
                                 userCreditsLog.setStatus(UserCreditsLogStatusEnum.COMMISSION.code);
                                 userCreditsLog.setBalance(second.getCredits());
                                 userCreditsLogService.save(userCreditsLog);
-                                UserInfo third = userInfoService.queryByUserId(second.getFatherId().longValue());
+                                UserInfo third = null;
+                                if(second.getFatherId() != null && second.getFatherId() != 0){
+                                    third = userInfoService.queryByUserId(second.getFatherId().longValue());
+                                }
                                 if(third != null){
                                     credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("THIRD_INCOME_RATE")));
                                     third.setCredits(third.getCredits().add(credits));
@@ -319,16 +308,6 @@ public class GoodsOrderController {
                 }
 
             }
-            userInfo.setBalance(userInfo.getBalance().add(goodsOrder.getAmount()));
-            userInfoService.update(userInfo);
-            //增加账单记录
-            UserBalanceLog userBalanceLog = new UserBalanceLog();
-            userBalanceLog.setType(LogTypeEnum.INCOME.code);
-            userBalanceLog.setBalance(userInfo.getBalance());
-            userBalanceLog.setAmount(goodsOrder.getAmount());
-            userBalanceLog.setUserId(userInfo.getUserId().longValue());
-            userBalanceLog.setStatus(UserBalanceLogStatusEnum.SHOP_ORDER_CANCELED.code);
-            userBalanceLogService.save(userBalanceLog);
         }
         goodsGroupRecordDetailsService.updateById(goodsGroupRecordDetails);
         goodsOrder.setStatus(6);
@@ -362,7 +341,6 @@ public class GoodsOrderController {
                 Integer countTotal = userCreditsLogService.queryCountByUserIdAndStatus(userInfo.getUserId().longValue(), UserCreditsLogStatusEnum.GROUP_AWARD.code);
                 if(countTotal < userLevel.getTotalGroupNum() || userLevel.getTotalGroupNum() == -1){
                     goodsGroupRecordDetails.setStatus(3);
-                    goodsGroupRecordDetailsService.updateById(goodsGroupRecordDetails);
                     goodsGroup.setAwardNum(goodsGroup.getAwardNum()-1);
                     userInfo.setCredits(userInfo.getCredits().add(credits));
                     userInfoService.update(userInfo);
@@ -373,7 +351,10 @@ public class GoodsOrderController {
                     userCreditsLog.setStatus(UserCreditsLogStatusEnum.GROUP_AWARD.code);
                     userCreditsLog.setBalance(userInfo.getCredits());
                     userCreditsLogService.save(userCreditsLog);
-                    UserInfo direct = userInfoService.queryByUserId(userInfo.getFatherId().longValue());
+                    UserInfo direct = null;
+                    if(userInfo.getFatherId() != null && userInfo.getFatherId() != 0){
+                        direct = userInfoService.queryByUserId(userInfo.getFatherId().longValue());
+                    }
                     if(direct != null){
                         credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("DIRECT_INCOME_RATE")));
                         direct.setCredits(direct.getCredits().add(credits));
@@ -385,7 +366,10 @@ public class GoodsOrderController {
                         userCreditsLog.setStatus(UserCreditsLogStatusEnum.COMMISSION.code);
                         userCreditsLog.setBalance(direct.getCredits());
                         userCreditsLogService.save(userCreditsLog);
-                        UserInfo second = userInfoService.queryByUserId(direct.getFatherId().longValue());
+                        UserInfo second = null;
+                        if(direct.getFatherId() != null && direct.getFatherId() != 0){
+                            second = userInfoService.queryByUserId(direct.getFatherId().longValue());
+                        }
                         if(second != null){
                             credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("SECOND_INCOME_RATE")));
                             second.setCredits(second.getCredits().add(credits));
@@ -397,7 +381,10 @@ public class GoodsOrderController {
                             userCreditsLog.setStatus(UserCreditsLogStatusEnum.COMMISSION.code);
                             userCreditsLog.setBalance(second.getCredits());
                             userCreditsLogService.save(userCreditsLog);
-                            UserInfo third = userInfoService.queryByUserId(second.getFatherId().longValue());
+                            UserInfo third = null;
+                            if(second.getFatherId() != null && second.getFatherId() != 0){
+                                third = userInfoService.queryByUserId(second.getFatherId().longValue());
+                            }
                             if(third != null){
                                 credits = goodsGroup.getAward().multiply(new BigDecimal(sysConfigService.getValue("THIRD_INCOME_RATE")));
                                 third.setCredits(third.getCredits().add(credits));
@@ -415,6 +402,7 @@ public class GoodsOrderController {
                 }
             }
         }
+        goodsGroupRecordDetailsService.updateById(goodsGroupRecordDetails);
         goodsOrder.setStatus(3);
         goodsOrderService.updateById(goodsOrder);
         return R.ok();

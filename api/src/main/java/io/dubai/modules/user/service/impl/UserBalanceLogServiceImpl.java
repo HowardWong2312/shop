@@ -85,13 +85,9 @@ public class UserBalanceLogServiceImpl extends ServiceImpl<UserBalanceLogDao, Us
     }
 
     @Override
-    public BigDecimal querySumAmountByUserIdType(Long userId, Integer type) {
-        return baseMapper.querySumAmountByUserIdType(userId, type);
+    public BigDecimal querySumAmountByUserIdAndStatus(Long userId, Integer status) {
+        return baseMapper.querySumAmountByUserIdAndStatus(userId, status);
     }
 
-    @Override
-    public Integer queryCountByUserIdType(Long userId, Integer type) {
-        return baseMapper.queryCountByUserIdType(userId, type);
-    }
 
 }

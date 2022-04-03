@@ -83,7 +83,7 @@ public class WalletController {
     @ApiOperation("获取商家总收入")
     @GetMapping("/getMerchantTotalIncome")
     public R getMerchantInfo(@ApiIgnore @LoginUser UserInfo userInfo) {
-        BigDecimal income = userBalanceLogService.querySumAmountByUserIdType(userInfo.getUserId().longValue(), UserBalanceLogStatusEnum.SHOP_ORDER_INCOME.code);
+        BigDecimal income = userBalanceLogService.querySumAmountByUserIdAndStatus(userInfo.getUserId().longValue(), UserBalanceLogStatusEnum.SHOP_ORDER_INCOME.code);
         if (income == null) {
             income = BigDecimal.ZERO;
         }
@@ -345,7 +345,7 @@ public class WalletController {
     @ApiOperation("积分兑现")
     @PostMapping("/exchange")
     public R exchange(@RequestBody ExchangeForm form, @ApiIgnore @LoginUser UserInfo userInfo) {
-        if (userInfo.getIsLockCredits().intValue() == 1 || userInfo.getIsMerchant() == 1 || userInfo.getFatherId() == 0) {
+        if (userInfo.getIsLockCredits() == 1 || userInfo.getIsMerchant() == 1 || userInfo.getFatherId() == 0) {
             return R.error(ResponseStatusEnum.CANNOT_EXCHANGE);
         }
         List<UserBank> userBanks = userBankService.list(new QueryWrapper<UserBank>().eq("user_id", userInfo.getUserId()).eq("is_del", 0));

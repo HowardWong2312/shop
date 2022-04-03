@@ -6,8 +6,10 @@ package io.dubai.common.utils;
  * @author mother fucker
  */
 public class Constant {
-	/** 超级管理员ID */
-	public static final int SUPER_ADMIN = 1;
+    /** 超级管理员ID */
+    public static final int SUPER_ADMIN = 1;
+    /** 总部门ID */
+    public static final int SUPER_DEPT = 1;
     /** 数据权限过滤 */
 	public static final String SQL_FILTER = "sql_filter";
     /**

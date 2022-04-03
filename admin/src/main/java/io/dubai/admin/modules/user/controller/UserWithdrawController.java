@@ -42,7 +42,7 @@ public class UserWithdrawController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("user:userWithdraw:list")
     public R list(@RequestParam Map<String, Object> params) {
-        if(getUserId() != Constant.SUPER_ADMIN){
+        if(getDeptId() != Constant.SUPER_DEPT){
             params.put("sysUserId",getUserId().toString());
         }
         return R.ok().put("page", userWithdrawService.queryPage(params)).put("totalAmount",userWithdrawService.queryAmountSumTotal(params));

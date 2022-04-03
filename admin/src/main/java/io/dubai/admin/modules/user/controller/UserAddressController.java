@@ -31,7 +31,7 @@ public class UserAddressController extends AbstractController  {
     @GetMapping("/list")
     @RequiresPermissions("user:userAddress:list")
     public R list(@RequestParam Map<String, Object> params) {
-        if(getUserId() != Constant.SUPER_ADMIN){
+        if(getDeptId() != Constant.SUPER_DEPT){
             params.put("sysUserId",getUserId().toString());
         }
         PageUtils page = userAddressService.queryPage(params);

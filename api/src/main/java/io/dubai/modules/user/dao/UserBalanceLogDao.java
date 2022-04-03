@@ -22,8 +22,6 @@ public interface UserBalanceLogDao extends BaseMapper<UserBalanceLog> {
 
     List<UserBalanceLog> queryPage(IPage page, @Param("query") LogQuery query);
 
-    BigDecimal querySumAmountByUserIdType(@Param("userId") Long userId, @Param("type") Integer type);
-
-    Integer queryCountByUserIdType(@Param("userId") Long userId, @Param("type") Integer type);
+    BigDecimal querySumAmountByUserIdAndStatus(@Param("userId") Long userId, @Param("status") Integer status);
 
 }

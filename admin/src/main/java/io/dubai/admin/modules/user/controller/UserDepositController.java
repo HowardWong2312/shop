@@ -31,7 +31,7 @@ public class UserDepositController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("user:userDeposit:list")
     public R list(@RequestParam Map<String, Object> params) {
-        if(getUserId() != Constant.SUPER_ADMIN){
+        if(getDeptId() != Constant.SUPER_DEPT){
             params.put("sysUserId",getUserId().toString());
         }
         PageUtils page = userDepositService.queryPage(params);

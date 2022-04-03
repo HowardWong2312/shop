@@ -23,6 +23,6 @@ public interface UserInfoService extends IService<UserInfo> {
 
     UserInfo save(UserInfoForm form);
 
-    R getTodayFundsAndUserData(Long sysUserId);
+    R getTodayFundsAndUserData(Long sysUserId,Long deptId);
 }
 

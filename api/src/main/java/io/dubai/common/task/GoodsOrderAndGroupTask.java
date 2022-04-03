@@ -1,6 +1,8 @@
 package io.dubai.common.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cz.czUser.system.entity.UserInfo;
+import io.dubai.common.enums.UserBalanceLogStatusEnum;
 import io.dubai.modules.goods.entity.GoodsGroup;
 import io.dubai.modules.goods.entity.GoodsGroupRecord;
 import io.dubai.modules.goods.entity.GoodsGroupRecordDetails;
@@ -9,6 +11,9 @@ import io.dubai.modules.goods.service.GoodsGroupRecordDetailsService;
 import io.dubai.modules.goods.service.GoodsGroupRecordService;
 import io.dubai.modules.goods.service.GoodsGroupService;
 import io.dubai.modules.goods.service.GoodsOrderService;
+import io.dubai.modules.user.entity.UserBalanceLog;
+import io.dubai.modules.user.service.UserBalanceLogService;
+import io.dubai.modules.user.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +42,41 @@ public class GoodsOrderAndGroupTask {
 
     @Resource
     private GoodsGroupService goodsGroupService;
+
+    @Resource
+    private UserBalanceLogService userBalanceLogService;
+
+    @Resource
+    private UserInfoService userInfoService;
+
+    public static void main(String[] args) {
+        LocalDateTime time = LocalDateTime.now().plusHours(-1);
+        System.out.println(time);
+        System.out.println(time.isAfter(LocalDateTime.now()));
+    }
+
+    //检测待退款账单
+    @Scheduled(cron = "0 0/1 * * * ?")
+    private void pendingRefundTask() {
+        logger.warn("开始检测所有检测待退款账单，定时任务正在执行");
+        int count = 0;
+        List<UserBalanceLog> userBalanceLogList = userBalanceLogService.list(
+                new QueryWrapper<UserBalanceLog>().eq("status", UserBalanceLogStatusEnum.PENDING_REFUND.code)
+        );
+        for (int i = 0; i < userBalanceLogList.size(); i++) {
+            UserBalanceLog userBalanceLog = userBalanceLogList.get(i);
+            if(userBalanceLog.getCreateTime().plusDays(1).isAfter(LocalDateTime.now())){
+                ++count;
+                UserInfo userInfo = userInfoService.queryByUserId(userBalanceLog.getUserId());
+                userInfo.setBalance(userInfo.getBalance().add(userBalanceLog.getAmount()));
+                userInfoService.update(userInfo);
+                userBalanceLog.setBalance(userInfo.getBalance());
+                userBalanceLog.setStatus(UserBalanceLogStatusEnum.SHOP_ORDER_CANCELED.code);
+                userBalanceLogService.updateById(userBalanceLog);
+            }
+        }
+        logger.warn("共检测到" + count + "个待退款账单,状态已设置为关闭");
+    }
 
     //拼团订单支付超时检测
     @Scheduled(cron = "0 0/1 * * * ?")
